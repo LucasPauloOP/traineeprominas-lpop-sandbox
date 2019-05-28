@@ -8,20 +8,20 @@ var teacher=[
     {
         'idteacher':id++,
         'name': 'Filipe' ,
-        'lastName': 'Costa',
+        'lastname': 'Costa',
         'phd': false
     },
 
     {
         'idteacher':id++,
         'name': 'Fabiano',
-        'lastName': 'Silva',
+        'lastname': 'Silva',
         'phd': true
     }
 ]
 
 function findid(teacherid) {
-    return teacher.find((l)=>{return l.idteacher === idteacher});
+    return teacher.find((l)=>{return l.idteacher === teacherid});
 
 }
 
@@ -30,7 +30,7 @@ app.post("/", function(req,res){
     teachers.idteacher =id++;
     teacher.push(teachers);
 
-    res.send('Usuário cadastrado com sucesso.');
+    res.send('Professor cadastrado com sucesso.');
 
 });
 
@@ -45,27 +45,32 @@ app.delete('/',function(req,res){
 
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
-    teacher = findid(id);
+    var teachers = findid(id);
 
-    if(teacher)
+    for(var aux=0;aux<teacher.length;aux++)
     {
-        teacher= teacher.map((s)=> {return (s.id !== id);});
-        res.send("Usuário deletado.");
-    }
-    else {
+        if(teacher[aux].idteacher=== teachers.idteacher)
+        {
+            teacher.splice(aux,1);
+            res.send('Professor deletado com sucesso.');
+        }
+        else
+        if(aux===teacher.length)
+        {
+            res.status(404).send('Professor não encontrado.');
 
-        res.status(404).send(' não encontrado.');
+        }
+
     }
 })
 
 app.get('/:id',function(req,res){
     var id = parseInt(req.params.id);
-   var teacher = findid(id);
-
-    if(teacher){
-        res.send(teacher);
+    var teachers = findid(id);
+    if(teachers){
+        res.send(teachers);
     }else{
-        res.status(404).send('Usuário não encontrado');
+        res.status(404).send('Professor não encontrado');
     }
 });
 
@@ -79,11 +84,11 @@ app.put('/:id', function(req,res){
         teachers.name = bodyteacher.name||teachers.name;
         teachers.lastname = bodyteacher.lastname||teachers.lastname;
         teachers.profile = teachers['profile']||teachers.profile;
-        res.send('Usuário atualizado');
+        res.send('Professor atualizado');
     }
     else
     {
-        res.send('Usuário não encontrado');
+        res.send('Professor não encontrado');
     }
 });
 
