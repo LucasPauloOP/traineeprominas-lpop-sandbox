@@ -7,7 +7,7 @@ var idstudent=1;
 
 var student = [
     {
-        'idstudents': idstudent++,
+        'id': idstudent++,
         'name': 'Lucas',
         'lastname':'Paulo',
         'age':'19',
@@ -23,7 +23,7 @@ var student = [
     },
 
     {
-        'idstudents': idstudent++,
+        'id': idstudent++,
         'name': 'Luan',
         'lastname': 'gomes',
         'age': '19',
@@ -40,7 +40,7 @@ var student = [
 ]
 
 function  findid(studentid) {
-    return student.find(l => l.id === id);
+    return student.find(l => l.id === studentid);
 }
 
 app.get('/',function (req,res) {
@@ -69,15 +69,15 @@ app.delete('/:id',function(req,res){
 
     for(var aux=0;aux<student.length;aux++)
     {
-        if(student[aux].idstudents === students.idstudents)
+        if(student[aux].id === students.id)
         {
             student.splice(aux,1);
-            res.send('Curso deletado com sucesso.');
+            res.send('Estudante deletado com sucesso.');
         }
         else
         if(aux===student.length)
         {
-            res.status(404).send('Curso não encontrado.');
+            res.status(404).send('Estudante não encontrado.');
 
         }
 
@@ -87,41 +87,43 @@ app.delete('/:id',function(req,res){
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
+    console.log(id);
     var students = findid(id);
+
     var bodystudent = req.body;
 
     if(students)
     {
         students.name = bodystudent.name||students.name;
-        students.period = bodystudent.period||students.period;
-        students.city = bodystudent.city||students.city;
-        students.teachers= bodystudent.teachers||students.teachers;
-        if(bodystudent.courses)
+        students.lastname = bodystudent.lastname||students.lastname;
+        students.age = bodystudent.age||students.age;
+        students.course= bodystudent.course||students.course;
+        if(bodystudent.course)
         {
             for(var aux=0;aux< students.course.length;aux++)
             {
-                students.courses[aux] = arqcourse.findcourse(bodystudent.courses[aux])
+                students.course[aux] = arqcourse.findcourse(bodystudent.course[aux])
             }
         }
 
-        res.send('Curso atualizado');
+        res.send('Estudante atualizado');
     }
     else
     {
-        res.send('Curso não encontrado');
+        res.send('Estudante não encontrado');
     }
 });
 
 app.post('/', function(req, res) {
     var students = req.body;
-    courses.id = idstudent++;
-    for(var aux=0;aux<students.courses.length;aux++)
+    students.id = idstudent++;
+    for(var aux=0;aux<students.course.length;aux++)
     {
-        students.courses[aux] = arqcourse.findcourse(students.courses[aux]);
+        students.course[aux] = arqcourse.findcourse(students.course[aux]);
 
     }
     student.push(students);
-    res.send("teste.");
+    res.send("Estudante cadastrado");
 })
 
 module.exports = app;

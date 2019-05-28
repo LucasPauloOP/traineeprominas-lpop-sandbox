@@ -6,14 +6,14 @@ var idteachers=1;
 
 var teacher=[
     {
-        'idteacher':idteachers++,
+        'id':idteachers++,
         'name': 'Filipe' ,
         'lastname': 'Costa',
         'phd': false
     },
 
     {
-        'idteacher':idteachers++,
+        'id':idteachers++,
         'name': 'Fabiano',
         'lastname': 'Silva',
         'phd': true
@@ -21,13 +21,13 @@ var teacher=[
 ]
 
 function findid(teacherid) {
-    return teacher.find((l)=>{return l.idteacher === teacherid});
+    return teacher.find((l)=>{return l.id === teacherid});
 
 }
 
 app.post("/", function(req,res){
     var teachers = req.body;
-    teachers.idteacher =idteachers++;
+    teachers.id = idteachers++;
     teacher.push(teachers);
 
     res.send('Professor cadastrado com sucesso.');
@@ -49,7 +49,7 @@ app.delete('/:id',function(req,res){
 
     for(var aux=0;aux<teacher.length;aux++)
     {
-        if(teacher[aux].idteacher=== teachers.idteacher)
+        if(teacher[aux].id === teachers.id)
         {
             teacher.splice(aux,1);
             res.send('Professor deletado com sucesso.');
@@ -94,7 +94,7 @@ app.put('/:id', function(req,res){
 
 function findteacher(id)
 {
-    return teacher.find((l)=>{return l.idteacher === id});
+    return teacher.find((l)=>{return l.id === id});
 }
 
 module.exports = {app,findteacher};

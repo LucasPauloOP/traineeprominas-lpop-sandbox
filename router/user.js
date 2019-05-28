@@ -8,13 +8,13 @@ var idusers=1;
 
 var user = [
     {
-        'iduser': idusers++,
+        'id': idusers++,
         'name': 'Lucas',
         'lastname':'Paulo',
         'profile':'Estudante'},
 
     {
-        'iduser': idusers++,
+        'id': idusers++,
         'name': 'Luan',
         'lastname':'Pedro',
         'profile':'Visitante'
@@ -22,13 +22,13 @@ var user = [
 ]
 
 function findid(userid) {
-   return user.find((s) => {return s.iduser === userid})
+   return user.find((s) => {return s.id === userid})
 
 }
 
 app.post("/", function(req,res){
     var users = req.body;
-    users.iduser =idusers++;
+    users.id =idusers++;
     user.push(users);
 
     res.send('Usuário cadastrado com sucesso.');

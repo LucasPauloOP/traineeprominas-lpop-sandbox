@@ -7,7 +7,7 @@ var idcourses = 1;
 
 var course = [
     {
-        'idcourse': idcourses++,
+        'id': idcourses++,
         'name': 'Ciência da computação',
         'period': 'Noturno',
         'city' : 'Ipatinga',
@@ -16,7 +16,7 @@ var course = [
         ]    },
 
     {
-        'idcourse' : idcourses++,
+        'id' : idcourses++,
         'name': 'Sistema da computação',
         'period':'Matutino',
         'city' : 'Fabriciano',
@@ -26,7 +26,7 @@ var course = [
 ]
 
 function findid(courseid) {
-    return course.find((s) => {return s.idcourse === courseid})
+    return course.find((s) => {return s.id === courseid})
 
 }
 
@@ -36,14 +36,14 @@ app.get('/',function (req,res) {
 
 app.post('/', function(req, res) {
     var courses = req.body;
-    courses.id = idcourses++;
+    courses.id = idcourse++;
     for(var aux=0;aux<courses.teachers.length;aux++)
     {
         courses.teachers[aux] = arqteacher.findteacher(courses.teachers[aux]);
 
     }
     course.push(courses);
-    res.send("teste.");
+    res.send("Curso adicionado com sucesso.");
 })
 
 
@@ -116,4 +116,4 @@ function findcourse(id){
     return course.find((l)=>{return l.idcourse === id});
 }
 
-module.exports = [app,findcourse];
+module.exports = {app,findcourse};
