@@ -23,16 +23,8 @@ var student = [
     }
 ]
 
-function verificarid(idstudents,id) {
-    if (idusers.getElementById('id') == null) {
-
-        return id=0;
-
-    } else {
-
-        return id =1;
-
-    }
+function  findid(studentid) {
+    return student.find(l => l.id === id);
 }
 
 app.get('/',function (req,res) {
@@ -40,10 +32,10 @@ app.get('/',function (req,res) {
 })
 
 app.get('/:id',function(req,res){
-    var id = prseInt(req.params.id);
-    id = verificarid('idusstudents',id);
-    if(id) {
-        res.send(course);
+    var id = parseInt(req.params.id);
+    student=findid(id);
+    if(student) {
+        res.send(student);
     }
     else{
         res.status(404).send('Curso não Encontrado');
@@ -56,13 +48,16 @@ app.delete('/',function(req,res){
 })
 
 app.delete('/:id',function(req,res){
-    var id = prseInt(req.params.id);
-    id = verificarid('iduser',id);
-    var Filteredid = student.filter ((s) => {return (s.id == id);});
-    if(Filteredid.lenght >=1)
-        res.send(Filteredid[0]);
+    var id = parseInt(req.params.id);
+    student = findid(id);
+    if(student){
+            student = student.map((s) => {return (s.id !== id);});
+        }
     else
-        res.status(404).send(' não encontrado.');
+    {
+        res.status(404).send("Estudante não encontrado.")
+    }
+
 })
 
 module.exports = app;

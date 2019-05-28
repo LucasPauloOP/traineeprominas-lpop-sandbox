@@ -1,5 +1,5 @@
 const express = require('express');
-const baseAPI = '/api/v1/router';
+// const baseAPI = '/api/v1/router';
 const app = express.Router();
 
 
@@ -22,12 +22,13 @@ var user = [
 ]
 
 function findid(userid) {
-   return user.find(l => l.id === id);
+   return user.find((s) => {return s.iduser === userid})
 
 }
 
 app.post("/", function(req,res){
     var users = req.body;
+    users.iduser =id++;
     user.push(users);
 
     res.send('Usuário cadastrado com sucesso.');
@@ -45,7 +46,7 @@ app.delete("/",function(req,res){
 
 app.get("/:id",function(req,res){
     var id = parseInt(req.params.id);
-    var user = verficarid(id);
+    var user = findid(id);
     if(user){
         res.send(user);
     }else{
@@ -55,26 +56,36 @@ app.get("/:id",function(req,res){
 
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
-    user = verificarid(id);
+    var users = findid(id);
 
-    if(user) {
-        user = user.map((s) => {
-            return (s.id !== id);
-        });
+    for(var aux=0;aux<user.length;aux++)
+    {
+          if(user[aux].iduser=== users.iduser)
+          {
+              user.splice(aux,1);
+              res.send('Usuário deletado com sucesso.');
+          }
+          else
+              if(aux===user.length)
+              {
+                  res.status(404).send('Usuário não encontrado.');
+
+              }
+
     }
 
-    else{
-        res.status(404).send(' não encontrado.');
-
-    }
 });
 
 app.put('/:id', function(req,res){
-    var id = prseInt(req.params.id);
-    user = verificarid(id);
-    if(user)
-    {
+    var id = parseInt(req.params.id);
+    var users = findid(id);
+    var bodyuser= req.body;
 
+    if(users)
+    {
+        users.name = bodyuser.name||users.name;
+        users.lastname = bodyuser.lastname||users.lastname;
+        users.profile = bodyuser['profile']||users.profile;
         res.send('Usuário atualizado');
     }
     else
@@ -82,5 +93,7 @@ app.put('/:id', function(req,res){
         res.send('Usuário não encontrado');
     }
 });
+
+
 
 module.exports = app;

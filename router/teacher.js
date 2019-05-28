@@ -20,17 +20,19 @@ var teacher=[
     }
 ]
 
-function verificarid(idteacher,id) {
-    if (idusers.getElementById('id') == null) {
+function findid(teacherid) {
+    return teacher.find((l)=>{return l.idteacher === idteacher});
 
-        return id=0;
-
-    } else {
-
-        return id =1;
-
-    }
 }
+
+app.post("/", function(req,res){
+    var teachers = req.body;
+    teachers.idteacher =id++;
+    teacher.push(teachers);
+
+    res.send('Usuário cadastrado com sucesso.');
+
+});
 
 app.get('/',function (req,res) {
     res.send(teacher);
@@ -42,24 +44,48 @@ app.delete('/',function(req,res){
 })
 
 app.delete('/:id',function(req,res){
-    var id = prseInt(req.params.id);
-    id = verificarid('idteacher',id);
-    if(Filteredid.lenght >=1)
-        res.send(Filteredid[0]);
-    else
+    var id = parseInt(req.params.id);
+    teacher = findid(id);
+
+    if(teacher)
+    {
+        teacher= teacher.map((s)=> {return (s.id !== id);});
+        res.send("Usuário deletado.");
+    }
+    else {
+
         res.status(404).send(' não encontrado.');
+    }
 })
 
 app.get('/:id',function(req,res){
-    var id = prseInt(req.params.id);
-    id = verificarid('idteacher',id);
-    if(teacher) {
-        res.send(course);
+    var id = parseInt(req.params.id);
+   var teacher = findid(id);
+
+    if(teacher){
+        res.send(teacher);
+    }else{
+        res.status(404).send('Usuário não encontrado');
     }
-    else{
-        res.status(404).send('Curso não Encontrado');
+});
+
+app.put('/:id', function(req,res){
+    var id = parseInt(req.params.id);
+    var teachers = findid(id);
+    var bodyteacher = req.body;
+
+    if(teachers)
+    {
+        teachers.name = bodyteacher.name||teachers.name;
+        teachers.lastname = bodyteacher.lastname||teachers.lastname;
+        teachers.profile = teachers['profile']||teachers.profile;
+        res.send('Usuário atualizado');
     }
-})
+    else
+    {
+        res.send('Usuário não encontrado');
+    }
+});
 
 module.exports = app;
 

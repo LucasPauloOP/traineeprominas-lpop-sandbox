@@ -25,16 +25,8 @@ var course = [
                     ]}
 ]
 
-function verificarid(idcourse,id) {
-    if (idusers.getElementById('id') == null) {
-
-        return id=0;
-
-    } else {
-
-        return id =1;
-
-    }
+function findid(couserid) {
+    return course.find((s) => {return s.idcourse === courserid})
 }
 
 app.get('/',function (req,res) {
@@ -49,8 +41,8 @@ app.put('/',function(req,res){
 })
 
 app.get('/:id',function(req,res){
-    var id = parqeInt(req.params.id);
-    id = verificarid('idcourse',id)
+    var id = parseInt(req.params.id);
+    course = findid(id);
     if(course) {
         res.send(course);
     }
@@ -60,13 +52,15 @@ app.get('/:id',function(req,res){
 })
 
 app.delete('/:id',function(req,res){
-    var id = prseInt(req.params.id);
-    id = verificarid('idcourse',id);
-    var Filteredid = course.filter ((s) => {return (s.id == id);});
-    if(Filteredid.lenght >=1)
-        res.send(Filteredid[0]);
-    else
-        res.status(404).send(' não encontrado.');
+    var id = parseInt(req.params.id);
+    course = findid(id);
+    if(course)
+    {
+        course = course.map((s) => {return (s.id !== id);});
+    }
+    else {
+        res.status(404).send('Cursos não encontrado.');
+    }
 })
 
 app.delete('/',function(req,res){
