@@ -18,7 +18,7 @@ app.use(baseAPI + '/teacher',teacherrouter.app);
 
 app.listen(process.env.PORT || 3000);
 
-app.get('/', function (req, res) {
+app.get(baseAPI + '/', function (req, res) {
     res.send('hello World - GET');
 });
 
