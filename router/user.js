@@ -3,18 +3,18 @@ const express = require('express');
 const app = express.Router();
 
 
-var id=1;
+var idusers=1;
 
 
 var user = [
     {
-        'iduser': id++,
+        'iduser': idusers++,
         'name': 'Lucas',
         'lastname':'Paulo',
         'profile':'Estudante'},
 
     {
-        'iduser': id++,
+        'iduser': idusers++,
         'name': 'Luan',
         'lastname':'Pedro',
         'profile':'Visitante'
@@ -28,7 +28,7 @@ function findid(userid) {
 
 app.post("/", function(req,res){
     var users = req.body;
-    users.iduser =id++;
+    users.iduser =idusers++;
     user.push(users);
 
     res.send('Usuário cadastrado com sucesso.');

@@ -2,18 +2,18 @@ const express = require('express');
 const baseAPI = "/api/v1/router";
 const app = express.Router();
 
-var id=1;
+var idteachers=1;
 
 var teacher=[
     {
-        'idteacher':id++,
+        'idteacher':idteachers++,
         'name': 'Filipe' ,
         'lastname': 'Costa',
         'phd': false
     },
 
     {
-        'idteacher':id++,
+        'idteacher':idteachers++,
         'name': 'Fabiano',
         'lastname': 'Silva',
         'phd': true
@@ -27,7 +27,7 @@ function findid(teacherid) {
 
 app.post("/", function(req,res){
     var teachers = req.body;
-    teachers.idteacher =id++;
+    teachers.idteacher =idteachers++;
     teacher.push(teachers);
 
     res.send('Professor cadastrado com sucesso.');
@@ -83,7 +83,7 @@ app.put('/:id', function(req,res){
     {
         teachers.name = bodyteacher.name||teachers.name;
         teachers.lastname = bodyteacher.lastname||teachers.lastname;
-        teachers.profile = teachers['profile']||teachers.profile;
+        teachers.phd = teachers.phd||teachers.phd;
         res.send('Professor atualizado');
     }
     else
@@ -92,7 +92,12 @@ app.put('/:id', function(req,res){
     }
 });
 
-module.exports = app;
+function findteacher(id)
+{
+    return teacher.find((l)=>{return l.idteacher === id});
+}
+
+module.exports = {app,findteacher};
 
 
 
