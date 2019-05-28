@@ -18,8 +18,8 @@ app.use(baseAPI + '/teacher',teacherrouter.app);
 
 app.listen(process.env.PORT || 3000);
 
-app.get(baseAPI + '/', function (req, res) {
-    res.send('hello World - GET');
+app.get(baseAPI + '/index', function (req, res) {
+    res.send('Hello World - GET');
 });
 
 /*
