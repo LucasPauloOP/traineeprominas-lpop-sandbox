@@ -1,6 +1,7 @@
 const express = require('express');
-const app = express();
 const baseAPI = "/api/v1/router";
+const app = express.Router();
+
 
 var id=1;
 
@@ -34,11 +35,11 @@ function verificarid(idstudents,id) {
     }
 }
 
-app.get(baseAPI + '/students',function (req,res) {
+app.get('/',function (req,res) {
     res.send(student);
 })
 
-app.get(baseAPI + '/students/:id',function(req,res){
+app.get('/:id',function(req,res){
     var id = prseInt(req.params.id);
     id = verificarid('idusstudents',id);
     if(id) {
@@ -49,12 +50,12 @@ app.get(baseAPI + '/students/:id',function(req,res){
     }
 })
 
-app.delete(baseAPI + '/students',function(req,res){
+app.delete('/',function(req,res){
     student=[];
     res.send('Todos os estudantes foram deletados.');
 })
 
-app.delete(baseAPI+'/students/:id',function(req,res){
+app.delete('/:id',function(req,res){
     var id = prseInt(req.params.id);
     id = verificarid('iduser',id);
     var Filteredid = student.filter ((s) => {return (s.id == id);});
@@ -64,5 +65,5 @@ app.delete(baseAPI+'/students/:id',function(req,res){
         res.status(404).send(' não encontrado.');
 })
 
-module.exports = router;
+module.exports = app;
 

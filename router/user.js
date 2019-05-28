@@ -1,7 +1,6 @@
 const express = require('express');
-
 const baseAPI = '/api/v1/router';
-const router = express.Router();
+const app = express.Router();
 
 
 var id=1;
@@ -22,59 +21,58 @@ var user = [
     }
 ]
 
-function verificarid(iduser,id) {
-    if (idusers.getElementById('id') == null) {
+function findid(userid) {
+   return user.find(l => l.id === id);
 
-        return id=0;
-
-    } else {
-
-        return id =1;
-
-    }
 }
 
-app.post(baseAPI + "/users", function(req,res){
+app.post("/", function(req,res){
     var users = req.body;
-    users.push(user);
+    user.push(users);
 
     res.send('Usuário cadastrado com sucesso.');
 
-})
+});
 
-app.get(baseAPI + "/users",function (req,res) {
+app.get("/",function (req,res) {
     res.send(user);
-})
+});
 
-app.delete(baseAPI + "/users",function(req,res){
+app.delete("/",function(req,res){
     user = [];
     res.send("Todos os usuários foram deletados.");
-})
+});
 
-app.get(baseAPI + "/users/:id",function(req,res){
+app.get("/:id",function(req,res){
     var id = parseInt(req.params.id);
-    id = verficarid('iduser',id);
-    if(id){
-        res.send(id);
+    var user = verficarid(id);
+    if(user){
+        res.send(user);
     }else{
         res.status(404).send('Usuário não encontrado');
     }
-})
+});
 
-app.delete(baseAPI+'/users/:id',function(req,res){
-    var id = prseInt(req.params.id);
-    id = verificarid('iduser',id);
-    var Filteredid = user.filter ((s) => {return (s.id == id);});
-    if(Filteredid.lenght >=1)
-        res.send(Filteredid[0]);
-    else
+app.delete('/:id',function(req,res){
+    var id = parseInt(req.params.id);
+    user = verificarid(id);
+
+    if(user) {
+        user = user.map((s) => {
+            return (s.id !== id);
+        });
+    }
+
+    else{
         res.status(404).send(' não encontrado.');
-})
 
-app.put(baseAPI + '/users/:id', function(req,res){
+    }
+});
+
+app.put('/:id', function(req,res){
     var id = prseInt(req.params.id);
-    id = verificarid('iduser',id);
-    if(id)
+    user = verificarid(id);
+    if(user)
     {
 
         res.send('Usuário atualizado');
@@ -83,6 +81,6 @@ app.put(baseAPI + '/users/:id', function(req,res){
     {
         res.send('Usuário não encontrado');
     }
-})
+});
 
-module.exports = router;
+module.exports = app;

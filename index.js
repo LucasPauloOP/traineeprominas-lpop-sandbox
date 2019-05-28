@@ -3,13 +3,16 @@ const bodyParser = require('body-parser');
 const app = express();
 const baseAPI = "/api/v1";
 
-const courseRoute = require('.router/course');
-const userRoute = require('.router/user');
-const studentRoute=require('.router/student');
+const courserouter = require('./router/course');
+const userrouter = require('./router/user');
+const studentrouter=require('./router/student');
+const teacherrouter= require('./router/teacher');
 
+app.use(baseAPI + '/user',userrouter);
+app.use(baseAPI+ '/course',courserouter);
+app.use(baseAPI + '/student',studentrouter);
+app.use(baseAPI + '/teacher',teacherrouter);
 
-app.use(baseAPI + '/user',userRoute)
-app.use(baseAPI+ 'course',courseRoute)
 app.use(bodyParser.json());
 
 app.listen(process.env.PORT || 3000);

@@ -1,6 +1,6 @@
 const express = require('express');
-const app = express();
 const baseAPI = "/api/v1/router";
+const app = express.Router();
 
 var id=1;
 
@@ -32,16 +32,16 @@ function verificarid(idteacher,id) {
     }
 }
 
-app.get(baseAPI + '/teachers',function (req,res) {
+app.get('/',function (req,res) {
     res.send(teacher);
 })
 
-app.delete(baseAPI + '/techers/',function(req,res){
+app.delete('/',function(req,res){
     teacher = [];
     res.send('Professores removidos com sucesso.');
 })
 
-app.delete(baseAPI+'/teachers/:id',function(req,res){
+app.delete('/:id',function(req,res){
     var id = prseInt(req.params.id);
     id = verificarid('idteacher',id);
     if(Filteredid.lenght >=1)
@@ -50,7 +50,7 @@ app.delete(baseAPI+'/teachers/:id',function(req,res){
         res.status(404).send(' não encontrado.');
 })
 
-app.get(baseAPI + 'teachers/:id',function(req,res){
+app.get('/:id',function(req,res){
     var id = prseInt(req.params.id);
     id = verificarid('idteacher',id);
     if(teacher) {
@@ -61,7 +61,7 @@ app.get(baseAPI + 'teachers/:id',function(req,res){
     }
 })
 
-module.exports =router;
+module.exports = app;
 
 
 

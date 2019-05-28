@@ -1,7 +1,6 @@
 const express = require('express');
-const app = express();
 const baseAPI = "/api/v1/router";
-const router = express.Router();
+const app = express.Router();
 
 var id = 1;
 
@@ -38,18 +37,18 @@ function verificarid(idcourse,id) {
     }
 }
 
-app.get(baseAPI + '/courses',function (req,res) {
+app.get('/',function (req,res) {
     res.send(course);
 })
 
 /*app.post(baseAPI + '/courses', function(req, res) {
 */
 
-app.put(baseAPI+ '/courses',function(req,res){
+app.put('/',function(req,res){
     res.send('Curso cadastrado com sucesso.');
 })
 
-app.get(baseAPI + 'courses/:id',function(req,res){
+app.get('/:id',function(req,res){
     var id = parqeInt(req.params.id);
     id = verificarid('idcourse',id)
     if(course) {
@@ -60,7 +59,7 @@ app.get(baseAPI + 'courses/:id',function(req,res){
     }
 })
 
-app.delete(baseAPI+'/courses/:id',function(req,res){
+app.delete('/:id',function(req,res){
     var id = prseInt(req.params.id);
     id = verificarid('idcourse',id);
     var Filteredid = course.filter ((s) => {return (s.id == id);});
@@ -70,10 +69,10 @@ app.delete(baseAPI+'/courses/:id',function(req,res){
         res.status(404).send(' não encontrado.');
 })
 
-app.delete(baseAPI + '/courses',function(req,res){
+app.delete('/',function(req,res){
     couser = [];
     res.send('Cursos removidos com sucesso.');
 })
 
 
-module.exports = router;
+module.exports = app;
