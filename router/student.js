@@ -12,12 +12,12 @@ var student = [
         'lastname':'Paulo',
         'age':'19',
         'course': [
-            { 'idcourse':'1',
+            { 'id':'1',
                 'name': 'Ciência da computação',
                 'period': 'Noturno',
                 'city' : 'Ipatinga',
                 'teacher':
-            [{'idteacher': '1', 'name': 'Filipe', 'lastname': 'Costa', 'phd': false}]
+            [{'id': '1', 'name': 'Filipe', 'lastname': 'Costa', 'phd': false}]
             }
         ]
     },
@@ -28,12 +28,12 @@ var student = [
         'lastname': 'gomes',
         'age': '19',
         'course': [
-        {'idcourse' : '2',
+        {'id' : '2',
             'name': 'Sistema da computação',
             'period':'Matutino',
             'city' : 'Fabriciano',
             'teacher':
-            {'idteacher':'2','name': 'Fabiano','lastname': 'Silva','phd': true}
+            {'id':'2','name': 'Fabiano','lastname': 'Silva','phd': true}
         }
     ]
     }
@@ -102,7 +102,8 @@ app.put('/:id', function(req,res){
         {
             for(var aux=0;aux< students.course.length;aux++)
             {
-                students.course[aux] = arqcourse.findcourse(bodystudent.course[aux])
+                students.course[aux] = arqcourse.findcourse(bodystudent.course[aux]);
+                console.log(arqcourse.findcourse(bodystudent.course[aux]));
             }
         }
 
@@ -120,7 +121,6 @@ app.post('/', function(req, res) {
     for(var aux=0;aux<students.course.length;aux++)
     {
         students.course[aux] = arqcourse.findcourse(students.course[aux]);
-
     }
     student.push(students);
     res.send("Estudante cadastrado");

@@ -18,7 +18,12 @@ app.use(baseAPI + '/teacher',teacherrouter.app);
 
 app.listen(process.env.PORT || 3000);
 
-/*var students = [
+app.get('/', function (req, res) {
+    res.send('hello World - GET');
+});
+
+/*
+var students = [
 		{"name": "Marcos", "age": "23"},
 		{"name": "Pedro", "age": "27"},
 		{"name": "Lucas", "age": "20"}
@@ -26,7 +31,7 @@ app.listen(process.env.PORT || 3000);
 
 app.listen(process.env.PORT || 3000);
 
-/*
+
 app.get('/', function (req, res) {
   res.send('hello World - GET');
 });

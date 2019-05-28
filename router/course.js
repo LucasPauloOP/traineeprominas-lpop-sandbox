@@ -12,7 +12,7 @@ var course = [
         'period': 'Noturno',
         'city' : 'Ipatinga',
         'teachers': [
-            {'idteacher': '1', 'name': 'Filipe', 'lastname': 'Costa', 'phd': false}
+            {'id': '1', 'name': 'Filipe', 'lastname': 'Costa', 'phd': false}
         ]    },
 
     {
@@ -21,7 +21,7 @@ var course = [
         'period':'Matutino',
         'city' : 'Fabriciano',
         'teachers':[
-                        {'idteacher':'2','name': 'Fabiano','lastname': 'Silva','phd': true}
+                        {'id':'2','name': 'Fabiano','lastname': 'Silva','phd': true}
                     ]}
 ]
 
@@ -113,7 +113,7 @@ app.put('/:id', function(req,res){
 });
 
 function findcourse(id){
-    return course.find((l)=>{return l.idcourse === id});
+    return course.find((l)=>{return l.id === id});
 }
 
 module.exports = {app,findcourse};
