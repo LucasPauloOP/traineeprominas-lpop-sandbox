@@ -9,10 +9,8 @@ const mongoClient = require('mongodb').MongoClient;
 const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/test?retryWrites=true';
 
 var db;//variavel global (pode ser vista nas rotas
-//var collection;
+var collection;
 
-var teacherdb;
-//var dbteacher= teacherdb.collection('teacher');
 
 
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
@@ -23,7 +21,7 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     else {
 
         db = database.db('trainee-prominas');
-        collecao = db.collection('course');
+        collection = db.collection('course');
     }
 });
 
@@ -42,15 +40,16 @@ juntar.course.aggregate([
 }
 ])*/
 
+
+
 (async function join (){
-    for(let aux=0;aux<course.teachers.length;aux++)
+    for(let aux=0;aux<course.teacher.length;aux++)
     {
-        var teacher;
-         teacher = await _getOneTeacher(course.tachers[aux]);
-        course.teachers[aux] = teacher;
+        let teachers = await _getoneTeacher(course.teacher[aux]);
+        course.teacher[aux] = teacher;
     }
 
-    courseCollection(insertone(course),(err,result)=>{
+    collection(insertone(course),(err,result)=>{
         if(err){
             console.error("Erro ao criar um novo curso",err);
             res.status(500).send("Erro ao criar um novo curso");
@@ -61,11 +60,11 @@ juntar.course.aggregate([
             res.status(201).send("Curso deletado com sucesso");
         }
     });
-    })();
+})();
 
 const _getoneTeacher = function (id) {
     return new Promisse((resolve, reject) => {
-        teachercollection.findone({"id": id}, (err, teacher) => {
+        collection.findone({"id": id}, (err, teacher) => {
             if (err) {
                 return reject(err);
             } else {
@@ -75,6 +74,8 @@ const _getoneTeacher = function (id) {
 
     });
 };
+
+
 
 
 //async function ()
