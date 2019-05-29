@@ -10,6 +10,31 @@ const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/t
 var db;//variavel global (pode ser vista nas rotas
 var collection;
 
+var teacherdb;
+//var dbteacher= teacherdb.collection('teacher');
+
+mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
+    if(err){
+        console.error("Ocorreu um erro ao conectar ao mongoDB", err);
+        res.status(500);//internal server error
+    }
+    else {
+
+        db = database.db('trainee-prominas');
+        collection = db.collection('course');
+        collection.aggregate([{
+            $lookup:
+                {
+                    from:"teacher",
+                    localField:"teachers",
+                    foreignkey:"id",
+                    ass:"professor"
+                }
+        }]);
+
+    }
+});
+
 var idcourses = 1;
 
 var course = []
@@ -17,20 +42,25 @@ var course = []
 
 
 app.get('/',function (req,res) {
-    res.send(course);
-})
+    collection['find']({}).toArray((err,courses) =>{
+        if(err){
+            console.error("Ocorreu um erro ao conectar a collection teacher");
+            res.status(500);
+        }
+        else{
+            res.send(courses);
+        }
+    });
+});
 
 app.post('/', function(req, res) {
     var courses = req.body;
-    id = idcourse++;
-    for(var aux=0;aux<courses.teachers.length;aux++)
-    {
-        courses.teachers[aux] = arqteacher.findteacher(courses.teachers[aux]);
+    courses.id =idcourses++;
 
-    }
-    course.push(courses);
-    res.send("Curso adicionado com sucesso.");
-})
+    collection.insert(courses);
+
+    res.send('Curso cadastrado com sucesso.');
+});
 
 
 app.get('/:id',function(req,res){
@@ -42,7 +72,7 @@ app.get('/:id',function(req,res){
     else{
         res.status(404).send('Curso não Encontrado');
     }
-})
+});
 
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
