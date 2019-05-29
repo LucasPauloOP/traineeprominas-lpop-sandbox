@@ -55,8 +55,27 @@ app.get("/",function (req,res) {
 });
 
 app.delete("/",function(req,res){
-    user = [];
-    res.send("Todos os usuários foram deletados.");
+    collection.remove({},false,function (err,info) {
+        if(err){
+            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            res.status(500);
+        }
+        else{
+            var numRemoved = info.result.n;
+            if(numRemoved>0){
+              console.log("INF: Todos os documentos ("+numRemoved+") foram removidos");
+              res.status(204);//No content
+                res.send("Todos os usuários foram removidos.");
+            }
+            else{
+                console.log("Nenhum documento foi removido");
+                res.status(404);
+                res.send("Nenhum usuário foi removido.");
+            }
+        }
+    });
+    //user = [];
+   // res.send("Todos os usuários foram deletados.");
 });
 
 app.get("/:id",function(req,res){
@@ -79,30 +98,29 @@ app.get("/:id",function(req,res){
 
             }
         });
+});
+app.delete('/:id',function(req,res) {
+    var id = parseInt(req.params.id);
 
+    collection.remove({"id": id}, true, function (err, info) {
+        if (err) {
+            console.error("Ocorreu um erro ao deletar o documento da coleção.");
+            res.status(500);
+        } else {
+            var numRemoved = info.result.n;
+            if (numRemoved > 0) {
+                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
+                res.status(204);//No content
+                res.send("O usuário foi removido.");
+            } else {
+                console.log("Nenhum documento foi removido");
+                res.status(404);
+                res.send("Nenhum usuário foi removido.");
+            }
+
+        }
 
     });
-
-app.delete('/:id',function(req,res){
-    var id = parseInt(req.params.id);
-    var users = findid(id);
-
-    for(var aux=0;aux<user.length;aux++)
-    {
-          if(user[aux].iduser=== users.iduser)
-          {
-              user.splice(aux,1);
-              res.send('Usuário deletado com sucesso.');
-          }
-          else
-              if(aux===user.length)
-              {
-                  res.status(404).send('Usuário não encontrado.');
-
-              }
-
-    }
-
 });
 
 app.put('/:id', function(req,res){
@@ -124,7 +142,6 @@ app.put('/:id', function(req,res){
             collection.update({"id":id},bodyuser);
             res.send('Usuário atualizado');
         }
-        res.send('Usuário atualizado');
 
 });
 

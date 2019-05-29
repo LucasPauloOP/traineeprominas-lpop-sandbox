@@ -3,32 +3,18 @@ const baseAPI = "/api/v1/router";
 const app = express.Router();
 const arqteacher=require('./teacher');
 
+const mongoClient = require('mongodb').MongoClient;
+
+const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/test?retryWrites=true';
+
+var db;//variavel global (pode ser vista nas rotas
+var collection;
+
 var idcourses = 1;
 
-var course = [
-    {
-        'id': idcourses++,
-        'name': 'Ciência da computação',
-        'period': 'Noturno',
-        'city' : 'Ipatinga',
-        'teachers': [
-            {'id': '1', 'name': 'Filipe', 'lastname': 'Costa', 'phd': false}
-        ]    },
+var course = []
 
-    {
-        'id' : idcourses++,
-        'name': 'Sistema da computação',
-        'period':'Matutino',
-        'city' : 'Fabriciano',
-        'teachers':[
-                        {'id':'2','name': 'Fabiano','lastname': 'Silva','phd': true}
-                    ]}
-]
 
-function findid(courseid) {
-    return course.find((s) => {return s.id === courseid})
-
-}
 
 app.get('/',function (req,res) {
     res.send(course);
