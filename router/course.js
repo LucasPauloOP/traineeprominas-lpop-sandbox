@@ -3,15 +3,17 @@ const baseAPI = "/api/v1/router";
 const app = express.Router();
 const arqteacher=require('./teacher');
 
+
 const mongoClient = require('mongodb').MongoClient;
 
 const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/test?retryWrites=true';
 
 var db;//variavel global (pode ser vista nas rotas
-var collection;
+//var collection;
 
 var teacherdb;
 //var dbteacher= teacherdb.collection('teacher');
+
 
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
@@ -21,19 +23,62 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     else {
 
         db = database.db('trainee-prominas');
-        collection = db.collection('course');
-        collection.aggregate([{
-            $lookup:
-                {
-                    from:"teacher",
-                    localField:"teachers",
-                    foreignkey:"id",
-                    ass:"professor"
-                }
-        }]);
-
+        collecao = db.collection('course');
     }
 });
+
+
+/*
+
+juntar.course.aggregate([
+    {
+        $lookup:
+        {
+            from:"teacher",
+            localField:"teachers",
+            foreignkey:"id",
+            ass:"professor"
+        }
+}
+])*/
+
+(async function join (){
+    for(let aux=0;aux<course.teachers.length;aux++)
+    {
+        var teacher;
+         teacher = await _getOneTeacher(course.tachers[aux]);
+        course.teachers[aux] = teacher;
+    }
+
+    courseCollection(insertone(course),(err,result)=>{
+        if(err){
+            console.error("Erro ao criar um novo curso",err);
+            res.status(500).send("Erro ao criar um novo curso");
+
+        }
+        else
+        {
+            res.status(201).send("Curso deletado com sucesso");
+        }
+    });
+    })();
+
+const _getoneTeacher = function (id) {
+    return new Promisse((resolve, reject) => {
+        teachercollection.findone({"id": id}, (err, teacher) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(teacher);
+            }
+        });
+
+    });
+};
+
+
+//async function ()
+
 
 var idcourses = 1;
 
@@ -54,6 +99,7 @@ app.get('/',function (req,res) {
 });
 
 app.post('/', function(req, res) {
+    juntar();
     var courses = req.body;
     courses.id =idcourses++;
 
