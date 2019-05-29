@@ -1,5 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
+const mongoClient = require("mongodb").MongoClient;
+
+const mdbURL="mongodb+srv://LucasPauloOP:<Lucio3237*>@cluster0-ofedr.mongodb.net/test?retryWrites=true";
+
+var db;//variavel global (pode ser vista nas rotas
+
+
 const app = express();
 const baseAPI = "/api/v1";
 
@@ -16,8 +24,8 @@ app.use(baseAPI + '/teacher',teacherrouter.app);
 
 
 
-app.listen(process.env.PORT || 3000);
-
+//app.listen(process.env.PORT || 3000);
+app.listen(3000);
 app.get(baseAPI + '/', function (req, res) {
     res.send('Hello World - GET');
 });

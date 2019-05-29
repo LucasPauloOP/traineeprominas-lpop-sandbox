@@ -36,7 +36,7 @@ app.get('/',function (req,res) {
 
 app.post('/', function(req, res) {
     var courses = req.body;
-    courses.id = idcourse++;
+    id = idcourse++;
     for(var aux=0;aux<courses.teachers.length;aux++)
     {
         courses.teachers[aux] = arqteacher.findteacher(courses.teachers[aux]);
