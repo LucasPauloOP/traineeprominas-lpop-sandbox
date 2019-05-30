@@ -24,8 +24,8 @@ app.use(baseAPI + '/teacher',teacherrouter.app);
 
 
 
-//app.listen(process.env.PORT || 3000);
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
+//app.listen(3000);
 app.get(baseAPI + '/', function (req, res) {
     res.send('Hello World - GET');
 });

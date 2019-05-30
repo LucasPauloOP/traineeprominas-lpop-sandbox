@@ -131,7 +131,7 @@ app.put('/:id', function(req,res){
     }
     else{
         collection.update({"id":id},bodyteacher);
-        res.send('Usuário atualizado');
+        res.send('Professor atualizado');
     }
 });
 

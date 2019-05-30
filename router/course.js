@@ -1,7 +1,7 @@
 const express = require('express');
 const baseAPI = "/api/v1/router";
 const app = express.Router();
-const arqteacher=require('./teacher');
+//const arqteacher=require('./teacher');
 
 
 const mongoClient = require('mongodb').MongoClient;
@@ -13,17 +13,23 @@ var collection;
 
 
 
-mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
+/*await*/ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
         console.error("Ocorreu um erro ao conectar ao mongoDB", err);
         res.status(500);//internal server error
     }
     else {
 
-        db = database.db('trainee-prominas');
+        db =  database.db('trainee-prominas');
         collection = db.collection('course');
+
     }
 });
+/*if(await mongodb.MongoClient.connect(mdbURL)){
+    let thing = await collection.findone({"id":id});
+    await  mongodb.MongoClient.connect(mdbURL).close();
+    return
+}*/
 
 
 /*db.course.aggregate([
@@ -45,30 +51,30 @@ var idcourses = 1;
 
 var course = []
 
-(async function aggregate (){
-    for(let aux=0;aux<course.teacher.length;aux++)
-    {
-        let teachers;
-         teachers = await _getoneTeacher(course.teacher[aux]);
-        course.teacher[aux] = teacher;
+async function aggregate (course,res) {
+    for (let aux = 0; aux < course.teachers.length; aux++) {
+        let teacher;
+        teacher = await _getoneTeacher(course.teachers[aux]);
+
+        course.teachers[aux] = teacher;
+
     }
 
-    collection(insertone(course),(err,result)=>{
-        if(err){
-            console.error("Erro ao criar um novo curso",err);
+    console.log("qq",course);
+    collection.insertOne(course, (err, result) => {
+        if (err) {
+            console.error("Erro ao criar um novo curso", err);
             res.status(500).send("Erro ao criar um novo curso");
 
-        }
-        else
-        {
+        } else {
             res.status(201).send("Curso deletado com sucesso");
         }
     });
-})();
+}
 
 const _getoneTeacher = function (id) {
-    return new Promisse((resolve, reject) => {
-        collection.findone({"id": id}, (err, teacher) => {
+    return new Promise((resolve, reject) => {
+        db.collection('teacher').findOne({"id": parseInt(id)}, (err, teacher) => {
             if (err) {
                 return reject(err);
             } else {
@@ -79,7 +85,28 @@ const _getoneTeacher = function (id) {
     });
 };
 
+async function put_aggregate (id,course,res) {
+    console.log("qq",course);
 
+    for (let aux = 0; aux < course.teachers.length; aux++) {
+        let teacher;
+        teacher = await _getoneTeacher(course.teachers[aux]);
+
+        course.teachers[aux] = teacher;
+
+    }
+
+
+
+    collection.updateOne({'id':id},{$set:course},(err,result) => {
+       if(err){
+           console.error("Erro ao conectar a collection course");
+           res.status(500).send("Erro ao conectar a collection course");
+       } else{
+           res.send("Curso atualizado com sucesso.");
+       }
+    })
+}
 
 
 //async function ()*/
@@ -103,11 +130,12 @@ app.get('/',function (req,res) {
 
 app.post('/', function(req, res) {
     var courses = req.body;
+
     courses.id =idcourses++;
 
-    collection.insert(courses);
+    aggregate(courses,res);
 
-    res.send('Curso cadastrado com sucesso.');
+
 });
 
 
@@ -182,33 +210,13 @@ app.delete('/',function(req,res){
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
-    var courses = findid(id);
-    var bodycourse= req.body;
+    var bodycourse  = req.body;
 
-    if(courses)
-    {
-        courses.name = bodycourse.name||courses.name;
-        courses.period = bodycourse.period||courses.period;
-        courses.city = bodycourse.city||courses.city;
-        courses.teachers= bodycourse.teachers||courses.teachers;
-        if(bodycourse.teachers)
-        {
-            for(var aux=0;aux< courses.teachers.length;aux++)
-            {
-                courses.teachers[aux] = arqteacher.findteacher(bodycourse.teachers[aux])
-            }
-        }
+    put_aggregate(id,bodycourse,res);
 
-        res.send('Curso atualizado');
-    }
-    else
-    {
-        res.send('Curso não encontrado');
-    }
+
 });
 
-function findcourse(id){
-    return course.find((l)=>{return l.id === id});
-}
 
-module.exports = {app,findcourse};
+
+module.exports = {app};

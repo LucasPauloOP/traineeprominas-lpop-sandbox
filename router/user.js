@@ -13,7 +13,7 @@ var collection;
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
         console.error("Ocorreu um erro ao conectar ao mongoDB", err);
-        res.status(500);//internal server error
+        //res.status(500);//internal server error
     }
     else {
         db = database.db('trainee-prominas');

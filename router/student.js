@@ -1,7 +1,7 @@
 const express = require('express');
 const baseAPI = "/api/v1/router";
 const app = express.Router();
-const arqcourse = require('./course');
+
 
 
 const mongoClient = require('mongodb').MongoClient;
@@ -28,6 +28,69 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 var idstudent=1;
 
 var student = []
+
+
+
+
+async function aggregate (student,res) {
+    if(student.course !== null){
+        console.log("qq",student.course);
+        let course;
+        course = await _getOneCourse(student.course);
+
+        student.course = course;
+
+    }
+
+    console.log("qualquercoisa",student);
+    collection.insertOne(student, (err, result) => {
+        if (err) {
+            console.error("Erro ao criar um novo estudante", err);
+            res.status(500).send("Erro ao criar um novo Estudante");
+
+        } else {
+            res.status(201).send("Estudante criado com sucesso");
+        }
+    });
+}
+
+const _getOneCourse = function (id) {
+    return new Promise((resolve, reject) => {
+        db.collection('course').findOne({"id": parseInt(id)}, (err, course) => {
+            if (err) {
+                return reject(err);
+            } else {
+                return resolve(course);
+            }
+        });
+
+    });
+};
+
+async function put_aggregate (id,student,res) {
+    console.log("qq",student);
+
+    if(student.course !== null) {
+        let course;
+        course = await _getOneCourse(student.course);
+
+        student.course = course;
+
+    }
+
+    console.log("qualquer coisa",student);
+
+
+    collection.updateOne({'id':id},{$set:student},(err,result) => {
+        console.log("qq14",result);
+        if(err){
+            console.error("Erro ao conectar a collection studant");
+            res.status(500).send("Erro ao conectar a collection studant");
+        } else{
+            res.send("Estudante atualizado com sucesso.");
+        }
+    })
+}
 
 
 
@@ -112,43 +175,17 @@ app.delete('/:id',function(req,res){
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
-    console.log(id);
-    var students = findid(id);
+    var bodystudent  = req.body;
 
-    var bodystudent = req.body;
-
-    if(students)
-    {
-        students.name = bodystudent.name||students.name;
-        students.lastname = bodystudent.lastname||students.lastname;
-        students.age = bodystudent.age||students.age;
-        students.course= bodystudent.course||students.course;
-        if(bodystudent.course)
-        {
-            for(var aux=0;aux< students.course.length;aux++)
-            {
-                students.course[aux] = arqcourse.findcourse(bodystudent.course[aux]);
-                console.log(arqcourse.findcourse(bodystudent.course[aux]));
-            }
-        }
-
-        res.send('Estudante atualizado');
-    }
-    else
-    {
-        res.send('Estudante não encontrado');
-    }
+    put_aggregate(id,bodystudent,res);
 });
 
 app.post('/', function(req, res) {
     var students = req.body;
-    students.id = idstudent++;
-    for(var aux=0;aux<students.course.length;aux++)
-    {
-        students.course[aux] = arqcourse.findcourse(students.course[aux]);
-    }
-    student.push(students);
-    res.send("Estudante cadastrado");
+
+    students.id =idstudent++;
+
+    aggregate(students,res);
 });
 
 module.exports = app;
