@@ -26,9 +26,7 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 });
 
 
-/*
-
-juntar.course.aggregate([
+/*db.course.aggregate([
     {
         $lookup:
         {
@@ -38,17 +36,20 @@ juntar.course.aggregate([
             ass:"professor"
         }
 }
-])*/
+]).map(function (cli) {
+    return[cli.name,cli.lastname,cli.phd]
+});*/
 
 
 var idcourses = 1;
 
 var course = []
 
-/*(async function join (){
+(async function aggregate (){
     for(let aux=0;aux<course.teacher.length;aux++)
     {
-        let teachers = await _getoneTeacher(course.teacher[aux]);
+        let teachers;
+         teachers = await _getoneTeacher(course.teacher[aux]);
         course.teacher[aux] = teacher;
     }
 
@@ -89,7 +90,7 @@ const _getoneTeacher = function (id) {
 
 
 app.get('/',function (req,res) {
-    collection['find']({}).toArray((err,courses) =>{
+    collection.find({}).toArray((err,courses) =>{
         if(err){
             console.error("Ocorreu um erro ao conectar a collection teacher");
             res.status(500);
@@ -133,28 +134,32 @@ app.get('/:id',function(req,res){
 
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
-    var courses = findid(id);
 
-    for(var aux=0;aux<course.length;aux++)
-    {
-        if(course[aux].idcourse=== courses.idcourse)
-        {
+    collection.remove({"id": id}, true, function (err, info) {
+        if (err) {
+            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            res.status(500);
+        } else {
+            var numRemoved = info.result.n;
+            if (numRemoved > 0) {
+                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
+                res.send("Curso foi removido.");
+                res.status(204);//No content
 
-            course.splice(aux,1);
-            res.send('Curso deletado com sucesso.');
+            }
+            else {
+                console.log("Nenhum documento foi removido");
+                res.status(404);
+                res.send("Nenhum curso foi removido.");
+            }
+
         }
-        else
-        if(aux===course.length)
-        {
-            res.status(404).send('Curso não encontrado.');
 
-        }
-
-    }
+    });
 });
 
 app.delete('/',function(req,res){
-    collection['remove']({},false,function(err, info) {
+    collection.remove({},false,function(err, info) {
         if (err) {
             console.error("Ocorreu um erro ao deletar os documentos da coleção.");
             res.status(500);

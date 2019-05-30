@@ -3,87 +3,112 @@ const baseAPI = "/api/v1/router";
 const app = express.Router();
 const arqcourse = require('./course');
 
+
+const mongoClient = require('mongodb').MongoClient;
+
+const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/test?retryWrites=true';
+
+var db;//variavel global (pode ser vista nas rotas
+var collection;
+
+
+
+mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
+    if(err){
+        console.error("Ocorreu um erro ao conectar ao mongoDB", err);
+        res.status(500);//internal server error
+    }
+    else {
+
+        db = database.db('trainee-prominas');
+        collection = db.collection('student');
+    }
+});
+
 var idstudent=1;
 
-var student = [
-    {
-        'id': idstudent++,
-        'name': 'Lucas',
-        'lastname':'Paulo',
-        'age':'19',
-        'course': [
-            { 'id':'1',
-                'name': 'Ciência da computação',
-                'period': 'Noturno',
-                'city' : 'Ipatinga',
-                'teacher':
-            [{'id': '1', 'name': 'Filipe', 'lastname': 'Costa', 'phd': false}]
-            }
-        ]
-    },
+var student = []
 
-    {
-        'id': idstudent++,
-        'name': 'Luan',
-        'lastname': 'gomes',
-        'age': '19',
-        'course': [
-        {'id' : '2',
-            'name': 'Sistema da computação',
-            'period':'Matutino',
-            'city' : 'Fabriciano',
-            'teacher':
-            {'id':'2','name': 'Fabiano','lastname': 'Silva','phd': true}
-        }
-    ]
-    }
-]
 
-function  findid(studentid) {
-    return student.find(l => l.id === studentid);
-}
+
+
 
 app.get('/',function (req,res) {
-    res.send(student);
-})
+    collection.find({}).toArray((err,students) =>{
+        if(err){
+            console.error("Ocorreu um erro ao conectar a collection student");
+            res.status(500);
+        }
+        else{
+            res.send(students);
+        }
+    });
+});
 
 app.get('/:id',function(req,res){
     var id = parseInt(req.params.id);
-   var students = findid(id);
-    if(students) {
-        res.send(students);
-    }
-    else{
-        res.status(404).send('Estudante não Encontrado');
-    }
-})
+
+    collection.find({'id':id}).toArray((err,students) =>{
+        if(err){
+            console.error("Ocorreu um erro ao conectar a collection student");
+            res.status(500);
+        }
+        else{
+            res.send(students);
+        }
+    });
+});
 
 app.delete('/',function(req,res){
-    student=[];
-    res.send('Todos os estudantes foram deletados.');
-})
+    collection.remove({}, true, function (err, info) {
+        if (err) {
+            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            res.status(500);
+        } else {
+            var numRemoved = info.result.n;
+            if (numRemoved > 0) {
+                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
+                res.send("Estudante foi removido com sucesso.");
+                res.status(204);//No content
+
+            }
+            else {
+                console.log("Nenhum documento foi removido");
+                res.status(404);
+                res.send("Nenhum Estudante foi removido.");
+            }
+
+        }
+
+    });
+});
 
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
-    var students = findid(id);
 
-    for(var aux=0;aux<student.length;aux++)
-    {
-        if(student[aux].id === students.id)
-        {
-            student.splice(aux,1);
-            res.send('Estudante deletado com sucesso.');
+    collection.remove({"id": id}, true, function (err, info) {
+        if (err) {
+            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            res.status(500);
+        } else {
+            var numRemoved = info.result.n;
+            if (numRemoved > 0) {
+                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
+                res.send("Estudante foi removido com sucesso.");
+                res.status(204);//No content
+
+            }
+            else {
+                console.log("Nenhum documento foi removido");
+                res.status(404);
+                res.send("Nenhum estudante foi removido.");
+            }
+
         }
-        else
-        if(aux===student.length)
-        {
-            res.status(404).send('Estudante não encontrado.');
 
-        }
+    });
 
-    }
-
-})
+});
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
@@ -124,7 +149,7 @@ app.post('/', function(req, res) {
     }
     student.push(students);
     res.send("Estudante cadastrado");
-})
+});
 
 module.exports = app;
 

@@ -33,7 +33,7 @@ var user = []//como utiliza banco não precisa ter nada de conteudo.
 
 app.post("/", function(req,res){
     var users = req.body;
-    users.id =idusers++;
+    users.id = idusers++;
     //user.push(users);
     collection.insert(users);
 
