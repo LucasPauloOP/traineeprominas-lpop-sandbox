@@ -1,14 +1,21 @@
+//constant that enables the express.
 const express = require('express');
+
+//constant that enables the express.
 const bodyParser = require('body-parser');
 
+//constant that connects to the BD (mongo db).
 const mongoClient = require("mongodb").MongoClient;
 
+//constant that saves the DB url
 const mdbURL="mongodb+srv://LucasPauloOP:<Lucio3237*>@cluster0-ofedr.mongodb.net/test?retryWrites=true";
 
-var db;//variavel global (pode ser vista nas rotas
+//global variable to facilitate DB database call
+var db;
 
-
+//constant that
 const app = express();
+
 const baseAPI = "/api/v1";
 
 const courserouter = require('./router/course');
@@ -24,8 +31,8 @@ app.use(baseAPI + '/teacher',teacherrouter.app);
 
 
 
-app.listen(process.env.PORT || 3000);
-//app.listen(3000);
+//app.listen(process.env.PORT || 3000);
+app.listen(3000);
 app.get(baseAPI + '/', function (req, res) {
     res.send('Hello World - GET');
 });

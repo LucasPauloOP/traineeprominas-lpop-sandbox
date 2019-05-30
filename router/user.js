@@ -21,37 +21,49 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     }
 });
 
+
+
 var idusers=1;
 
 
-var user = []//como utiliza banco não precisa ter nada de conteudo.
-
-/*function findid(userid) {
-   return user.find((s) => {return s.id === userid})
-
-}*/
+var user = []
 
 app.post("/", function(req,res){
     var users = req.body;
     users.id = idusers++;
-    //user.push(users);
+    users.status=1;
     collection.insert(users);
 
     res.send('Usuário cadastrado com sucesso.');
 
 });
 
+
 app.get("/",function (req,res) {
-    //res.send(user);
-    collection.find({}).toArray((err,users)=>{
-        if(err){
-            console.error("Ocorreu um erro ao conectar a collection User");
-            res.status(500);
-        }
-        else{
-            res.send(users)
-        }
-    });
+
+    var status= collection.find({"status":1});
+    if(status) {
+
+        collection.find({}).toArray((err, users) => {
+            if (err) {
+                console.error("Ocorreu um erro ao conectar a collection User");
+                res.status(500);
+            } else {
+                res.send(users)
+            }
+        });
+    }
+    else
+    if(status === 0){
+            if(err){
+                console.log("Ocorreu um erro ao conectar a collection user");
+                res.status(500);
+            }else{
+                res.status(404).send("Usuário inexistente.");
+            }
+
+    }
+
 });
 
 app.delete("/",function(req,res){
@@ -80,7 +92,6 @@ app.delete("/",function(req,res){
 
 app.get("/:id",function(req,res){
     var id = parseInt(req.params.id);
-  //  var user = findid(id);
 
         collection.find({"id":id}).toArray((err,user)=>{
             if(err){
@@ -99,10 +110,11 @@ app.get("/:id",function(req,res){
             }
         });
 });
+
 app.delete('/:id',function(req,res) {
     var id = parseInt(req.params.id);
 
-    collection.remove({"id": id}, true, function (err, info) {
+    collection.update({"id": id}, true, function (err, info) {
         if (err) {
             console.error("Ocorreu um erro ao deletar o documento da coleção.");
             res.status(500);
