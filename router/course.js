@@ -41,8 +41,11 @@ juntar.course.aggregate([
 ])*/
 
 
+var idcourses = 1;
 
-(async function join (){
+var course = []
+
+/*(async function join (){
     for(let aux=0;aux<course.teacher.length;aux++)
     {
         let teachers = await _getoneTeacher(course.teacher[aux]);
@@ -78,12 +81,10 @@ const _getoneTeacher = function (id) {
 
 
 
-//async function ()
+//async function ()*/
 
 
-var idcourses = 1;
 
-var course = []
 
 
 
@@ -100,7 +101,6 @@ app.get('/',function (req,res) {
 });
 
 app.post('/', function(req, res) {
-    juntar();
     var courses = req.body;
     courses.id =idcourses++;
 
@@ -112,13 +112,23 @@ app.post('/', function(req, res) {
 
 app.get('/:id',function(req,res){
     var id = parseInt(req.params.id);
-    var courses = findid(id);
-    if(courses) {
-        res.send(courses);
-    }
-    else{
-        res.status(404).send('Curso não Encontrado');
-    }
+
+    collection.find({"id":id}).toArray((err,coursers)=>{
+        if(err){
+            console.error("Ocorreu um erro ao conectar a collection Curso");
+            res.status(500);
+        }
+        else{
+            if(coursers === []){
+                res.status(404);
+                res.send("Curso não encontrado.");
+            }
+            else{
+                res.send(coursers);
+            }
+
+        }
+    });
 });
 
 app.delete('/:id',function(req,res){
@@ -141,12 +151,29 @@ app.delete('/:id',function(req,res){
         }
 
     }
-})
+});
 
 app.delete('/',function(req,res){
-    course = [];
-    res.send('Cursos removidos com sucesso.');
-})
+    collection['remove']({},false,function(err, info) {
+        if (err) {
+            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            res.status(500);
+        } else {
+            var numRemoved = info.result.n;
+            if (numRemoved > 0) {
+                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
+                res.status(204);//No content
+                res.send("Todos os professores foram removidos.");
+            } else {
+                console.log("Nenhum documento foi removido");
+                res.status(404);
+                res.send("Nenhum professor foi removido.");
+            }
+
+        }
+
+    });
+});
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);

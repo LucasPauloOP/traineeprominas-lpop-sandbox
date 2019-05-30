@@ -99,7 +99,7 @@ app.delete('/:id',function(req,res){
 
 app.get('/:id',function(req,res){
     var id = parseInt(req.params.id);
-  //  var teachers = findid(id);
+
 
     collection.find({"id":id}).toArray((err,teachers)=>{
         if(err){
