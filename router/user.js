@@ -22,6 +22,11 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 });
 
 
+var cont;
+for(var aux=0;aux<collection.find({}.))
+{
+    cont++;
+}
 
 var idusers=1;
 
@@ -39,6 +44,7 @@ app.post("/", function(req,res){
 });
 
 
+
 app.get("/",function (req,res) {
 
     var status= collection.find({"status":1});
@@ -50,12 +56,12 @@ app.get("/",function (req,res) {
                 res.status(500);
             }
             else {
-                res.send(users)
+                res.status(201).send(users);
             }
         });
     }
     else
-    if(!status){
+    {
         res.status(404);
         res.send("Usuário não encontrado.");
     }
@@ -88,7 +94,7 @@ app.delete("/",function(req,res){
 
     }
     else{
-
+        res.status(204).send("Usuário não encontrado.");
     }
 
     //user = [];
@@ -115,7 +121,7 @@ app.get("/:id",function(req,res){
         {
             if(!status)
             {
-                res.status(404);
+                res.status(204);
                 res.send("Usuário não encontrado.");
             }
         }
@@ -124,31 +130,24 @@ app.get("/:id",function(req,res){
 app.delete('/:id',function(req,res) {
     var id = parseInt(req.params.id);
     var status = collection.find({"status":1});
+
     if(status)
     {
-        collection.update({"id": id}, true, function (err, info) {
+        collection.find({"id": id}, true, function (err, info) {
             if (err) {
                 console.error("Ocorreu um erro ao deletar o documento da coleção.");
                 res.status(500);
             } else {
-                var numRemoved = info.result.n;
-                if (numRemoved > 0) {
-                    console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
+                    collection.update({"status":1},{$set:{'status':0}},{upset:true});
                     res.status(204);//No content
                     res.send("O usuário foi removido.");
-                } else {
-                    console.log("Nenhum documento foi removido");
-                    res.status(404);
-                    res.send("Usuário não encontrado.");
                 }
-
-            }
-
         });
 
     }
     else{
-        res.status(404).send("Usuário nao encontrado.");
+        console.log("Nenhum documento foi removido");
+        res.status(204).send("Usuário nao encontrado.");
     }
 
 });
