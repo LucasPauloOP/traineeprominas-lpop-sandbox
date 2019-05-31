@@ -22,11 +22,11 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 });
 
 
-var cont;
-for(var aux=0;aux<collection.find({}.))
+/*var cont;
+for(var aux=0;aux<collection.find({}))
 {
     cont++;
-}
+}*/
 
 var idusers=1;
 
@@ -46,7 +46,6 @@ app.post("/", function(req,res){
 
 
 app.get("/",function (req,res) {
-
     var status= collection.find({"status":1});
     if(status) {
 
@@ -65,7 +64,6 @@ app.get("/",function (req,res) {
         res.status(404);
         res.send("Usuário não encontrado.");
     }
-
 });
 
 app.delete("/",function(req,res){

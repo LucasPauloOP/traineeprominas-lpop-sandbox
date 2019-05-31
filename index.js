@@ -23,7 +23,7 @@ const userrouter = require('./router/user');
 const studentrouter=require('./router/student');
 const teacherrouter= require('./router/teacher');
 
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 app.use(baseAPI + '/user',userrouter);
 app.use(baseAPI+ '/course',courserouter.app);
 app.use(baseAPI + '/student',studentrouter);
@@ -31,11 +31,13 @@ app.use(baseAPI + '/teacher',teacherrouter.app);
 
 
 
-app.listen(process.env.PORT||3000);
-//app.listen(3000);
+
 app.get(baseAPI + '/', function (req, res) {
     res.send('Hello World - GET');
 });
+
+app.listen(process.env.PORT);
+//app.listen(3000);
 
 /*
 var students = [
