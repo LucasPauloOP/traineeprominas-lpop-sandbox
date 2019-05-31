@@ -23,7 +23,6 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     }
 });
 
-
 var iduser=1;
 
 let count=0;
@@ -33,23 +32,25 @@ var user = []
 app.post("/", function(req,res){
     var users =req.body;
 
-    collection.find({}).toArray((err,user)=>{
+  /* collection.find({}).toArray((err,user)=>{
         for (let aux = 0; aux < user.length; aux++) {
-            iduser = user.length;
-            console.log("id",iduser);
-        }
-    });
 
-    if(users.name != null || users.lastName != null || users['profile'] != null)
+            iduser = aux;
+        }
+        console.log(iduser);
+    });*/
+    console.log("body",users);
+    if(users.name == '' || users.lastName == '' || users['profile'] == '')
     {
-        users.id=iduser;
-        users.status=1;
-        collection.insert(users);
-        res.status(200).send('Usuário cadastrado com sucesso.');
+        res.status(401).send("Campos obrigatorios não prenchidos.");
     }
     else
     {
-        res.status(401).send("Campos obrigatorios não prenchidos.");
+        /*users.id=iduser;*/
+        console.log('id2',users.id);
+        users.status=1;
+        collection.insert(users);
+        res.status(200).send('Usuário cadastrado com sucesso.');
     }
 
     /*else{

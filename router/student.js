@@ -34,7 +34,7 @@ var student = []
 
 async function aggregate (student,res) {
     if(student.course !== null){
-        console.log("qq",student.course);
+
         let course;
         course = await _getOneCourse(student.course);
 
