@@ -32,21 +32,23 @@ var user = []
 app.post("/", function(req,res){
     var users =req.body;
 
-  /* collection.find({}).toArray((err,user)=>{
+  collection.find({}).toArray((err,user)=>{
         for (let aux = 0; aux < user.length; aux++) {
 
             iduser = aux;
         }
-        console.log(iduser);
-    });*/
+        console.log("idi",iduser);
+    });
+
     console.log("body",users);
     if(users.name === '' || users.lastName === '' || users['profile'] === '')
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
     else
+     if(users.name != ''||users.lastName != ''||users['profile']!=''||users != null)
     {
-        /*users.id=iduser;*/
+        users.id=iduser;
         console.log('id2',users.id);
         users.status=1;
         collection.insert(users);
@@ -120,7 +122,7 @@ app.get("/:id",function(req,res){
 
                     else
                         {
-                            res.send(user);
+                            res.status(201).send(user);
                         }
 
                 })
@@ -130,53 +132,60 @@ app.get("/:id",function(req,res){
 
 app.delete('/:id',function(req,res) {
     var id = parseInt(req.params.id);
-    var status = collection.find({"status":1});
 
-    if(status)
-    {
-        collection.find({"id": id}, true, function (err, info) {
+        collection.find({"id": id}, true, function (err,users) {
             if (err) {
                 console.error("Ocorreu um erro ao deletar o documento da coleção.");
                 res.status(500);
             } else {
-                    collection.update({"status":1},{$set:{'status':0}},{upset:true});
+                if(users.status === 1) {
+                    collection.update({"status": 1}, {$set: {'status': 0}}, {upset: true});
                     res.status(204);//No content
                     res.send("O usuário foi removido.");
                 }
-        });
+                else{
+                    res.status(401).send("Usuário não foi removido ou por não existir ou por ja ter sido deletado");
 
-    }
-    else{
-        console.log("Nenhum documento foi removido");
-        res.status(204).send("Usuário nao encontrado.");
-    }
+                }
+            }
+
+        });
 
 });
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
-    var status= collection.find({"status":1});
+    var users;
     var bodyuser= req.body;
+    users.name=bodyuser.name;users.name;
+    users.lastName=bodyuser.lastName;users.lastName;
+    users.profile=bodyuser['profile'];users.profile;
 
-       /* users.name = bodyuser.name;//||users.name;
-        users.lastname = bodyuser.lastname;//||users.lastname;
-        users.profile = bodyuser['profile'];//||users.profile;*/
-    if(status) {
-        collection.update({"id": id}, bodyuser);
-        if (bodyuser === {}) {
-            res.status("400");
-            res.send("Solicitação não autorizada");
-        } else {
-            collection.update({"id": id}, bodyuser);
-            res.send('Usuário atualizado');
-        }
+
+    if(bodyuser.name === '' || bodyuser.lastName === '' || bodyuser['profile'] === ''){
+        res.status(401).send("Campos obrigatorios não prenchidos.");
     }
-    else
-    {
-        res.status("404").send("Usuário não encontrado.");
+    else {
+            //collection.update({"id": id}, bodyuser);
+            collection.find({"status":1}).toArray((err,user)=>{
+            if (err) {
+                res.status("400");
+                res.send("Solicitação não autorizada");
+            } else {
+                console.log("body2",user);
+                bodyuser.id = user.id;
+                bodyuser.status = user.status;
+                collection.update({"id": id},{$set:{'name':bodyuser.name,'lastName':bodyuser.lastName,'profile':bodyuser['profile']}},
+                    {upset:true});
+                res.send('Usuário atualizado');
+            }
+        });
     }
 });
 
+/* users.name = bodyuser.name;||users.name;
+       users.lastname = bodyuser.lastname;||users.lastname;
+       users.profile = bodyuser['profile'];||users.profile;*/
 
 
 module.exports = app;
