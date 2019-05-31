@@ -22,13 +22,21 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     }
 });
 
+
+
 var idteachers=1;
 
 var teacher=[]
 
+let count;
 
 app.post("/", function(req,res){
     var teachers = req.body;
+
+
+
+
+
     teachers.id =idteachers++;
 
     collection.insert(teachers);

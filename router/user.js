@@ -13,7 +13,7 @@ var collection;
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
         console.error("Ocorreu um erro ao conectar ao mongoDB", err);
-        //res.status(500);//internal server error
+        res.status(500);//internal server error
     }
     else {
         db = database.db('trainee-prominas');
@@ -28,16 +28,19 @@ for(var aux=0;aux<collection.find({}))
     cont++;
 }*/
 
-var idusers=1;
+var idusers;
 
+let count;
 
 var user = []
 
 app.post("/", function(req,res){
     var users = req.body;
+
+    idusers = collection.find({}).count();
     users.id = idusers++;
     users.status=1;
-    collection.insert(users);
+    collection.insert(users['name','lastName','profile']);
 
     res.send('Usuário cadastrado com sucesso.');
 
@@ -46,10 +49,7 @@ app.post("/", function(req,res){
 
 
 app.get("/",function (req,res) {
-    var status= collection.find({"status":1});
-    if(status) {
-
-        collection.find({}).toArray((err, users) => {
+        collection.find({'status':1}).toArray((err, users) => {
             if (err) {
                 console.error("Ocorreu um erro ao conectar a collection User");
                 res.status(500);
@@ -58,12 +58,6 @@ app.get("/",function (req,res) {
                 res.status(201).send(users);
             }
         });
-    }
-    else
-    {
-        res.status(404);
-        res.send("Usuário não encontrado.");
-    }
 });
 
 app.delete("/",function(req,res){
@@ -101,10 +95,6 @@ app.delete("/",function(req,res){
 
 app.get("/:id",function(req,res){
     var id = parseInt(req.params.id);
-
-    var status = collection.find({"status":1});
-        if(status)
-        {
             collection.find({"id":id}).toArray((err,user)=>{
                 if(err){
                     console.error("Ocorreu um erro ao conectar a collection User");
@@ -114,15 +104,6 @@ app.get("/:id",function(req,res){
                         res.send(user);
                     }
             });
-        }
-        else
-        {
-            if(!status)
-            {
-                res.status(204);
-                res.send("Usuário não encontrado.");
-            }
-        }
 });
 
 app.delete('/:id',function(req,res) {
@@ -154,7 +135,6 @@ app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
     var status= collection.find({"status":1});
     var bodyuser= req.body;
-
 
        /* users.name = bodyuser.name;//||users.name;
         users.lastname = bodyuser.lastname;//||users.lastname;

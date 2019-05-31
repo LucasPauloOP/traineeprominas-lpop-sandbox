@@ -36,7 +36,7 @@ app.get(baseAPI + '/', function (req, res) {
     res.send('Hello World - GET');
 });
 
-app.listen(process.env.PORT);
+app.listen(process.env.PORT||3000);
 //app.listen(3000);
 
 /*
