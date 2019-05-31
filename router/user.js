@@ -4,11 +4,13 @@ const app = express.Router();
 
 const mongoClient = require('mongodb').MongoClient;
 
+
 const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/test?retryWrites=true';
 
 var db;//variavel global (pode ser vista nas rotas
+
 var collection;
-//const collection = db.collection('user');
+
 
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
@@ -22,12 +24,6 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 });
 
 
-/*var cont;
-for(var aux=0;aux<collection.find({}))
-{
-    cont++;
-}*/
-
 var iduser=1;
 
 let count=0;
@@ -39,13 +35,23 @@ app.post("/", function(req,res){
 
     collection.find({}).toArray((err,user)=>{
         for (let aux = 0; aux < user.length; aux++) {
-            users.id = user.lenght[aux];
+            iduser = user.length;
+            console.log("id",iduser);
         }
     });
-        users.id = users.id++;
+
+    if(users.name != null || users.lastName != null || users['profile'] != null)
+    {
+        users.id=iduser;
         users.status=1;
         collection.insert(users);
         res.status(200).send('Usuário cadastrado com sucesso.');
+    }
+    else
+    {
+        res.status(401).send("Campos obrigatorios não prenchidos.");
+    }
+
     /*else{
             sen.status(401).send("Campo de cadastro vazio.");
     }*/
@@ -62,13 +68,13 @@ app.get("/",function (req,res) {
                 res.status(500);
             }
             else {
-                  count=1;
-                 res.status(201).send(users);
+                    count=1;
+                    res.status(201).send(users);
                 }
         });
-        if(!count) {
+        /*if(count===0) {
             res.status(404).send("Nenhum usuário cadastrado");
-        }
+        }*/
 });
 
 app.delete("/",function(req,res){

@@ -18,6 +18,8 @@ const app = express();
 
 const baseAPI = "/api/v1";
 
+app.use(bodyParser.json());
+
 const courserouter = require('./router/course');
 const userrouter = require('./router/user');
 const studentrouter=require('./router/student');

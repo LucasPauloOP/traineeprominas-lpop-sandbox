@@ -33,6 +33,10 @@ let count;
 app.post("/", function(req,res){
     var teachers = req.body;
 
+
+
+
+
     teachers.id =idteachers++;
 
     collection.insert(teachers);
