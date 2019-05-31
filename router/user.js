@@ -40,7 +40,7 @@ app.post("/", function(req,res){
         console.log(iduser);
     });*/
     console.log("body",users);
-    if(users.name == '' || users.lastName == '' || users['profile'] == '')
+    if(users.name === '' || users.lastName === '' || users['profile'] === '')
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
@@ -53,9 +53,6 @@ app.post("/", function(req,res){
         res.status(200).send('Usuário cadastrado com sucesso.');
     }
 
-    /*else{
-            sen.status(401).send("Campo de cadastro vazio.");
-    }*/
 
 
 });
@@ -114,14 +111,21 @@ app.delete("/",function(req,res){
 app.get("/:id",function(req,res){
     var id = parseInt(req.params.id);
             collection.find({"id":id}).toArray((err,user)=>{
-                if(err){
-                    console.error("Ocorreu um erro ao conectar a collection User");
-                    res.status(500);
-                }
-                else{
-                        res.send(user);
+                collection.find({"status":1}).toArray((err,user)=>
+                {
+                    if (err) {
+                        console.error("Ocorreu um erro ao conectar a collection User");
+                        res.status(500);
                     }
+
+                    else
+                        {
+                            res.send(user);
+                        }
+
+                })
             });
+
 });
 
 app.delete('/:id',function(req,res) {
