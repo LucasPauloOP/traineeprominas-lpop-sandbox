@@ -28,21 +28,28 @@ for(var aux=0;aux<collection.find({}))
     cont++;
 }*/
 
-var idusers;
+var iduser=1;
 
-let count;
+let count=0;
 
 var user = []
 
 app.post("/", function(req,res){
-    var users = req.body;
+    var users =req.body;
 
-    idusers = collection.find({}).count();
-    users.id = idusers++;
-    users.status=1;
-    collection.insert(users['name','lastName','profile']);
+    collection.find({}).toArray((err,user)=>{
+        for (let aux = 0; aux < user.length; aux++) {
+            users.id = user.lenght[aux];
+        }
+    });
+        users.id = users.id++;
+        users.status=1;
+        collection.insert(users);
+        res.status(200).send('Usuário cadastrado com sucesso.');
+    /*else{
+            sen.status(401).send("Campo de cadastro vazio.");
+    }*/
 
-    res.send('Usuário cadastrado com sucesso.');
 
 });
 
@@ -55,9 +62,13 @@ app.get("/",function (req,res) {
                 res.status(500);
             }
             else {
-                res.status(201).send(users);
-            }
+                  count=1;
+                 res.status(201).send(users);
+                }
         });
+        if(!count) {
+            res.status(404).send("Nenhum usuário cadastrado");
+        }
 });
 
 app.delete("/",function(req,res){
