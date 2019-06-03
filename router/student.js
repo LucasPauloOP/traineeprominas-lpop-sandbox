@@ -11,7 +11,7 @@ const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/t
 var db;//variavel global (pode ser vista nas rotas
 var collection;
 
-
+var id;
 
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
@@ -22,14 +22,13 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 
         db = database.db('trainee-prominas');
         collection = db.collection('student');
+        collection.count().then((count) => {
+            id = count;
+        });
     }
 });
 
-var idstudent=1;
-
 var student = []
-
-
 
 
 async function aggregate (student,res) {
@@ -181,11 +180,17 @@ app.put('/:id', function(req,res){
 });
 
 app.post('/', function(req, res) {
-    var students = req.body;
+    var newStudent={
+        name: req.body.name,
+          lastName:req.body.lastName,
+        age:req.body.age,
+        course:req.body.course,
+        status:1,
+        id:parseInt(++id)
+    };
 
-    students.id =idstudent++;
 
-    aggregate(students,res);
+    aggregate(newStudent,res);
 });
 
 module.exports = app;

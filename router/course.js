@@ -80,17 +80,17 @@ const _getoneTeacher = function (id) {
 
 async function put_aggregate (id,newCourse,res) {
     //console.log("qq",course);
-    for (let aux = 0; aux < course.teachers.length; aux++) {
+    for (let aux = 0; aux < newCourse.teacher.length; aux++) {
         let teacher;
-        teacher = await _getoneTeacher(course.teachers[aux]);
+        teacher = await _getoneTeacher(newCourse.teacher[aux]);
 
-        course.teachers[aux] = teacher;
+        newCourse.teacher[aux] = teacher;
 
     }
 
 
 
-    collection.updateOne({'id':id},{$set:course},(err,result) => {
+    collection.updateOne({'id':id},{$set:newCourse},(err) => {
        if(err){
            console.error("Erro ao conectar a collection course");
            res.status(500).send("Erro ao conectar a collection course");
@@ -221,9 +221,7 @@ app.put('/:id', function(req,res){
         period: req.body.period||8,
         teacher: req.body.teacher||null,
     };
-
-    put_aggregate(id,newCourse,res);
-
+        put_aggregate(id, newCourse, res);
 
 });
 
