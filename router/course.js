@@ -13,7 +13,7 @@ var collection;
 
 
 
-/*await*/ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
+ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
         console.error("Ocorreu um erro ao conectar ao mongoDB", err);
         res.status(500);//internal server error
@@ -25,12 +25,6 @@ var collection;
 
     }
 });
-/*if(await mongodb.MongoClient.connect(mdbURL)){
-    let thing = await collection.findone({"id":id});
-    await  mongodb.MongoClient.connect(mdbURL).close();
-    return
-}*/
-
 
 /*db.course.aggregate([
     {
@@ -53,30 +47,34 @@ var course = []
 
 
 async function aggregate (course,res) {
-    course.teachers=[];
+    course.teacher=[];
     for (let aux = 0; aux < course.teachers.length; aux++) {
         let teacher;
         teacher = await _getoneTeacher(course.teachers[aux]);
-
-        course.teachers[aux] = teacher;
-
+            course.teacher.push(teacher);
     }
 
     console.log("qq",course);
     collection.insertOne(course, (err, result) => {
         if (err) {
             console.error("Erro ao criar um novo curso", err);
+            console.log("err",err);
             res.status(500).send("Erro ao criar um novo curso");
 
         } else {
-            res.status(201).send("Curso deletado com sucesso");
+            if(course.teacher.length<course.teachers[aux]){
+                res.status(201).send("Curso cadastrado com sucesso. Porém ainda não há professor nele.");
+            }
+            else{
+                res.status(201).send("Curso cadastrado com sucesso.");
+            }
         }
     });
 }
 
 const _getoneTeacher = function (id) {
     return new Promise((resolve, reject) => {
-        db.collection('teacher').findOne({"id": parseInt(id)}, (err, teacher) => {
+        db.collection('teacher').findOne({'id': parseInt(id),'status':1}, (err, teacher) => {
             if (err) {
                 return reject(err);
             } else {
@@ -142,11 +140,10 @@ app.post('/', function(req, res) {
     courses.period = parseInt(body.period)||8;
 
 
-    courses.teacher = body.teacher;
+    courses.teachers = body.teachers;
     if(body.name && body.city)
     {
         aggregate(courses,res);
-
 
     }
     else

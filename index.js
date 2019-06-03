@@ -25,7 +25,7 @@ const userrouter = require('./router/user');
 const studentrouter=require('./router/student');
 const teacherrouter= require('./router/teacher');
 
-//app.use(bodyParser.json());
+
 app.use(baseAPI + '/user',userrouter);
 app.use(baseAPI+ '/course',courserouter.app);
 app.use(baseAPI + '/student',studentrouter);
