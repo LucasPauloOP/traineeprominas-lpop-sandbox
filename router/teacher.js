@@ -31,28 +31,42 @@ var teacher=[]
 let count;
 
 app.post("/", function(req,res){
-    var teachers = req.body;
-
-
-
-
+    var teachers= teacher;
+    var bodyteacher = req.body;
 
     teachers.id =idteachers++;
+    teachers.status=1;
 
-    collection.insert(teachers);
+    teachers.name = bodyteacher.name;
+    teachers.lastName = bodyteacher.lastName;
+    if(bodyteacher.phd == ' ')
+    teachers.phd="Não informado";
+    else
+        teachers.phd = bodyteacher.phd;
 
-    res.send('Professor cadastrado com sucesso.');
+    if(!teachers.name || !teachers.lastName )
+    {
+        res.status(401).send("Campos obrigatorios não prenchidos.");
+    }
+    else
+    if(teachers.name && teachers.lastName )
+    {
+        collection.insert(teachers);
+        res.status(200).send('Professor cadastrado com sucesso.');
+    }
+
 
 });
 
 app.get('/',function (req,res) {
-    collection.find({}).toArray((err,teachers)=>{
-        if(err){
+    collection.find({"status":1},{projection:{_id:0,status:0}}).toArray((err, teachers) => {
+        if (err) {
+            console.log(err);
             console.error("Ocorreu um erro ao conectar a collection teacher");
             res.status(500);
         }
-        else{
-            res.send(teachers);
+        else {
+            res.status(201).send(teachers);
         }
     });
 });
@@ -81,25 +95,21 @@ app.delete('/',function(req,res){
 
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
-
-    collection.remove({"id": id}, true, function (err, info) {
+    collection.find({"id": id,'status':1},function (err,teachers) {
         if (err) {
-            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            console.error("Ocorreu um erro ao deletar o documento da coleção.");
             res.status(500);
         } else {
-            var numRemoved = info.result.n;
-            if (numRemoved > 0) {
-                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
-                res.send("Professor foi removido.");
+            if (teachers != null) {
+                collection.update({"status": 1}, {$set: {'status': 0}}, {upset: true});
                 res.status(204);//No content
+                res.send("O professor foi removido.");
+            }
+            else{
+                console.log("Nenhum documento foi removido.");
+                res.status(401).send("Usuário não foi removido ou por não existir ou por ja ter sido deletado");
 
             }
-            else {
-                console.log("Nenhum documento foi removido");
-                res.status(404);
-                res.send("Nenhum professor foi removido.");
-            }
-
         }
 
     });
@@ -107,22 +117,17 @@ app.delete('/:id',function(req,res){
 
 app.get('/:id',function(req,res){
     var id = parseInt(req.params.id);
-
-
-    collection.find({"id":id}).toArray((err,teachers)=>{
-        if(err){
-            console.error("Ocorreu um erro ao conectar a collection Teacher");
+    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status:0}}).toArray((err, teachers) => {
+        if (err) {
+            console.log (err);
+            console.error("Ocorreu um erro ao conectar a collection teacher");
             res.status(500);
-        }
-        else{
-            if(teachers === []){
-                res.status(404);
-                res.send("Professor não encontrado.");
+        } else {
+            if (teachers === []) {
+                res.status(404).send("Professor não encontrado.");
+            } else {
+                res.status(201).send(teachers);
             }
-            else{
-                res.send(teachers);
-            }
-
         }
     });
 });
@@ -143,12 +148,8 @@ app.put('/:id', function(req,res){
     }
 });
 
-function findteacher(id)
-{
-    return teacher.find((l)=>{return l.id === id});
-}
 
-module.exports = {app,findteacher};
+module.exports = {app};
 
 
 

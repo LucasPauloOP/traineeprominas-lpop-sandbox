@@ -64,7 +64,7 @@ app.post("/", function(req,res){
 
 
 app.get("/",function (req,res) {
-        collection.find({"status":1},{projection:{_id:0,id:0,status:0}}).toArray((err, users) => {
+        collection.find({"status":1},{projection:{_id:0,status:0}}).toArray((err, users) => {
             if (err) {
                 console.log(err);
                 console.error("Ocorreu um erro ao conectar a collection User");
@@ -74,12 +74,11 @@ app.get("/",function (req,res) {
                     res.status(201).send(users);
                 }
         });
-        /*if(count===0) {
-            res.status(404).send("Nenhum usuário cadastrado");
-        }*/
 });
 
-app.delete("/",function(req,res){
+//delete all
+
+/*app.delete("/",function(req,res){
     var status = collection.find({"status":1});
     if(status)
     {
@@ -110,7 +109,7 @@ app.delete("/",function(req,res){
 
     //user = [];
    // res.send("Todos os usuários foram deletados.");
-});
+});*/
 
 app.get("/:id",function(req,res) {
     var id = parseInt(req.params.id);
@@ -123,7 +122,7 @@ app.get("/:id",function(req,res) {
             if (users === []) {
                 res.status(404).send("Usuário não encontrado.");
             } else {
-                res.status(201).send(user);
+                res.status(201).send(users);
             }
         }
     });
@@ -136,7 +135,8 @@ app.delete('/:id',function(req,res) {
                 console.error("Ocorreu um erro ao deletar o documento da coleção.");
                 res.status(500);
             } else {
-                if (users.value != null) {
+                console.log(users);
+                if (users != null) {
                     collection.update({"status": 1}, {$set: {'status': 0}}, {upset: true});
                     res.status(204);//No content
                     res.send("O usuário foi removido.");
@@ -153,15 +153,16 @@ app.delete('/:id',function(req,res) {
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
-    var users = user;
+    console.log("algo",id);
+    var users = [];
     var bodyuser= req.body;
     users.name=bodyuser.name;
     users.lastName=bodyuser.lastName;
     users.profile=bodyuser.profile;
 
     if(bodyuser.name  &&  bodyuser.lastName  &&  bodyuser.profile){
-        collection.findOneAndUpdate({'id':id, 'status':1},{$set:users},function(err,results){
-        console.log(results);
+        users.id = id;
+        collection.update({'id':id, 'status':1},{$set:{'name':users.name,'lastName':users.lastName,'profile':users.profile}},function(err,results){
             if(results  ==    null)
             {
                 res.status(403).send('Não foi possível realizar a atualização.');
