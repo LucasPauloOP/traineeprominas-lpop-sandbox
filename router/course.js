@@ -11,7 +11,7 @@ const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/t
 var db;//variavel global (pode ser vista nas rotas
 var collection;
 
-
+var id;
 
  mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
@@ -22,26 +22,13 @@ var collection;
 
         db =  database.db('trainee-prominas');
         collection = db.collection('course');
+        collection.count().then((count) => {
+            id = count;
+            console.log(count);
+        });
 
     }
 });
-
-/*db.course.aggregate([
-    {
-        $lookup:
-        {
-            from:"teacher",
-            localField:"teachers",
-            foreignkey:"id",
-            ass:"professor"
-        }
-}
-]).map(function (cli) {
-    return[cli.name,cli.lastname,cli.phd]
-});*/
-
-
-var idcourses = 1;
 
 var course = []
 
@@ -129,24 +116,20 @@ app.get('/',function (req,res) {
 });
 
 app.post('/', function(req, res) {
-    var courses = [];
-    var body = req.body;
+    var newCourse={
 
-    courses.name=body.name;
-    courses.city = body.city;
-    courses.period = parseInt(body.period)||8;
-
-    courses.teachers = body.teachers;
-    if(body.name && body.city)
-    {
-        courses.id =idcourses++;
-        courses.status = 1;
-        aggregate(courses,res);
+            name:   req.body.name,
+            city:   req.body.city,
+            period: req.body.period||8,
+            teacher: req.body.teacher||' ',
+            id:parseInt(id+1),
+            status:1
 
     }
-    else
-    {
 
+    if(newCourse.name && newCourse.city)
+    {
+        aggregate(courses,res);
     }
 
 });
