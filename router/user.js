@@ -35,14 +35,14 @@ var user = []
 app.post("/", function(req,res){
     var users =req.body;
 
-  collection.find({}).toArray((err,user)=>{
+  /*collection.find({}).toArray((err,user)=>{
         for (let aux = 0; aux < user.length; aux++) {
 
             iduser = user.length;
             iduser++;
         }
         console.log("idi",iduser);
-    });
+    });*/
 
     console.log("body",users);
     if(!users.name || !users.lastName || !users['profile'] )
@@ -50,7 +50,7 @@ app.post("/", function(req,res){
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
     else
-     if(users.name||users.lastName ||users['profile'])
+     if(users.name && users.lastName && users['profile'])
     {
         users.id=iduser++;
         console.log('id2',users.id);
@@ -64,8 +64,9 @@ app.post("/", function(req,res){
 
 
 app.get("/",function (req,res) {
-        collection.find({'status':1},{projection:{_id:0,id:0,name:1,lastName:1,profile:1}}).toArray((err, users) => {
+        collection.find({"status":1},{projection:{_id:0,id:0,status:0}}).toArray((err, users) => {
             if (err) {
+                console.log(err);
                 console.error("Ocorreu um erro ao conectar a collection User");
                 res.status(500);
             }
@@ -113,14 +114,7 @@ app.delete("/",function(req,res){
 
 app.get("/:id",function(req,res) {
     var id = parseInt(req.params.id);
-    collection.find({"id": id,status: 1},{
-            _id: 0,
-            id: 1,
-            name: 1,
-            lastName: 1,
-            profile: 1
-    }).toArray((err, users) => {
-
+    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status:0}}).toArray((err, users) => {
         if (err) {
             console.log("algo",err);
             console.error("Ocorreu um erro ao conectar a collection User");
@@ -128,7 +122,6 @@ app.get("/:id",function(req,res) {
         } else {
             if (users === []) {
                 res.status(404).send("Usuário não encontrado.");
-
             } else {
                 res.status(201).send(user);
             }
@@ -160,17 +153,16 @@ app.delete('/:id',function(req,res) {
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
-    var users;
+    var users = user;
     var bodyuser= req.body;
     users.name=bodyuser.name;
     users.lastName=bodyuser.lastName;
     users.profile=bodyuser.profile;
 
-    if(bodyuser.name    &&  bodyuser.lastName &&   bodyuser.profile){
-        users.id=id;
+    if(bodyuser.name  &&  bodyuser.lastName  &&  bodyuser.profile){
         collection.findOneAndUpdate({'id':id, 'status':1},{$set:users},function(err,results){
-
-            if(results==null)
+        console.log(results);
+            if(results  ==    null)
             {
                 res.status(403).send('Não foi possível realizar a atualização.');
             }
