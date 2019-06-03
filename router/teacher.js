@@ -134,17 +134,27 @@ app.get('/:id',function(req,res){
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
+    var teachers = [];
+    var bodyteacher= req.body;
+    teachers.name=bodyteacher.name;
+    teachers.lastName=bodyteacher.lastName;
+    teachers.phd=bodyteacher.profile;
 
-    var bodyteacher = req.body;
-
-    collection.update({"id":id},bodyteacher);
-    if(bodyteacher ==={}){
-        res.status("400");
-        res.send("Solicitação não autorizada");
+    if(bodyteacher.name  &&  bodyteacher.lastName  &&  bodyteacher.profile){
+        teachers.id = id;
+        collection.update({'id':id, 'status':1},{$set:{'name':teachers.name,'lastName':teachers.lastName,'profile':teachers.profile}},function(err,results){
+            if(results  ==    null)
+            {
+                res.status(403).send('Não foi possível realizar a atualização.');
+            }
+            else
+            {
+                res.status(200).send('Usuário atualizado.');
+            }
+        });
     }
     else{
-        collection.update({"id":id},bodyteacher);
-        res.send('Professor atualizado');
+        res.status(403).send("Campo inválido.");
     }
 });
 
