@@ -31,18 +31,16 @@ var teacher=[]
 let count;
 
 app.post("/", function(req,res){
-    var teachers= teacher;
-    var bodyteacher = req.body;
+    var teachers= req.body;
+
 
     teachers.id =idteachers++;
     teachers.status=1;
 
-    teachers.name = bodyteacher.name;
-    teachers.lastName = bodyteacher.lastName;
-    if(bodyteacher.phd == ' ')
-    teachers.phd="Não informado";
-    else
-        teachers.phd = bodyteacher.phd;
+    if(typeof (req.body.phd)=='boolean')
+    {
+        teachers.phd = req.body.phd;
+    }
 
     if(!teachers.name || !teachers.lastName )
     {
