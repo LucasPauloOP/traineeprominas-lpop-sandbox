@@ -21,47 +21,33 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
         db = database.db('trainee-prominas');
         collection = db.collection('teacher');
         collection.count().then((count) => {
+            console.log(count);
             id = count;
         });
     }
 });
 
 
-
-var idteachers=1;
-
-
 app.post("/", function(req,res){
 
-    var newTeacher =
-        {
-            name = req.body.name,
-           lastName = req.body.lastName,
-
-
-        }
-    teachers.name=body.name;
-    teachers.lastName=body.lastName;
-
-    teachers.id =idteachers++;
-    teachers.status=1;
-
-    if(typeof (req.body.phd)=='boolean')
-    {
-        teachers.phd = req.body.phd;
-    }
-
-    if(!teachers.name || !teachers.lastName )
+    var newTeacher = {
+            name : req.body.name,
+           lastName : req.body.lastName,
+            phd:req.body.phd||"Não informado",
+            id:parseInt(id+1),
+            status:1
+    };
+    console.log('------>',newTeacher);
+    if(!newTeacher.name || !newTeacher.lastName )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
     else
-    if(teachers.name && teachers.lastName )
+    if(newTeacher.name && newTeacher.lastName )
     {
-        collection.insert(teachers);
+        collection.insert(newTeacher);
         res.status(200).send('Professor cadastrado com sucesso.');
     }
-
 
 });
 
