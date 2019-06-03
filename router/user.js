@@ -11,6 +11,7 @@ var db;//variavel global (pode ser vista nas rotas
 
 var collection;
 
+var id;
 
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
@@ -19,48 +20,44 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     }
     else {
         db = database.db('trainee-prominas');
-        collection =db.collection('user');
+        collection = db.collection('user');
+
+        collection.count().then((count) => {
+            id = count;
+            console.log(count);
+        });
     }
 });
 
 
-var iduser=1;
+/*collection.count().then((count) => {
+    console.log(count);
+    id = count;
+});*/
 
-let count=0;
-
-var user = []
 
 
 
 app.post("/", function(req,res){
-    var users =[];
-    var body=req.body;
-
-  /*collection.find({}).toArray((err,user)=>{
-        for (let aux = 0; aux < user.length; aux++) {
-
-            iduser = user.length;
-            iduser++;
-        }
-        console.log("idi",iduser);
-    });*/
-    users.name= body.name;
-    users.lastName= body.lastName;
-    users.profile = body.profile;
-
-    console.log("body",users);
-    if(!users.name || !users.lastName || !users['profile'] )
+    var newUser = {
+        name: req.body.name,
+        lastName: req.body.lastName,
+        profile: req.body.profile,
+        id: parseInt(id + 1),
+        status: 1
+    };
+    console.log(id);
+    if(!newUser.name || !newUser.lastName || !newUser['profile'] )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
-    else
-     if(users.name && users.lastName && users['profile'])
-    {
-        users.id=iduser++;
-        console.log('id2',users.id);
-        users.status=1;
-        collection.insert(users);
-        res.status(200).send('Usuário cadastrado com sucesso.');
+    else {
+        if(newUser.name && newUser.lastName && newUser['profile'])
+        {
+            collection.insertOne(newUser);
+            parseInt(id);
+            res.status(200).send('Usuário cadastrado com sucesso.');
+        }
     }
 
 });
@@ -82,7 +79,7 @@ app.get("/",function (req,res) {
 
 //delete all
 
-/*app.delete("/",function(req,res){
+app.delete("/",function(req,res){
     var status = collection.find({"status":1});
     if(status)
     {
@@ -113,7 +110,7 @@ app.get("/",function (req,res) {
 
     //user = [];
    // res.send("Todos os usuários foram deletados.");
-});*/
+});
 
 app.get("/:id",function(req,res) {
     var id = parseInt(req.params.id);

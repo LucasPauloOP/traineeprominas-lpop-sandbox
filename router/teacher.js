@@ -9,6 +9,8 @@ const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/t
 var db;//variavel global (pode ser vista nas rotas
 var collection;
 
+var id;
+
 mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
     if(err){
         console.error("Ocorreu um erro ao conectar ao mongoDB", err);
@@ -18,7 +20,9 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 
         db = database.db('trainee-prominas');
         collection = db.collection('teacher');
-
+        collection.count().then((count) => {
+            id = count;
+        });
     }
 });
 
@@ -26,14 +30,16 @@ mongoClient.connect(mdbURL,{native_parser:true},(err,database) =>{
 
 var idteachers=1;
 
-var teacher=[]
-
-let count;
 
 app.post("/", function(req,res){
-    var teachers= [];
-    var body=req.body;
 
+    var newTeacher =
+        {
+            name = req.body.name,
+           lastName = req.body.lastName,
+
+
+        }
     teachers.name=body.name;
     teachers.lastName=body.lastName;
 

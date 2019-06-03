@@ -47,22 +47,21 @@ var course = []
 
 
 async function aggregate (course,res) {
-    course.teacher=[];
+    console.log('body',course);
     for (let aux = 0; aux < course.teachers.length; aux++) {
-        let teacher;
+        var teacher;
         teacher = await _getoneTeacher(course.teachers[aux]);
             course.teacher.push(teacher);
     }
-
     console.log("qq",course);
-    collection.insertOne(course, (err, result) => {
+    collection.insertOne(course, (err) => {
         if (err) {
             console.error("Erro ao criar um novo curso", err);
             console.log("err",err);
             res.status(500).send("Erro ao criar um novo curso");
 
         } else {
-            if(course.teacher.length<course.teachers[aux]){
+            if(course.teachers.length   > course.teacher){
                 res.status(201).send("Curso cadastrado com sucesso. Porém ainda não há professor nele.");
             }
             else{
@@ -76,6 +75,7 @@ const _getoneTeacher = function (id) {
     return new Promise((resolve, reject) => {
         db.collection('teacher').findOne({'id': parseInt(id),'status':1}, (err, teacher) => {
             if (err) {
+                console.error("Problemas no documento teacher.");
                 return reject(err);
             } else {
                 return resolve(teacher);
@@ -86,8 +86,7 @@ const _getoneTeacher = function (id) {
 };
 
 async function put_aggregate (id,course,res) {
-    console.log("qq",course);
-
+    //console.log("qq",course);
     for (let aux = 0; aux < course.teachers.length; aux++) {
         let teacher;
         teacher = await _getoneTeacher(course.teachers[aux]);
@@ -133,16 +132,15 @@ app.post('/', function(req, res) {
     var courses = [];
     var body = req.body;
 
-    courses.id =idcourses++;
-    courses.status = 1;
     courses.name=body.name;
     courses.city = body.city;
     courses.period = parseInt(body.period)||8;
 
-
     courses.teachers = body.teachers;
     if(body.name && body.city)
     {
+        courses.id =idcourses++;
+        courses.status = 1;
         aggregate(courses,res);
 
     }
@@ -196,7 +194,8 @@ app.delete('/:id',function(req,res){
     });
 });
 
-app.delete('/',function(req,res){
+//delete all
+/*app.delete('/',function(req,res){
     collection.remove({},false,function(err, info) {
         if (err) {
             console.error("Ocorreu um erro ao deletar os documentos da coleção.");
@@ -216,7 +215,7 @@ app.delete('/',function(req,res){
         }
 
     });
-});
+});*/
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
