@@ -117,21 +117,30 @@ async function put_aggregate (id,course,res) {
 
 
 app.get('/',function (req,res) {
-    collection.find({}).toArray((err,courses) =>{
-        if(err){
-            console.error("Ocorreu um erro ao conectar a collection teacher");
+    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status: 0,'teacher_id':  0,'teacher.status':   0}}).toArray((err, courses) => {
+        if (err) {
+            console.log(err);
+            console.error("Ocorreu um erro ao conectar a collection course");
             res.status(500);
         }
-        else{
-            res.send(courses);
+        else {
+            res.status(201).send(courses);
         }
     });
 });
 
 app.post('/', function(req, res) {
-    var courses = req.body;
+    var courses = [];
+    var body = req.body;
 
     courses.id =idcourses++;
+    courses.status = 1;
+    courses.name=body.name;
+    courses.city = body.city;
+    courses.period = body.period||8;
+
+
+    courses.teacher = body.teacher;
 
     aggregate(courses,res);
 
@@ -140,22 +149,20 @@ app.post('/', function(req, res) {
 
 
 app.get('/:id',function(req,res){
+
     var id = parseInt(req.params.id);
 
-    collection.find({"id":id}).toArray((err,coursers)=>{
-        if(err){
-            console.error("Ocorreu um erro ao conectar a collection Curso");
+    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status:0,'teacher_id':0,'teacher.status':0}}).toArray((err, courses) => {
+        if (err) {
+            console.log (err);
+            console.error("Ocorreu um erro ao conectar a collection course");
             res.status(500);
-        }
-        else{
-            if(coursers === []){
-                res.status(404);
-                res.send("Curso não encontrado.");
+        } else {
+            if (courses === []) {
+                res.status(404).send("Curso não encontrado.");
+            } else {
+                res.status(201).send(courses);
             }
-            else{
-                res.send(coursers);
-            }
-
         }
     });
 });
