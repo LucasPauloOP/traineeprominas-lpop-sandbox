@@ -51,7 +51,9 @@ var idcourses = 1;
 
 var course = []
 
+
 async function aggregate (course,res) {
+    course.teachers=[];
     for (let aux = 0; aux < course.teachers.length; aux++) {
         let teacher;
         teacher = await _getoneTeacher(course.teachers[aux]);
@@ -137,13 +139,20 @@ app.post('/', function(req, res) {
     courses.status = 1;
     courses.name=body.name;
     courses.city = body.city;
-    courses.period = body.period||8;
+    courses.period = parseInt(body.period)||8;
 
 
     courses.teacher = body.teacher;
+    if(body.name && body.city)
+    {
+        aggregate(courses,res);
 
-    aggregate(courses,res);
 
+    }
+    else
+    {
+
+    }
 
 });
 
@@ -170,24 +179,21 @@ app.get('/:id',function(req,res){
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
 
-    collection.remove({"id": id}, true, function (err, info) {
+    collection.find({"id": id,'status':1},function (err,coursers) {
         if (err) {
-            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            console.error("Ocorreu um erro ao deletar o documento da coleção.");
             res.status(500);
         } else {
-            var numRemoved = info.result.n;
-            if (numRemoved > 0) {
-                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
-                res.send("Curso foi removido.");
+            if (coursers != null) {
+                collection.update({"status": 1}, {$set: {'status': 0}}, {upset: true});
                 res.status(204);//No content
+                res.send("O curso foi removido.");
+            }
+            else{
+                console.log("Nenhum documento foi removido.");
+                res.status(401).send("curso não foi removido ou por não existir ou por ja ter sido deletado");
 
             }
-            else {
-                console.log("Nenhum documento foi removido");
-                res.status(404);
-                res.send("Nenhum curso foi removido.");
-            }
-
         }
 
     });
