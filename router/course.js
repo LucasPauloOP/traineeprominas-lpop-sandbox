@@ -1,7 +1,7 @@
 const express = require('express');
 const baseAPI = "/api/v1/router";
 const app = express.Router();
-//const arqteacher=require('./teacher');
+
 
 
 const mongoClient = require('mongodb').MongoClient;
@@ -24,31 +24,31 @@ var id;
         collection = db.collection('course');
         collection.count().then((count) => {
             id = count;
-            console.log(count);
+            console.log("---->",count);
         });
 
     }
 });
 
-var course = []
 
-
-async function aggregate (course,res) {
-    console.log('body',course);
-    for (let aux = 0; aux < course.teachers.length; aux++) {
-        var teacher;
-        teacher = await _getoneTeacher(course.teachers[aux]);
-            course.teacher.push(teacher);
+async function aggregate (newCourse,res) {
+    console.log('body',newCourse);
+    if(newCourse.teacher && newCourse.teacher.length) {
+        for (let aux = 0; aux < newCourse.teacher.length; aux++) {
+            var teachers;
+            teachers = await _getoneTeacher(newCourse.teachers[aux]);
+            newCourse.teacher = teacher[aux];
+        }
     }
-    console.log("qq",course);
-    collection.insertOne(course, (err) => {
+    console.log('---->',newCourse);
+    collection.insertOne(newCourse, (err) => {
         if (err) {
             console.error("Erro ao criar um novo curso", err);
             console.log("err",err);
             res.status(500).send("Erro ao criar um novo curso");
 
         } else {
-            if(course.teachers.length   > course.teacher){
+            if(newCourse.teacher && newCourse.teacher.length < 0){
                 res.status(201).send("Curso cadastrado com sucesso. Porém ainda não há professor nele.");
             }
             else{
@@ -62,7 +62,7 @@ const _getoneTeacher = function (id) {
     return new Promise((resolve, reject) => {
         db.collection('teacher').findOne({'id': parseInt(id),'status':1}, (err, teacher) => {
             if (err) {
-                console.error("Problemas no documento teacher.");
+                console.error("Erro ao acessar o documento teacher.");
                 return reject(err);
             } else {
                 return resolve(teacher);
@@ -121,15 +121,20 @@ app.post('/', function(req, res) {
             name:   req.body.name,
             city:   req.body.city,
             period: req.body.period||8,
-            teacher: req.body.teacher||' ',
-            id:parseInt(id+1),
+            teacher: req.body.teacher||null,
+            id:parseInt(++id),
             status:1
 
+    };
+
+    if(newCourse.teacher == null)
+    {
+        delete newCourse.teacher;
     }
 
     if(newCourse.name && newCourse.city)
     {
-        aggregate(courses,res);
+        aggregate(newCourse,res);
     }
 
 });

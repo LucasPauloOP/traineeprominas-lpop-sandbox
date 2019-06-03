@@ -43,7 +43,7 @@ app.post("/", function(req,res){
         name: req.body.name,
         lastName: req.body.lastName,
         profile: req.body.profile,
-        id: parseInt(id + 1),
+        id: parseInt(++id),
         status: 1
     };
     console.log(id);
@@ -79,7 +79,7 @@ app.get("/",function (req,res) {
 
 //delete all
 
-app.delete("/",function(req,res){
+/*app.delete("/",function(req,res){
     var status = collection.find({"status":1});
     if(status)
     {
@@ -110,7 +110,7 @@ app.delete("/",function(req,res){
 
     //user = [];
    // res.send("Todos os usuários foram deletados.");
-});
+});*/
 
 app.get("/:id",function(req,res) {
     var id = parseInt(req.params.id);

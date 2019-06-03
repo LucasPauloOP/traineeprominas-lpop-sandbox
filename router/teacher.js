@@ -34,10 +34,12 @@ app.post("/", function(req,res){
             name : req.body.name,
            lastName : req.body.lastName,
             phd:req.body.phd||"Não informado",
-            id:parseInt(id+1),
+            id:parseInt(++id),
             status:1
     };
+
     console.log('------>',newTeacher);
+
     if(!newTeacher.name || !newTeacher.lastName )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
