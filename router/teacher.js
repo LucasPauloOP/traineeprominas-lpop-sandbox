@@ -31,8 +31,11 @@ var teacher=[]
 let count;
 
 app.post("/", function(req,res){
-    var teachers= req.body;
+    var teachers= [];
+    var body=req.body;
 
+    teachers.name=body.name;
+    teachers.lastName=body.lastName;
 
     teachers.id =idteachers++;
     teachers.status=1;
@@ -69,7 +72,8 @@ app.get('/',function (req,res) {
     });
 });
 
-app.delete('/',function(req,res){
+// delete all
+/*app.delete('/',function(req,res){
     collection['remove']({},false,function(err, info) {
         if (err) {
             console.error("Ocorreu um erro ao deletar os documentos da coleção.");
@@ -89,7 +93,7 @@ app.delete('/',function(req,res){
         }
 
     });
-});
+});*/
 
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
@@ -105,7 +109,7 @@ app.delete('/:id',function(req,res){
             }
             else{
                 console.log("Nenhum documento foi removido.");
-                res.status(401).send("Usuário não foi removido ou por não existir ou por ja ter sido deletado");
+                res.status(401).send("Professor não foi removido ou por não existir ou por ja ter sido deletado");
 
             }
         }
@@ -136,18 +140,21 @@ app.put('/:id', function(req,res){
     var bodyteacher= req.body;
     teachers.name=bodyteacher.name;
     teachers.lastName=bodyteacher.lastName;
-    teachers.phd=bodyteacher.profile;
 
-    if(bodyteacher.name  &&  bodyteacher.lastName  &&  bodyteacher.profile){
+    if(typeof(req.body.phd) == 'boolean'){
+        teachers.phd = bodyteacher.phd;
+    }
+
+    if(bodyteacher.name  &&  bodyteacher.lastName ){
         teachers.id = id;
-        collection.update({'id':id, 'status':1},{$set:{'name':teachers.name,'lastName':teachers.lastName,'profile':teachers.profile}},function(err,results){
+        collection.update({'id':id, 'status':1},{$set:{'name':teachers.name,'lastName':teachers.lastName,'phd':teachers.phd}},function(err,results){
             if(results  ==    null)
             {
                 res.status(403).send('Não foi possível realizar a atualização.');
             }
             else
             {
-                res.status(200).send('Usuário atualizado.');
+                res.status(200).send('Profesor atualizado.');
             }
         });
     }

@@ -33,7 +33,8 @@ var user = []
 
 
 app.post("/", function(req,res){
-    var users =req.body;
+    var users =[];
+    var body=req.body;
 
   /*collection.find({}).toArray((err,user)=>{
         for (let aux = 0; aux < user.length; aux++) {
@@ -43,6 +44,9 @@ app.post("/", function(req,res){
         }
         console.log("idi",iduser);
     });*/
+    users.name= body.name;
+    users.lastName= body.lastName;
+    users.profile = body.profile;
 
     console.log("body",users);
     if(!users.name || !users.lastName || !users['profile'] )
