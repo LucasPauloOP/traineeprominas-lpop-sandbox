@@ -45,12 +45,12 @@ app.post("/", function(req,res){
     });
 
     console.log("body",users);
-    if(users.name === '' || users.lastName === '' || users['profile'] === '')
+    if(!users.name || !users.lastName || !users['profile'] )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
     else
-     if(users.name != ''||users.lastName != ''||users['profile']!=''||users != {})
+     if(users.name||users.lastName ||users['profile'])
     {
         users.id=iduser++;
         console.log('id2',users.id);
@@ -162,35 +162,31 @@ app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
     var users;
     var bodyuser= req.body;
-    users.name=bodyuser.name;users.name;
-    users.lastName=bodyuser.lastName;users.lastName;
-    users.profile=bodyuser['profile'];users.profile;
+    users.name=bodyuser.name;
+    users.lastName=bodyuser.lastName;
+    users.profile=bodyuser.profile;
 
+    if(bodyuser.name    &&  bodyuser.lastName &&   bodyuser.profile){
+        users.id=id;
+        collection.findOneAndUpdate({'id':id, 'status':1},{$set:users},function(err,results){
 
-    if(bodyuser.name === '' || bodyuser.lastName === '' || bodyuser['profile'] === ''){
-        res.status(401).send("Campos obrigatorios não prenchidos.");
-    }
-    else {
-            //collection.update({"id": id}, bodyuser);
-            collection.find({"status":1}).toArray((err,user)=>{
-            if (err) {
-                res.status("400");
-                res.send("Solicitação não autorizada");
-            } else {
-                console.log("body2",user);
-                bodyuser.id = user.id;
-                bodyuser.status = user.status;
-                collection.update({"id": id},{$set:{'name':bodyuser.name,'lastName':bodyuser.lastName,'profile':bodyuser['profile']}},
-                    {upset:true});
-                res.send('Usuário atualizado');
+            if(results==null)
+            {
+                res.status(403).send('Não foi possível realizar a atualização.');
             }
-        });
+            else
+            {
+                res.status(200).send('Usuário atualizado.');
+            }
+    });
+        }
+    else{
+        res.status(403).send("Campo inválido.");
     }
+
+
 });
 
-/* users.name = bodyuser.name;||users.name;
-       users.lastname = bodyuser.lastname;||users.lastname;
-       users.profile = bodyuser['profile'];||users.profile;*/
 
 
 module.exports = app;
