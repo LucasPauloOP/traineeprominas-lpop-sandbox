@@ -24,7 +24,6 @@ var id;
         collection = db.collection('course');
         collection.count().then((count) => {
             id = count;
-            console.log("---->",count);
         });
 
     }
@@ -32,15 +31,22 @@ var id;
 
 
 async function aggregate (newCourse,res) {
-    console.log('body',newCourse);
-    if(newCourse.teacher && newCourse.teacher.length) {
-        for (let aux = 0; aux < newCourse.teacher.length; aux++) {
+    //console.log('body',newCourse);
+    if(newCourse.teacher && newCourse.teacher.length    >   0) {
+        // console.log('---->',newCourse.teacher.length);
+        let variavel = newCourse.teacher.length;
+
+        for (let aux = 0; aux < variavel; aux++) {
+
+            console.log('seta',newCourse);
             var teachers;
-            teachers = await _getoneTeacher(newCourse.teachers[aux]);
-            newCourse.teacher = teacher[aux];
+            teachers = await _getoneTeacher(newCourse.teacher[aux]);
+
+
+            newCourse.teacher[aux] = teachers;
         }
     }
-    console.log('---->',newCourse);
+    console.log('seta2',newCourse);
     collection.insertOne(newCourse, (err) => {
         if (err) {
             console.error("Erro ao criar um novo curso", err);
@@ -72,7 +78,7 @@ const _getoneTeacher = function (id) {
     });
 };
 
-async function put_aggregate (id,course,res) {
+async function put_aggregate (id,newCourse,res) {
     //console.log("qq",course);
     for (let aux = 0; aux < course.teachers.length; aux++) {
         let teacher;
@@ -103,14 +109,14 @@ async function put_aggregate (id,course,res) {
 
 
 app.get('/',function (req,res) {
-    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status: 0,'teacher_id':  0,'teacher.status':   0}}).toArray((err, courses) => {
+    collection.find({'status': 1},{projection:{ _id: 0,status: 0}}).toArray((err, courses) => {
         if (err) {
             console.log(err);
             console.error("Ocorreu um erro ao conectar a collection course");
             res.status(500);
         }
         else {
-            res.status(201).send(courses);
+            res.status(200).send(courses);
         }
     });
 });
@@ -144,7 +150,7 @@ app.get('/:id',function(req,res){
 
     var id = parseInt(req.params.id);
 
-    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status:0,'teacher_id':0,'teacher.status':0}}).toArray((err, courses) => {
+    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status:0}}).toArray((err, courses) => {
         if (err) {
             console.log (err);
             console.error("Ocorreu um erro ao conectar a collection course");
@@ -183,7 +189,7 @@ app.delete('/:id',function(req,res){
 });
 
 //delete all
-/*app.delete('/',function(req,res){
+app.delete('/',function(req,res){
     collection.remove({},false,function(err, info) {
         if (err) {
             console.error("Ocorreu um erro ao deletar os documentos da coleção.");
@@ -203,13 +209,20 @@ app.delete('/:id',function(req,res){
         }
 
     });
-});*/
+});
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
-    var bodycourse  = req.body;
 
-    put_aggregate(id,bodycourse,res);
+    var newCourse={
+
+        name:   req.body.name,
+        city:   req.body.city,
+        period: req.body.period||8,
+        teacher: req.body.teacher||null,
+    };
+
+    put_aggregate(id,newCourse,res);
 
 
 });
