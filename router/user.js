@@ -64,13 +64,12 @@ app.post("/", function(req,res){
 
 
 app.get("/",function (req,res) {
-        collection.find({'status':1}).toArray((err, users) => {
+        collection.find({'status':1},{projection:{_id:0,id:0,name:1,lastName:1,profile:1}}).toArray((err, users) => {
             if (err) {
                 console.error("Ocorreu um erro ao conectar a collection User");
                 res.status(500);
             }
             else {
-                    count=1;
                     res.status(201).send(users);
                 }
         });
@@ -112,47 +111,51 @@ app.delete("/",function(req,res){
    // res.send("Todos os usuários foram deletados.");
 });
 
-app.get("/:id",function(req,res){
+app.get("/:id",function(req,res) {
     var id = parseInt(req.params.id);
-            collection.find({"id":id}).toArray((err,user)=>{
-                collection.find({"status":1}).toArray((err,user)=>
-                {
-                    if (err) {
-                        console.error("Ocorreu um erro ao conectar a collection User");
-                        res.status(500);
-                    }
+    collection.find({"id": id,status: 1},{
+            _id: 0,
+            id: 1,
+            name: 1,
+            lastName: 1,
+            profile: 1
+    }).toArray((err, users) => {
 
-                    else
-                        {
-                            res.status(201).send(user);
-                        }
+        if (err) {
+            console.log("algo",err);
+            console.error("Ocorreu um erro ao conectar a collection User");
+            res.status(500);
+        } else {
+            if (users === []) {
+                res.status(404).send("Usuário não encontrado.");
 
-                })
-            });
-
+            } else {
+                res.status(201).send(user);
+            }
+        }
+    });
 });
 
 app.delete('/:id',function(req,res) {
     var id = parseInt(req.params.id);
-
-        collection.find({"id": id}, true, function (err,users) {
+        collection.find({"id": id,'status':1},function (err,users) {
             if (err) {
                 console.error("Ocorreu um erro ao deletar o documento da coleção.");
                 res.status(500);
             } else {
-                if(users.status === 1) {
+                if (users.value != null) {
                     collection.update({"status": 1}, {$set: {'status': 0}}, {upset: true});
                     res.status(204);//No content
                     res.send("O usuário foi removido.");
                 }
-                else{
+               else{
+                   console.log("Nenhum documento foi removido.");
                     res.status(401).send("Usuário não foi removido ou por não existir ou por ja ter sido deletado");
 
                 }
             }
 
         });
-
 });
 
 app.put('/:id', function(req,res){
