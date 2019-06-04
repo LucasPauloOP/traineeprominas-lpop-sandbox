@@ -38,14 +38,14 @@ exports.getall=(status,project)=>{
 exports.getone=(where,project)=>{
     return teacherCollection.find(where, project).toArray();
 };
-/*
-//------------post----------------------
-exports.post=(newUser)=>{
-    newUser.id=++id;
-    console.log('------>',newUser);
-    return userCollection.insertOne(newUser);
-};
 
+//------------post----------------------
+exports.post=(newTeacher)=>{
+    newTeacher.id=++id;
+    console.log('------>',newTeacher);
+    return teacherCollection.insertOne(newTeacher);
+};
+/*
 //-------------put----------------------
 exports.put=(newUser,where,project)=>{
     console.log('--------->',newUser);

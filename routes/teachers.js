@@ -8,9 +8,9 @@ console.log(teachers);
 router.get('/',teachers.getAll);
 
 router.get('/:id',teachers.getOne);
-/*
-router.post('/',tachers.post);
 
+router.post('/',teachers.post);
+/*
 router.put('/:id',tachers.put);
 
 router.delete('/:id',teachers.delete);

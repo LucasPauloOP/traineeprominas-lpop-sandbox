@@ -38,26 +38,26 @@ exports.getOne = (req,res)=>{
     });
 };
 
-/*
+
 //---------------post------------------------------
 exports.post=function(req,res){
 
     let status = {status:1};
 
-    var newUser = {
+    var newTeacher = {
         name: req.body.name,
         lastName: req.body.lastName,
-        profile: req.body.profile,
+        phd: req.body.phd||'Não informado',
         status : 1
     };
-    if(!newUser.name || !newUser.lastName || !newUser['profile'] )
+    if(!newTeacher.name || !newTeacher.lastName )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
     else {
-        if(newUser.name && newUser.lastName && newUser['profile'])
+        if(newTeacher.name && newTeacher.lastName)
         {
-            modelUser.post(newUser).then(user=>{
+            modelTeacher.post(newTeacher).then(teacher=>{
                 res.status(200).send('Usuário cadastrado com sucesso.');
 
             }).catch(err=>{
@@ -70,6 +70,7 @@ exports.post=function(req,res){
 
 };
 
+/*
 //---------------------put--------------------------------
 exports.put=function (req,res) {
     let id = parseInt(req.params.id);
