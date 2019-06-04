@@ -71,19 +71,18 @@ async function put_aggregate (id,newStudent,res) {
 
     if(newStudent.course !== null) {
         let course;
-        course = await _getOneCourse(student.course);
+        course = await  _getOneCourse(newStudent.course);
 
-        newStudent = course;
-
+        newStudent.course = course;
     }
 
-    //console.log("qualquer coisa",student);
-
-
-    collection.updateOne({'id':id},{$set:student},(err,result) => {
+    console.log("----->",newStudent);
+    collection.updateOne({'id':id},{$set:{'course.name':newStudent.course.name,'course.period':newStudent.course.period,
+            'course.teacher':newStudent.course.teacher,'course.city':newStudent.course.city}},(err) => {
         if(err){
-            console.error("Erro ao conectar a collection studant");
-            res.status(500).send("Erro ao conectar a collection studant");
+            console.error("Erro ao conectar a collection student");
+           console.log(err);
+            res.status(500).send("Erro ao conectar a collection student");
         } else{
             res.send("Estudante atualizado com sucesso.");
         }
@@ -116,7 +115,7 @@ app.get('/:id',function(req,res){
             console.error("Ocorreu um erro ao conectar a collection student");
             res.status(500);
         } else {
-            if (courses === []) {
+            if (students === []) {
                 res.status(404).send("Estudante não encontrado.");
             } else {
                 res.status(201).send(students);
@@ -190,7 +189,7 @@ app.put('/:id', function(req,res){
 app.post('/', function(req, res) {
     var newStudent={
         name: req.body.name,
-          lastName:req.body.lastName,
+        lastName:req.body.lastName,
         age:req.body.age,
         course:req.body.course,
         status:1,
@@ -199,6 +198,7 @@ app.post('/', function(req, res) {
 
     if(newStudent.name && newStudent.lastName && newStudent.age && newStudent.course)
     {
+        insertOne
         aggregate(newStudent,res);
     }
     else
