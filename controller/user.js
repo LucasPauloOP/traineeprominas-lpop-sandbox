@@ -25,14 +25,15 @@ exports.getOne = (req,res)=>{
     let id = parseInt(req.params.id);
     let where = {status:1,'id':id};
 
-    let project = { projection:{ _id: 0, status: 0 } };
+    let project = { projection: {  _id: 0, status: 0 } };
 
-    modelUser.getone(where,project).then(users=>{
-        res.status(201).send(users);
-    }).catch(err=>{
-        console.error("Erro ao conectar a collection 'user'", err);
-        res.status(500).send("Erro ao conectar a collection 'user'");
-    });
+    modelUser.getone(where,project)
+        .then(users => {
+            res.status(201).send(users);
+        }).catch(err => {
+            console.error("Erro ao conectar a collection 'user'", err);
+            res.status(500).send("Erro ao conectar a collection 'user'");
+        });
 };
 
 //---------------post------------------------------

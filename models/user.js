@@ -18,11 +18,11 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
         db = database.db("trainee-prominas");
         userCollection = db.collection('user');
-        //counterCollection = db.collection('counter');
-       // userCollection.countDocuments().then((count) => {
-         //   id = count;
-           // console.log(count);
-        //});
+
+         userCollection.countDocuments().then((count) => {
+           id = count;
+         console.log(count);
+        });
     }
 });
 
@@ -44,13 +44,13 @@ exports.getall=(status,project)=>{
 
 //-----------getone---------------------
 exports.getone=(where,project)=>{
-  return userCollection.find({where,project}).toArray();
+  return userCollection.find(where, project).toArray();
 };
 
 //------------post----------------------
 exports.post=(newUser)=>{
     newUser.id=++id;
-    conosole.log('------>',newUser);
+    console.log('------>',newUser);
     insertOne(newUser);
 
 };
