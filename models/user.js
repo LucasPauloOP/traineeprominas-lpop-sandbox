@@ -22,7 +22,17 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
     }
 });
 
-exports.getall=()=>{
-    return collection.
+//---------------id----------------------
+
+
+//----------getalll----------------------
+exports.getall=(status,project)=>{
+    return userCollection.find({status,project}).toArray();
+
+};
+
+//-----------getone---------------------
+exports.getOne=(status,project,id)=>{
+  return userCollection.find({status,project,id}).toArray();
 };
 

@@ -1,16 +1,33 @@
 var express = require('express');
 var router = express.Router();
 
+modelUser = require('../models/user');
+
+
+//-----------get all-----------------------------------
 exports.getAll = (req,res) => {
-    const projection = { _id: 0, id: 1, name: 1, lastName: 1, profile: 1 };
-userCollection.find({ status: 1 }, { projection })
-    .toArray((err, users) => {
-        if (err) {
-            console.error("Erro ao conectar a collection 'user'", err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        } else {
-            res.send(users);
-        }
+    let status={status:1};
+    let project ={projection:{_id: 0, id: 1, name: 1, lastName: 1, profile: 1} };
+    modelUser.getall(status,project).then(users => {
+        console.log(users);
+        res.status(201).send(users);
+    }).catch(err=>{
+        console.error("Erro ao conectar a collection 'user'", err);
+        res.status(500).send("Erro ao conectar a collection 'user'");
+    });
+};
+
+//-----------get one-------------------------------
+exports.getOne = (req,res)=>{
+    let status = {status:1};
+    let project ={projection:{_id: 0, id: 1, name: 1, lastName: 1, profile: 1} };
+    let id = parseInt(req.params.id);
+
+    modelUser.getone(status,project,id).then(users=>{
+        res.status(201).send(users);
+    }).catch(err=>{
+        console.error("Erro ao conectar a collection 'user'", err);
+        res.status(500).send("Erro ao conectar a collection 'user'");
     });
 };
 
