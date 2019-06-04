@@ -66,22 +66,21 @@ const _getOneCourse = function (id) {
     });
 };
 
-async function put_aggregate (id,student,res) {
-    console.log("qq",student);
+async function put_aggregate (id,newStudent,res) {
+    //console.log("qq",newStudent);
 
-    if(student.course !== null) {
+    if(newStudent.course !== null) {
         let course;
         course = await _getOneCourse(student.course);
 
-        student.course = course;
+        newStudent = course;
 
     }
 
-    console.log("qualquer coisa",student);
+    //console.log("qualquer coisa",student);
 
 
     collection.updateOne({'id':id},{$set:student},(err,result) => {
-        console.log("qq14",result);
         if(err){
             console.error("Erro ao conectar a collection studant");
             res.status(500).send("Erro ao conectar a collection studant");
@@ -96,13 +95,14 @@ async function put_aggregate (id,student,res) {
 
 
 app.get('/',function (req,res) {
-    collection.find({}).toArray((err,students) =>{
-        if(err){
+    collection.find({'status': 1},{projection:{ _id: 0,status: 0}}).toArray((err, students) => {
+        if (err) {
+            console.log(err);
             console.error("Ocorreu um erro ao conectar a collection student");
             res.status(500);
         }
-        else{
-            res.send(students);
+        else {
+            res.status(200).send(students);
         }
     });
 });
@@ -110,13 +110,17 @@ app.get('/',function (req,res) {
 app.get('/:id',function(req,res){
     var id = parseInt(req.params.id);
 
-    collection.find({'id':id}).toArray((err,students) =>{
-        if(err){
+    collection.find({'id': id,'status': 1},{projection:{ _id: 0,status:0}}).toArray((err, students) => {
+        if (err) {
+            console.log (err);
             console.error("Ocorreu um erro ao conectar a collection student");
             res.status(500);
-        }
-        else{
-            res.send(students);
+        } else {
+            if (courses === []) {
+                res.status(404).send("Estudante não encontrado.");
+            } else {
+                res.status(201).send(students);
+            }
         }
     });
 });
@@ -148,24 +152,21 @@ app.delete('/',function(req,res){
 app.delete('/:id',function(req,res){
     var id = parseInt(req.params.id);
 
-    collection.remove({"id": id}, true, function (err, info) {
+    collection.find({"id": id,'status':1},function (err,students) {
         if (err) {
-            console.error("Ocorreu um erro ao deletar os documentos da coleção.");
+            console.error("Ocorreu um erro ao deletar o documento da coleção.");
             res.status(500);
         } else {
-            var numRemoved = info.result.n;
-            if (numRemoved > 0) {
-                console.log("INF: Todos os documentos (" + numRemoved + ") foram removidos");
-                res.send("Estudante foi removido com sucesso.");
+            if (students != null) {
+                collection.update({"status": 1}, {$set: {'status': 0}}, {upset: true});
                 res.status(204);//No content
+                res.send("O estudante foi removido.");
+            }
+            else{
+                console.log("Nenhum documento foi removido.");
+                res.status(401).send("Estudante não foi removido ou por não existir ou por ja ter sido deletado");
 
             }
-            else {
-                console.log("Nenhum documento foi removido");
-                res.status(404);
-                res.send("Nenhum estudante foi removido.");
-            }
-
         }
 
     });
@@ -174,9 +175,16 @@ app.delete('/:id',function(req,res){
 
 app.put('/:id', function(req,res){
     var id = parseInt(req.params.id);
-    var bodystudent  = req.body;
 
-    put_aggregate(id,bodystudent,res);
+    var newStudent={
+
+        name:   req.body.name,
+        lastName:  req.body.lastName,
+        age: req.body.age,
+        course: req.body.course
+    };
+    put_aggregate(id, newStudent, res);
+
 });
 
 app.post('/', function(req, res) {
@@ -189,8 +197,15 @@ app.post('/', function(req, res) {
         id:parseInt(++id)
     };
 
+    if(newStudent.name && newStudent.lastName && newStudent.age && newStudent.course)
+    {
+        aggregate(newStudent,res);
+    }
+    else
+    {
+        res.status(401).send("Campos obrigatórios não prenchidos.");
+    }
 
-    aggregate(newStudent,res);
 });
 
 module.exports = app;

@@ -142,6 +142,10 @@ app.post('/', function(req, res) {
     {
         aggregate(newCourse,res);
     }
+    else
+    {
+        res.status(401).send("Campos obrigatórios não prenchidos.");
+    }
 
 });
 
