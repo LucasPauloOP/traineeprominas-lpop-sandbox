@@ -51,6 +51,5 @@ exports.getone=(where,project)=>{
 exports.post=(newUser)=>{
     newUser.id=++id;
     console.log('------>',newUser);
-    insertOne(newUser);
-
+    return userCollection.insertOne(newUser);
 };
