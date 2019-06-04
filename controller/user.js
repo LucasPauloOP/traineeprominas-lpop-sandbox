@@ -31,6 +31,38 @@ exports.getOne = (req,res)=>{
     });
 };
 
+exports.post=(req,res)=>{
+    let status = {status:1};
+
+    modelUser.post(status,project).then(users=>{
+        // validation
+        if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName') || !req.body.hasOwnProperty('profile'))
+            return res.status(401).send('Os campos name, lastName e profile são obrigatórios.');
+
+        // if valid creates the user object
+        let user = {
+            name: req.body.name,
+            lastName: req.body.lastName,
+            profile: req.body.profile,
+            status: 1
+        };
+        //persists the new user on database
+        if (err) {
+            console.error("Erro ao Criar Um Novo Usuário", err);
+            res.status(500).send("Erro ao Criar Um Novo Usuário");
+        }
+
+        else {
+            res.status(201).send("Usuário Cadastrado com Sucesso.");
+        }
+
+    }).catch(err=>{
+        console.error("Erro ao conectar a collection 'user'", err);
+        res.status(500).send("Erro ao conectar a collection 'user'");
+    });
+
+};
+
 /*exports.getOne=(res,req)=>{
     let id = parseInt(req.params.id);
 

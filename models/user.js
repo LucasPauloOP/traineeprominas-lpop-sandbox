@@ -23,7 +23,12 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 });
 
 //---------------id----------------------
-
+exports.id=()=>{
+    return userCollection.count().then((count) => {
+        id = count;
+        console.log(count);
+    });
+};
 
 //----------getalll----------------------
 exports.getall=(status,project)=>{
