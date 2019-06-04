@@ -53,3 +53,14 @@ exports.post=(newUser)=>{
     console.log('------>',newUser);
     return userCollection.insertOne(newUser);
 };
+
+//-------------put----------------------
+exports.put=(newUser,where,project)=>{
+  console.log('--------->',newUser);
+  return userCollection.findOneAndUpdate(where,{$set:{...newUser}});
+};
+
+//---------------delete-------------------
+exports.delete=(where)=>{
+return userCollection.findOneAndUpdate(where,{ $set: { status: 0 } });
+};

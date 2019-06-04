@@ -68,6 +68,59 @@ exports.post=function(req,res){
     };
 
 //---------------------put--------------------------------
+exports.put=function (req,res) {
+    let id = parseInt(req.params.id);
+
+    let where = {status:1,'id':id};
+
+    let project = { projection: {_id: 0, status: 0 } };
+
+    var newUser = {
+        name: req.body.name,
+        lastName: req.body.lastName,
+        profile: req.body.profile,
+    };
+
+    if(newUser.name && newUser.lastName && newUser['profile'])
+    {
+        modelUser.post(newUser,where,project).then(user=>{
+            res.status(201).send('Usuário atualizado com sucesso.');
+        }).catch(err=>{
+            console.error('Erro ao conectar a collection user',err);
+            res.status(500).send("Erro ao conectar a collection 'user'");
+        });
+    }
+
+    else{
+        res.status(401).send("Campos obrigatorios não prenchidos.");
+    }
+
+};
+
+
+//----------------------delete----------------------------------
+exports.delete=function(req,res,err){
+    let id = parseInt(req.params.id);
+
+    let where = {status:1,'id':id};
+    modelUser.delete(where).then(result=>{
+            if (result)
+            {
+                console.log(`INF: Usuário Removido`);
+                res.status(200).send(`Usuário Removido`);
+            }
+            else
+                {
+                console.log('Nenhum Usuário Removido');
+                res.status(204).send('Nenhum Usuário Removido');
+            }
+    }).catch(err=>{
+            console.error("Erro ao remover o usuário", err);
+            res.status(500).send("Erro ao remover o usuário");
+
+    });
+};
+
 
 
 

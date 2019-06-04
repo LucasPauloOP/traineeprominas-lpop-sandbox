@@ -11,5 +11,7 @@ router.get('/:id',users.getOne);
 
 router.post('/',users.post);
 
-/*router.put(users.put);*/
+router.put('/:id',users.put);
+
+router.delete('/:id',users.delete);
 module.exports = router;
