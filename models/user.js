@@ -1,8 +1,8 @@
 const mongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectID;
 
-const mdbURL="mongodb+srv://LucasPauloOP:Lucio3237*@cluster0-ofedr.mongodb.net/test?retryWrites=true";
-
+const mdbURL='mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/test?retryWrites=true';
+let id;
 let db;
 let userCollection;
 let counterCollection;
@@ -18,7 +18,11 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
         db = database.db("trainee-prominas");
         userCollection = db.collection('user');
-        counterCollection = db.collection('counter');
+        //counterCollection = db.collection('counter');
+       // userCollection.countDocuments().then((count) => {
+         //   id = count;
+           // console.log(count);
+        //});
     }
 });
 
@@ -32,12 +36,21 @@ exports.id=()=>{
 
 //----------getalll----------------------
 exports.getall=(status,project)=>{
-    return userCollection.find({status,project}).toArray();
+    console.log('------>model',status);
+    //console.log(userCollection.count())
+    return userCollection.find(status,project).toArray();
 
 };
 
 //-----------getone---------------------
-exports.getOne=(status,project,id)=>{
-  return userCollection.find({status,project,id}).toArray();
+exports.getone=(where,project)=>{
+  return userCollection.find({where,project}).toArray();
 };
 
+//------------post----------------------
+exports.post=(newUser)=>{
+    newUser.id=++id;
+    conosole.log('------>',newUser);
+    insertOne(newUser);
+
+};

@@ -7,23 +7,27 @@ modelUser = require('../models/user');
 //-----------get all-----------------------------------
 exports.getAll = (req,res) => {
     let status={status:1};
-    let project ={projection:{_id: 0, id: 1, name: 1, lastName: 1, profile: 1} };
-    modelUser.getall(status,project).then(users => {
-        console.log(users);
-        res.status(201).send(users);
-    }).catch(err=>{
-        console.error("Erro ao conectar a collection 'user'", err);
-        res.status(500).send("Erro ao conectar a collection 'user'");
-    });
+
+    let project = { projection:{ _id: 0, status: 0 } };
+
+    modelUser.getall(status, project)
+        .then(users => {
+            console.log('----->controlller',users);
+            res.status(201).send(users);
+        }).catch(err=>{
+            console.error("Erro ao conectar a collection 'user'", err);
+            res.status(500).send("Erro ao conectar a collection 'user'");
+        });
 };
 
 //-----------get one-------------------------------
 exports.getOne = (req,res)=>{
-    let status = {status:1};
-    let project ={projection:{_id: 0, id: 1, name: 1, lastName: 1, profile: 1} };
     let id = parseInt(req.params.id);
+    let where = {status:1,'id':id};
 
-    modelUser.getone(status,project,id).then(users=>{
+    let project = { projection:{ _id: 0, status: 0 } };
+
+    modelUser.getone(where,project).then(users=>{
         res.status(201).send(users);
     }).catch(err=>{
         console.error("Erro ao conectar a collection 'user'", err);
@@ -31,148 +35,36 @@ exports.getOne = (req,res)=>{
     });
 };
 
-exports.post=(req,res)=>{
+//---------------post------------------------------
+exports.post=function(req,res){
+
     let status = {status:1};
 
-    modelUser.post(status,project).then(users=>{
-        // validation
-        if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName') || !req.body.hasOwnProperty('profile'))
-            return res.status(401).send('Os campos name, lastName e profile são obrigatórios.');
-
-        // if valid creates the user object
-        let user = {
+        var newUser = {
             name: req.body.name,
             lastName: req.body.lastName,
             profile: req.body.profile,
-            status: 1
+            status : 1
         };
-        //persists the new user on database
-        if (err) {
-            console.error("Erro ao Criar Um Novo Usuário", err);
-            res.status(500).send("Erro ao Criar Um Novo Usuário");
+        if(!newUser.name || !newUser.lastName || !newUser['profile'] )
+        {
+            res.status(401).send("Campos obrigatorios não prenchidos.");
         }
-
         else {
-            res.status(201).send("Usuário Cadastrado com Sucesso.");
+            if(newUser.name && newUser.lastName && newUser['profile'])
+            {
+                modelUser.post(newUser).then(user=>{
+                    res.status(200).send('Usuário cadastrado com sucesso.');
+
+                }).catch(err=>{
+                    console.error('Erro ao conectar a collection user',err);
+                    res.status(500).send("Erro ao conectar a collection 'user'");
+            });
+
+            }
         }
 
-    }).catch(err=>{
-        console.error("Erro ao conectar a collection 'user'", err);
-        res.status(500).send("Erro ao conectar a collection 'user'");
-    });
-
-};
-
-/*exports.getOne=(res,req)=>{
-    let id = parseInt(req.params.id);
-
-    const projection = { _id: 0, id: 1, name: 1, lastName: 1, profile: 1 };
-
-    userCollection.findOne({ id: id, status: 1 }, { projection }, (err, user) => {
-
-        if (err) {
-            console.error("Erro ao conectar a collection 'user'", err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        } else {
-
-            if (user)
-                res.send(user);
-            else
-                res.status(404).send("Usuário não Encontrado.");
-        }
-    });
-};
-
-exports.post=(res,req)=>{
-
-    // validation
-    if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName') || !req.body.hasOwnProperty('profile'))
-        return res.status(401).send('Os campos name, lastName e profile são obrigatórios.');
-
-    // if valid creates the user object
-    let user = {
-        name: req.body.name,
-        lastName: req.body.lastName,
-        profile: req.body.profile,
-        status: 1
     };
 
-    (async () => {
 
-        // sets user's unique id
-        user.id = await _getNextIdValue();
 
-        // persists the new user on database
-        userCollection.insertOne(user, (err, result) => {
-
-            if (err) {
-                console.error("Erro ao Criar Um Novo Usuário", err);
-                res.status(500).send("Erro ao Criar Um Novo Usuário");
-            } else {
-                res.status(201).send("Usuário Cadastrado com Sucesso.");
-            }
-        });
-
-    })();
-};
-
-exports.put=(res,req)=>{
-
-    // validation
-    if (!req.body.hasOwnProperty('name') || !req.body.hasOwnProperty('lastName') || !req.body.hasOwnProperty('profile'))
-        return res.status(401).send('Os campos name, lastName e profile são obrigatórios.');
-
-    // if valid creates the user object
-    let user = {
-        name: req.body.name,
-        lastName: req.body.lastName,
-        profile: req.body.profile,
-    };
-
-    // collects the user's id
-    let id = parseInt(req.params.id);
-
-    // updates the user if it exists and it is active
-    userCollection.findOneAndUpdate({ id: id, status: 1 }, { $set: { ...user } }, (err, result) => {
-
-        if (err) {
-            console.error("Erro ao conectar a collection 'user'", err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        } else {
-
-            if (result.value) {
-                console.log(`INF: Usuário Atualizado`);
-                res.status(200).send(`Usuário Atualizado`);
-            } else {
-                console.log('Usuário não Encontrado.');
-                res.status(404).send('Usuário não Encontrado.');
-            }
-        }
-
-    });
-
-};
-
-exports.delete=(req,res)=>{
-    let id = parseInt(req.params.id);
-
-    // Don't actually remove just change user status
-    userCollection.findOneAndUpdate({ id: id, status: 1 }, { $set: { status: 0 } }, (err, result) => {
-
-        if (err) {
-            console.error("Erro ao remover o usuário", err);
-            res.status(500).send("Erro ao remover o usuário");
-        } else {
-
-            if (result.value) {
-                console.log(`INF: Usuário Removido`);
-                res.status(200).send(`Usuário Removido`);
-            } else {
-                console.log('Nenhum Usuário Removido');
-                res.status(204).send('Nenhum Usuário Removido');
-            }
-        }
-
-    });
-
-};*/
