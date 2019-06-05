@@ -12,8 +12,8 @@ router.get('/:id',teachers.getOne);
 router.post('/',teachers.post);
 
 router.put('/:id',teachers.put);
-/*
+
 router.delete('/:id',teachers.delete);
-*/
+
 
 module.exports = router;

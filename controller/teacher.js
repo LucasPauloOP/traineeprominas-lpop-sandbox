@@ -99,13 +99,13 @@ exports.put=function (req,res) {
 
 };
 
-/*
+
 //----------------------delete----------------------------------
 exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);
 
     let where = {status:1,'id':id};
-    modelUser.delete(where).then(result=>{
+    modelTeacher.delete(where).then(result=>{
         if (result)
         {
             console.log(`INF: Usuário Removido`);
@@ -121,4 +121,4 @@ exports.delete=function(req,res,err){
         res.status(500).send("Erro ao remover o usuário");
 
     });
-};*/
+};
