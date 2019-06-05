@@ -38,26 +38,27 @@ exports.getOne = (req,res)=>{
     });
 };
 
-/*
+
 //---------------post------------------------------
 exports.post=function(req,res){
 
     let status = {status:1};
 
-    var newTeacher = {
+    var newCourse = {
         name: req.body.name,
-        lastName: req.body.lastName,
-        phd: req.body.phd||'Não informado',
+        period:req.body.period||8,
+        teachers: req.body.teachers||' ',
+        city:req.body.city,
         status : 1
     };
-    if(!newTeacher.name || !newTeacher.lastName )
+    if(!newCourse.name || !newCourse.city )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
     else {
-        if(newTeacher.name && newTeacher.lastName)
+        if(newCourse.name && newCourse.city)
         {
-            modelTeacher.post(newTeacher).then(teacher=>{
+            modelCourse.post(newCourse).then(course=>{
                 res.status(200).send('Usuário cadastrado com sucesso.');
 
             }).catch(err=>{
@@ -70,7 +71,7 @@ exports.post=function(req,res){
 
 };
 
-
+/*
 //---------------------put--------------------------------
 exports.put=function (req,res) {
     let id = parseInt(req.params.id);
