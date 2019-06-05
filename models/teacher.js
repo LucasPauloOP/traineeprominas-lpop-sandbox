@@ -45,13 +45,13 @@ exports.post=(newTeacher)=>{
     console.log('------>',newTeacher);
     return teacherCollection.insertOne(newTeacher);
 };
-/*
-//-------------put----------------------
-exports.put=(newUser,where,project)=>{
-    console.log('--------->',newUser);
-    return userCollection.findOneAndUpdate(where,{$set:{...newUser}});
-};
 
+//-------------put----------------------
+exports.put=(newTeacher,where)=>{
+    console.log('--------->',newTeacher);
+    return teacherCollection.findOneAndUpdate(where,{$set:{...newTeacher}});
+};
+/*
 //---------------delete-------------------
 exports.delete=(where)=>{
     return userCollection.findOneAndUpdate(where,{ $set: { status: 0 } });

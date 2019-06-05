@@ -70,24 +70,22 @@ exports.post=function(req,res){
 
 };
 
-/*
+
 //---------------------put--------------------------------
 exports.put=function (req,res) {
     let id = parseInt(req.params.id);
 
     let where = {status:1,'id':id};
 
-    let project = { projection: {_id: 0, status: 0 } };
-
-    var newUser = {
+    var newTeacher = {
         name: req.body.name,
         lastName: req.body.lastName,
-        profile: req.body.profile,
+        phd: req.body.phd||""
     };
 
-    if(newUser.name && newUser.lastName && newUser['profile'])
+    if(newTeacher.name && newTeacher.lastName )
     {
-        modelUser.post(newUser,where,project).then(user=>{
+        modelTeacher.put(newTeacher,where).then(teacher=>{
             res.status(201).send('Usuário atualizado com sucesso.');
         }).catch(err=>{
             console.error('Erro ao conectar a collection user',err);
@@ -101,7 +99,7 @@ exports.put=function (req,res) {
 
 };
 
-
+/*
 //----------------------delete----------------------------------
 exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);

@@ -10,9 +10,9 @@ router.get('/',teachers.getAll);
 router.get('/:id',teachers.getOne);
 
 router.post('/',teachers.post);
-/*
-router.put('/:id',tachers.put);
 
+router.put('/:id',teachers.put);
+/*
 router.delete('/:id',teachers.delete);
 */
 
