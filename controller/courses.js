@@ -195,20 +195,20 @@ exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);
 
     let where = {status:1,'id':id};
-    modelTeacher.delete(where).then(result=>{
+    modelCourse.delete(where).then(result=>{
         if (result)
         {
-            console.log(`INF: Usuário Removido`);
-            res.status(200).send(`Usuário Removido`);
+            console.log(`INF: curso removido`);
+            res.status(200).send(`curso removido`);
         }
         else
         {
-            console.log('Nenhum Usuário Removido');
-            res.status(204).send('Nenhum Usuário Removido');
+            console.log('Nenhum curso removido');
+            res.status(204).send('Nenhum curso removido');
         }
     }).catch(err=>{
-        console.error("Erro ao remover o usuário", err);
-        res.status(500).send("Erro ao remover o usuário");
+        console.error("Erro ao remover o curso", err);
+        res.status(500).send("Erro ao remover o curso");
 
     });
 };

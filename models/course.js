@@ -50,8 +50,8 @@ exports.put=(newCourse,where)=>{
 
     return courseCollection.findOneAndUpdate(where,{$set:{...newCourse}});
 };
-/*
+
 //---------------delete-------------------
 exports.delete=(where)=>{
-    return teacherCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });
-};*/
+    return courseCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });
+};
