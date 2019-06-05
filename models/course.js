@@ -13,10 +13,10 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
         // send.status(500);
     }
     else {
-        console.log('User CONECTOU!');
+        //console.log('Course CONECTOU!');
 
         db = database.db("trainee-prominas");
-        courseCollection = db.collection('teacher');
+        courseCollection = db.collection('course');
 
         courseCollection.countDocuments().then((count) => {
             id = count;
@@ -25,15 +25,15 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
     }
 });
 
-/*
+
 //----------getalll----------------------
 exports.getall=(status,project)=>{
     //console.log('------>model',status);
     //console.log(userCollection.count())
-    return teacherCollection.find(status,project).toArray();
+    return courseCollection.find(status,project).toArray();
 
 };
-
+/*
 //-----------getone---------------------
 exports.getone=(where,project)=>{
     return teacherCollection.find(where, project).toArray();

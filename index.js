@@ -1,21 +1,27 @@
-
 const express = require('express');
-const router = express.Router();
+const bodyParser = require('body-parser');
 
-const courses = require('../controller/course');
+const userRouter = require('./routes/users');
+const teacherRouter = require('./routes/teachers');
+const courseRouter = require('./routes/courses');
+const studentRouter = require('./routes/students');
 
-//console.log(courses);
+const app = express();
 
-router.get('/',courses.getAll);
-/*
-router.get('/:id',courses.getOne);
+const baseApi = "/api/v1";
 
-router.post('/',courses.post);
+app.use(bodyParser.json());
 
-router.put('/:id',courses.put);
+app.get(baseApi, function (req, res) {
+  res.send('Hello World!');
+});
 
-router.delete('/:id',courses.delete);
- */
+// Rotas da Tarefa 02
+app.use(`${baseApi}/user`, userRouter);
+app.use(`${baseApi}/teacher`, teacherRouter);
+app.use(`${baseApi}/course`, courseRouter);
+app.use(`${baseApi}/student`, studentRouter);
 
-
-module.exports = router;
+const listener = app.listen(process.env.PORT || 3000, () => {
+  console.log(`Server running on PORT ${listener.address().port}`);
+});

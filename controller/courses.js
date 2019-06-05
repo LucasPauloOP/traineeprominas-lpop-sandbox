@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-modelTeacher = require('../models/teacher');
+modelCourse = require('../models/course');
 
 
 //-----------get all-----------------------------------
@@ -10,10 +10,10 @@ exports.getAll = (req,res) => {
 
     let project = { projection:{ _id: 0, status: 0 } };
 
-    modelTeacher.getall(status, project)
-        .then(teachers => {
-            console.log('----->controlller',teachers);
-            res.status(201).send(teachers);
+    modelCourse.getall(status, project)
+        .then(courses => {
+            console.log('----->controlller',courses);
+            res.status(201).send(courses);
         }).catch(err=>{
         console.error("Erro ao conectar a collection 'user'", err);
         res.status(500).send("Erro ao conectar a collection 'user'");
