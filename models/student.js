@@ -32,11 +32,16 @@ return studentCollection.countDocuments(where);
 };
 
 //----------update all students if change course------------
-exports.updateStudent= async function(newCourse,where){
-    console.log('------>',newCourse);
-    return studentCollection.updateMany(where,{$set:newCourse});
+exports.updateStudent= function(where,newCourse){
+    console.log('------>',where);
+    return studentCollection.findOneAndUpdate(where,{$set:newCourse});
 };
 
+//---------update teacher in students-----------------------
+exports.updateTeacher=function(where,newTeacher){
+    console.log('------->',where);
+
+};
 
 //----------getalll----------------------
 exports.getall=(status,project)=>{

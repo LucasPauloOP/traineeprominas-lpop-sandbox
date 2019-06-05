@@ -26,6 +26,11 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 });
 
 
+//---------------updateOne--------------
+exports.updateOne=(teacher,where)=>{
+    return teacherCollection.findOneAndUpdate(where,{$set:{...teacher}}, {returnOriginal:false});
+};
+
 //----------getalll----------------------
 exports.getall=(status,project)=>{
     //console.log('------>model',status);

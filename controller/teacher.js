@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 modelTeacher = require('../models/teacher');
-
+modelCourse = require('../models/course');
+modelStudent=require('../models/student');
 
 //-----------get all-----------------------------------
 exports.getAll = (req,res) => {
@@ -83,25 +84,46 @@ exports.put=function (req,res) {
         phd: req.body.phd||""
     };
 
-    if(newTeacher.name && newTeacher.lastName )
-    {
-        modelTeacher.put(newTeacher,where).then(teacher=>{
-            res.status(201).send('Usuário atualizado com sucesso.');
-        }).catch(err=>{
-            console.error('Erro ao conectar a collection user',err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        });
-    }
+    modelTeacher.updateOne(teacher,{id:id,status:1}).then(result=>{
+       let updatedTeacher=result.value;
+        (async () => {
 
-    else{
-        res.status(401).send("Campos obrigatorios não prenchidos.");
-    }
+            try {
+
+                // Updates the teacher from all courses that he is associated
+                await modelCourse.updateMany(
+                    { "status": 1, "teachers.id": updatedTeacher.id },
+                    { "teachers.$":  updatedTeacher });
+
+                // Updates the teacher from all student.course that he is associated
+                await modelStudent.updateMany(
+                    { "status": 1, "course.teachers._id": updatedTeacher._id },
+                    { "course.teachers.$":  updatedTeacher } );
+
+            } catch(err) {
+                console.error(err);
+            }
+
+            console.log(`INF: Professor Atualizado`);
+            res.status(200).send(`Professor Atualizado`);
+
+        })();
+                if (newTeacher.name && newTeacher.lastName) {
+                    modelTeacher.put(newTeacher, where).then(teacher => {
+                        res.status(201).send('Usuário atualizado com sucesso.');
+                    }).catch(err => {
+                        console.error('Erro ao conectar a collection user', err);
+                        res.status(500).send("Erro ao conectar a collection 'user'");
+                    });
+                } else {
+                    res.status(401).send("Campos obrigatorios não prenchidos.");
+
 
 };
 
 
 //----------------------delete----------------------------------
-exports.delete=function(req,res,err){
+/*exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);
 
     let where = {status:1,'id':id};
@@ -121,4 +143,4 @@ exports.delete=function(req,res,err){
         res.status(500).send("Erro ao remover o curso");
 
     });
-};
+};*/

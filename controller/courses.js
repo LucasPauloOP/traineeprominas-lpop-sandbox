@@ -134,36 +134,19 @@ exports.put=function (req,res) {
             newCourse.teacher = validTeachers;
         }
 
-
         // persists the new course on database
-        if(!newCourse.name && !newCourse.city )
-        {
-            res.status(401).send("Campos obrigatorios não prenchidos.");
-        }
-        if(newCourse.name && newCourse.city)
-        {
-            modelCourse.put(newCourse,where).then(course=>{
-
-                // If some invalid teacher id was informed
-                if (invalidTeachers.length > 0)
-                    return res.status(201).send(`Curso atualizado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidTeachers}`);
-
-                res.status(200).send('Curso atualizado com sucesso.');
-
-            }).catch(err=>{
-                console.error('Erro ao conectar a collection course',err);
-                res.status(500).send("Erro ao conectar a collection course");
-            });
-
-        }
-
-
-
     modelCourse.updateOne(newCourse,where).then(results =>{
+
+
        if(results.value){
+
+
            //updates all students who have this course
-           modelStudent.updateStudent({'status':1,'course._id': results.value._id},{course:{...results.value}})
+           // modelStudent.updateStudent({'status':1,'course._id': results.value._id},{'course':results.value})
+           modelStudent.updateStudent({'status':1,'course.id': results.value.id},{'course.$':results.value})
                .then(results=>{
+
+                   //console.log(results);
                    if(invalidTeachers.length>0) {
 
                        return res.status(201).send('Curso atualizado com sucesso. Porem os professores com ' +

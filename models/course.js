@@ -24,8 +24,13 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
     }
 });
 
+//----------update all courses if teacher change--------------
+exports.updateMany=function(where,newCourse){
+    return  courseCollection.findOneAndUpdate(where,{$set:{newCourse}})
+};
+
 //----------update course---------------
-exports.updateOne= async function (newCourse,where) {
+exports.updateOne=  function (newCourse,where) {
     return courseCollection.findOneAndUpdate(where, {$set:{...newCourse }},{returnOriginal:false});
     
 };
