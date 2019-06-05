@@ -13,7 +13,7 @@ exports.getAll = (req,res) => {
 
     modelTeacher.getall(status, project)
         .then(teachers => {
-            console.log('----->controlller',teachers);
+            //console.log('----->controlller',teachers);
             res.status(201).send(teachers);
         }).catch(err=>{
         console.error("Erro ao conectar a collection 'teacher'", err);
@@ -81,26 +81,35 @@ exports.put=function (req,res) {
     var newTeacher = {
         name: req.body.name,
         lastName: req.body.lastName,
-        phd: req.body.phd||""
     };
+    if(req.body.phd)
+    {
+        newTeacher.phd= req.body.phd ||' ';
+    }
 
-    modelTeacher.updateOne(teacher,{id:id,status:1}).then(result=>{
-       let updatedTeacher=result.value;
+    if(!newTeacher.name && !newTeacher.lastName)
+    {
+        res.status(401).send('Campos obrigatorios foram deixados em branco');
+    }
+
+    modelTeacher.updateOne(newTeacher,{'id':id,status:1}).then(result=> {
+        let updatedTeacher = result.value;
+        console.log('----->result:',result.value);
         (async () => {
 
             try {
 
                 // Updates the teacher from all courses that he is associated
                 await modelCourse.updateMany(
-                    { "status": 1, "teachers.id": updatedTeacher.id },
-                    { "teachers.$":  updatedTeacher });
+                    {"status": 1, "teacher.id": updatedTeacher.id},
+                    {"teacher.$": updatedTeacher});
 
                 // Updates the teacher from all student.course that he is associated
                 await modelStudent.updateMany(
-                    { "status": 1, "course.teachers._id": updatedTeacher._id },
-                    { "course.teachers.$":  updatedTeacher } );
+                    {"status": 1, "course.teacher.id": updatedTeacher.id},
+                    {"course.teacher.$": updatedTeacher});
 
-            } catch(err) {
+            } catch (err) {
                 console.error(err);
             }
 
@@ -108,15 +117,11 @@ exports.put=function (req,res) {
             res.status(200).send(`Professor Atualizado`);
 
         })();
-                if (newTeacher.name && newTeacher.lastName) {
-                    modelTeacher.put(newTeacher, where).then(teacher => {
-                        res.status(201).send('Usuário atualizado com sucesso.');
-                    }).catch(err => {
-                        console.error('Erro ao conectar a collection user', err);
-                        res.status(500).send("Erro ao conectar a collection 'user'");
-                    });
-                } else {
-                    res.status(401).send("Campos obrigatorios não prenchidos.");
+    })
+        .catch(err => {
+            console.error("Erro ao conectar a collection teacher", err);
+            res.status(500).send("Erro ao conectar a collection teacher");
+        });
 
 
 };

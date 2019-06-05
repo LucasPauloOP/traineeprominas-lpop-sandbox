@@ -26,12 +26,15 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
 //----------update all courses if teacher change--------------
 exports.updateMany=function(where,newCourse){
-    return  courseCollection.findOneAndUpdate(where,{$set:{newCourse}})
+    //console.log('------->where: ',where);
+    //console.log('------->newCourse:',newCourse);
+    return  courseCollection.findOneAndUpdate(where,{$set:newCourse});
 };
 
 //----------update course---------------
 exports.updateOne=  function (newCourse,where) {
-    return courseCollection.findOneAndUpdate(where, {$set:{...newCourse }},{returnOriginal:false});
+    console.log('where------>',where);
+    return courseCollection.updateMany(where, {$set:{...newCourse }},{returnOriginal:false});
     
 };
 

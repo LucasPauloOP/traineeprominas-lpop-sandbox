@@ -28,6 +28,8 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
 //---------------updateOne--------------
 exports.updateOne=(teacher,where)=>{
+    console.log('where updateOne: ',where);
+    console.log('teacher updateOne: ',teacher);
     return teacherCollection.findOneAndUpdate(where,{$set:{...teacher}}, {returnOriginal:false});
 };
 

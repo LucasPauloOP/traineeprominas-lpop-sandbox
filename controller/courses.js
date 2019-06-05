@@ -69,7 +69,7 @@ exports.post=function(req,res){
                 let teacher = await modelTeacher.getone(where);
 
                 if (teacher)
-                    validTeachers.push(teacher);
+                    validTeachers.push(teacher[0]);
                 else
                     invalidTeachers.push(req.body.teacher[i]);
             }
@@ -126,7 +126,7 @@ exports.put=function (req,res) {
                 let teacher = await modelTeacher.getone(where);
 
                 if (teacher)
-                    validTeachers.push(teacher);
+                    validTeachers.push(teacher[0]);
                 else
                     invalidTeachers.push(req.body.teacher[i]);
             }
@@ -152,9 +152,10 @@ exports.put=function (req,res) {
                        return res.status(201).send('Curso atualizado com sucesso. Porem os professores com ' +
                            'esses ids não foram encontrados:${invalidTeachers}');
                    }
-
+                   else{
                        console.log('INF: Curso Atualizado');
                        res.status(200).send(`Curso Atualizado`);
+                   }
 
                }).catch(err=>{
                    console.error(err);

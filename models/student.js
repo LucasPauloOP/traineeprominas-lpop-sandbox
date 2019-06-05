@@ -37,12 +37,12 @@ exports.updateStudent= function(where,newCourse){
     return studentCollection.findOneAndUpdate(where,{$set:newCourse});
 };
 
-//---------update teacher in students-----------------------
-exports.updateTeacher=function(where,newTeacher){
-    console.log('------->',where);
-
+//-----------update all student if change teacher-----------
+exports.updateMany=function(where,newTeacher){
+    console.log('where_student_model->',where);
+    console.log('newTeacher->',newTeacher);
+    return studentCollection.updateMany(where,{$set:newTeacher});
 };
-
 //----------getalll----------------------
 exports.getall=(status,project)=>{
     return studentCollection.find(status,project).toArray();
