@@ -128,24 +128,33 @@ exports.put=function (req,res) {
 
 
 //----------------------delete----------------------------------
-/*exports.delete=function(req,res,err){
+exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);
-
     let where = {status:1,'id':id};
-    modelCourse.delete(where).then(result=>{
-        if (result)
-        {
-            console.log(`INF: Curso Removido`);
-            res.status(200).send('Curso removido com sucesso');
-        }
-        else
-        {
-            console.log('Nenhum curso Removido');
-            res.status(204).send('Nenhum curso Removido');
+
+    modelTeacher.setInactive(where).then(result =>{
+        if(result.value){
+
+            (async ()  => {
+                try{
+                    await modelCourse.removeTeachers(
+                        {"status":1, "teachers.id": result_value.id},
+                        {'teachers':{'id':result.value.id}})
+
+                    await modelStudent.removeTeachers(
+                        { "status": 1, "course.teachers._id": result.value._id },
+                        { "course.teachers": { "_id": result.value._id} } )
+                } catch(err){
+                    console.error(err);
+                }
+                console.log('Nenhum Professor Removido');
+                res.status(204).send('Nenhum Professor Removido');
+
+            })();
         }
     }).catch(err=>{
-        console.error("Erro ao remover o curso", err);
-        res.status(500).send("Erro ao remover o curso");
+        console.error("Erro ao remover o Professor", err);
+        res.status(500).send("Erro ao remover o Professor");
+    })
 
-    });
-};*/
+};

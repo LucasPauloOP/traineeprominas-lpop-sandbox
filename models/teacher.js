@@ -33,6 +33,10 @@ exports.updateOne=(teacher,where)=>{
     return teacherCollection.findOneAndUpdate(where,{$set:{...teacher}}, {returnOriginal:false});
 };
 
+exports.setInactive = function(where) {
+    return teacherCollection.findOneAndUpdate(where, { $set: { status: 0 } });
+};
+
 //----------getalll----------------------
 exports.getall=(status,project)=>{
     //console.log('------>model',status);

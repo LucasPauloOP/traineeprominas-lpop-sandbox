@@ -24,6 +24,11 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
     }
 });
 
+
+exports.findteacher=function(where){
+  return courseCollection.find({where});
+};
+
 //----------update all courses if teacher change--------------
 exports.updateMany=function(where,newCourse){
     //console.log('------->where: ',where);
