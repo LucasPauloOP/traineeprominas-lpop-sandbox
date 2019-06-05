@@ -41,13 +41,15 @@ exports.post=(newStudent)=>{
 
     return studentCollection.insertOne(newStudent);
 };
-/*
-//-------------put----------------------
-exports.put=(newCourse,where)=>{
 
-    return courseCollection.findOneAndUpdate(where,{$set:{...newCourse}});
+//-------------put----------------------
+exports.put=(newStudent,where)=>{
+
+    console.log('------>',newStudent);
+
+    return studentCollection.findOneAndUpdate(where,{$set:{...newStudent}});
 };
-*/
+
 //---------------delete-------------------
 exports.delete=(where)=>{
     return studentCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });

@@ -81,9 +81,9 @@ exports.post=function(req,res){
 };
 
 
-/*
+
 //---------------------put--------------------------------
-exports.post=function(req,res){
+exports.put=function(req,res){
 
 
     var newStudent = {
@@ -104,7 +104,7 @@ exports.post=function(req,res){
         let course = await modelCourse.getone(where);
 
         // if course id is invalid abort the creation of the student
-        if (!course)
+        if (course.length   <= 0)
             return res.status(401).send('O Curso Informado Não Existe.');
 
         // If course is valid continues
@@ -112,8 +112,8 @@ exports.post=function(req,res){
 
 
         // persists the new course on database
-        modelStudent.post(newStudent).then(students => {
-            res.status(201).send("Estudante Cadastrado com Sucesso.");
+        modelStudent.put(newStudent,where).then(students => {
+            res.status(201).send("Estudante atualizado com sucesso.");
         }).catch(err=>{
             console.error("Erro ao Criar Um Novo Estudante", err);
             res.status(500).send("Erro ao Criar Um Novo Estudante");
@@ -121,7 +121,7 @@ exports.post=function(req,res){
     })();
 
 };
-*/
+
 
 
 
