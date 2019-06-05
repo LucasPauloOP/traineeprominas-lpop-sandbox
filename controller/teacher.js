@@ -47,7 +47,7 @@ exports.post=function(req,res){
     var newTeacher = {
         name: req.body.name,
         lastName: req.body.lastName,
-        phd: req.body.phd||'Não informado',
+        phd: req.body.phd.hasOwnProperty('phd')||'Não informado',
         status : 1
     };
     if(!newTeacher.name || !newTeacher.lastName )
@@ -78,9 +78,9 @@ exports.put=function (req,res) {
     let where = {status:1,'id':id};
 
     var newTeacher = {
-        name: req.body.name,
-        lastName: req.body.lastName,
-        phd: req.body.phd||""
+        name: req.body.name.hasOwnProperty('name'),
+        lastName: req.body.lastName.hasOwnProperty('lastName'),
+        phd: req.body.phd.hasOwnProperty('phd')||""
     };
 
     if(newTeacher.name && newTeacher.lastName )

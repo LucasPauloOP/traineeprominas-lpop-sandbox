@@ -10,9 +10,9 @@ router.get('/',courses.getAll);
 router.get('/:id',courses.getOne);
 
 router.post('/',courses.post);
-/*
-router.put('/:id',courses.put);
 
+router.put('/:id',courses.put);
+/*
 router.delete('/:id',courses.delete);
  */
 

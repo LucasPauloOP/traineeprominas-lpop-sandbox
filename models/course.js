@@ -41,16 +41,16 @@ exports.getone=(where,project)=>{
 //------------post----------------------
 exports.post=(newCourse)=>{
     newCourse.id=++id;
-    //console.log('------>',newTeacher);
+
     return courseCollection.insertOne(newCourse);
 };
-/*
-//-------------put----------------------
-exports.put=(newTeacher,where)=>{
-    // console.log('--------->',newTeacher);
-    return teacherCollection.findOneAndUpdate(where,{$set:{...newTeacher}});
-};
 
+//-------------put----------------------
+exports.put=(newCourse,where)=>{
+
+    return courseCollection.findOneAndUpdate(where,{$set:{...newCourse}});
+};
+/*
 //---------------delete-------------------
 exports.delete=(where)=>{
     return teacherCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });

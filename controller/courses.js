@@ -46,7 +46,7 @@ exports.post=function(req,res){
 
     var newCourse = {
         name: req.body.name,
-        period:req.body.period||8,
+        period:req.body.period.hasOwnProperty('period')||8,
         city:req.body.city,
         status : 1
     };
@@ -134,29 +134,62 @@ exports.put=function (req,res) {
 
     let where = {status:1,'id':id};
 
-    var newTeacher = {
+    var newCourse = {
         name: req.body.name,
-        lastName: req.body.lastName,
-        phd: req.body.phd||""
+        period:req.body.period,
+        city:req.body.city,
     };
+    console.log(newCourse);
 
-    if(newTeacher.name && newTeacher.lastName )
-    {
-        modelCourse.put(newTeacher,where).then(course=>{
-            res.status(201).send('Usuário atualizado com sucesso.');
-        }).catch(err=>{
-            console.error('Erro ao conectar a collection user',err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        });
-    }
+    (async () => {
 
-    else{
-        res.status(401).send("Campos obrigatorios não prenchidos.");
-    }
+        let validTeachers = [];
+        let invalidTeachers = [];
+
+        // If some teacher id is informed replace teachers ids by the entire teacher object
+        if (req.body.hasOwnProperty('teacher') && Array.isArray(req.body.teacher) && req.body.teacher.length > 0) {
+
+            for (let i = 0; i < req.body.teacher.length; i++) {
+                let where = {'id':parseInt(req.body.teacher[i]),status:1};
+                let teacher = await modelTeacher.getone(where);
+
+                if (teacher)
+                    validTeachers.push(teacher);
+                else
+                    invalidTeachers.push(req.body.teacher[i]);
+            }
+
+            newCourse.teacher = validTeachers;
+        }
+
+
+        // persists the new course on database
+        if(!newCourse.name || !newCourse.city )
+        {
+            res.status(401).send("Campos obrigatorios não prenchidos.");
+        }
+        if(newCourse.name && newCourse.city)
+        {
+            modelCourse.put(newCourse,where).then(course=>{
+
+                // If some invalid teacher id was informed
+                if (invalidTeachers.length > 0)
+                    return res.status(201).send(`Curso atualizado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidTeachers}`);
+
+                res.status(200).send('Curso atualizado com sucesso.');
+
+            }).catch(err=>{
+                console.error('Erro ao conectar a collection course',err);
+                res.status(500).send("Erro ao conectar a collection course");
+            });
+
+        }
+
+    })();
 
 };
 
-/*
+
 //----------------------delete----------------------------------
 exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);
@@ -179,4 +212,3 @@ exports.delete=function(req,res,err){
 
     });
 };
-*/
