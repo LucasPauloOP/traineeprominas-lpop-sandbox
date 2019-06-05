@@ -3,6 +3,7 @@ var router = express.Router();
 
 modelCourse = require('../models/course');
 modelTeacher = require('../models/teacher');
+modelStudent = require('../models/student');
 
 //-----------get all-----------------------------------
 exports.getAll = (req,res) => {
@@ -50,7 +51,7 @@ exports.post=function(req,res){
         city:req.body.city,
         status : 1
     };
-   if(!newCourse.name || !newCourse.city )
+   if(!newCourse.name && !newCourse.city )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
@@ -78,17 +79,6 @@ exports.post=function(req,res){
 
 
         // persists the new course on database
-        /*courseCollection.insertOne(course, (err, result) => {
-
-            if (err) {
-                console.error("Erro ao Criar Um Novo Curso", err);
-                res.status(500).send("Erro ao Criar Um Novo Curso");
-            } else {*/
-                if(!newCourse.name || !newCourse.city )
-                {
-                    res.status(401).send("Campos obrigatorios não prenchidos.");
-                }
-                //else {
                     if(newCourse.name && newCourse.city)
                     {
                         modelCourse.post(newCourse).then(course=>{
@@ -105,11 +95,6 @@ exports.post=function(req,res){
                         });
 
                     }
-                //}
-
-            //}
-     //   });
-
     })();
 
 };
@@ -151,7 +136,7 @@ exports.put=function (req,res) {
 
 
         // persists the new course on database
-        if(!newCourse.name || !newCourse.city )
+        if(!newCourse.name && !newCourse.city )
         {
             res.status(401).send("Campos obrigatorios não prenchidos.");
         }
@@ -172,30 +157,71 @@ exports.put=function (req,res) {
 
         }
 
-    })();
 
+
+    modelCourse.updateOne(newCourse,where).then(results =>{
+       if(results.value){
+           //updates all students who have this course
+           modelStudent.updateStudent({'status':1,'course._id': results.value._id},{course:{...results.value}})
+               .then(results=>{
+                   if(invalidTeachers.length>0) {
+
+                       return res.status(201).send('Curso atualizado com sucesso. Porem os professores com ' +
+                           'esses ids não foram encontrados:${invalidTeachers}');
+                   }
+
+                       console.log('INF: Curso Atualizado');
+                       res.status(200).send(`Curso Atualizado`);
+
+               }).catch(err=>{
+                   console.error(err);
+           });
+
+           }
+       else{
+           console.log('Curso não encontrado.');
+           res.status(404).send('Curso não encontrado');
+       }
+
+       }).catch(err=>{
+          console.error('Erro ao conectar a collection course',err);
+          res.status(500).send('Erro ao conectar a collection course');
+
+        });
+
+    })();
 };
 
 
 //----------------------delete----------------------------------
 exports.delete=function(req,res,err){
-    let id = parseInt(req.params.id);
 
-    let where = {status:1,'id':id};
-    modelCourse.delete(where).then(result=>{
-        if (result)
-        {
-            console.log(`INF: curso removido`);
-            res.status(200).send(`curso removido`);
-        }
-        else
-        {
-            console.log('Nenhum curso removido');
-            res.status(204).send('Nenhum curso removido');
-        }
-    }).catch(err=>{
-        console.error("Erro ao remover o curso", err);
-        res.status(500).send("Erro ao remover o curso");
+    (async()=> {
+        let id = parseInt(req.params.id);
+        let where = {status: 1, 'course.id': id};
 
-    });
+        let numStudents;
+        numStudents = await modelStudent.countStudents(where);
+
+        if (numStudents > 0) {
+            return res.status(401).send("Curso não pode ser removido, pois contem estudantes matriculados.");
+        }
+
+        where={id:'id',status:1};
+
+        modelCourse.delete(where).then(result => {
+            if (result) {
+                console.log(`INF: curso removido`);
+                res.status(200).send(`curso removido`);
+            } else {
+                console.log('Nenhum curso removido');
+                res.status(204).send('Nenhum curso removido');
+            }
+        }).catch(err => {
+            console.error("Erro ao remover o curso", err);
+            res.status(500).send("Erro ao remover o curso");
+
+        });
+
+    })();
 };

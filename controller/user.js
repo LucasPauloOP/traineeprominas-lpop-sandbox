@@ -47,7 +47,7 @@ exports.post=function(req,res){
             profile: req.body.profile,
             status : 1
         };
-        if(!newUser.name || !newUser.lastName || !newUser['profile'] )
+        if(!newUser.name && !newUser.lastName && !newUser['profile'] )
         {
             res.status(401).send("Campos obrigatorios não prenchidos.");
         }

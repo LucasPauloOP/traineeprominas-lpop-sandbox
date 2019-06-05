@@ -15,8 +15,8 @@ exports.getAll = (req,res) => {
             console.log('----->controlller',teachers);
             res.status(201).send(teachers);
         }).catch(err=>{
-        console.error("Erro ao conectar a collection 'user'", err);
-        res.status(500).send("Erro ao conectar a collection 'user'");
+        console.error("Erro ao conectar a collection 'teacher'", err);
+        res.status(500).send("Erro ao conectar a collection 'teacher'");
     });
 };
 
@@ -33,8 +33,8 @@ exports.getOne = (req,res)=>{
         .then(teachers => {
             res.status(201).send(teachers);
         }).catch(err => {
-        console.error("Erro ao conectar a collection 'user'", err);
-        res.status(500).send("Erro ao conectar a collection 'user'");
+        console.error("Erro ao conectar a collection 'teacher'", err);
+        res.status(500).send("Erro ao conectar a collection 'teacher'");
     });
 };
 
@@ -50,7 +50,7 @@ exports.post=function(req,res){
         phd: req.body.phd.hasOwnProperty('phd')||'Não informado',
         status : 1
     };
-    if(!newTeacher.name || !newTeacher.lastName )
+    if(!newTeacher.name && !newTeacher.lastName )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
@@ -58,11 +58,11 @@ exports.post=function(req,res){
         if(newTeacher.name && newTeacher.lastName)
         {
             modelTeacher.post(newTeacher).then(teacher=>{
-                res.status(200).send('Usuário cadastrado com sucesso.');
+                res.status(200).send('Professor cadastrado com sucesso.');
 
             }).catch(err=>{
-                console.error('Erro ao conectar a collection user',err);
-                res.status(500).send("Erro ao conectar a collection 'user'");
+                console.error('Erro ao conectar a collection teacher',err);
+                res.status(500).send("Erro ao conectar a collection 'teacher'");
             });
 
         }
@@ -78,9 +78,9 @@ exports.put=function (req,res) {
     let where = {status:1,'id':id};
 
     var newTeacher = {
-        name: req.body.name.hasOwnProperty('name'),
-        lastName: req.body.lastName.hasOwnProperty('lastName'),
-        phd: req.body.phd.hasOwnProperty('phd')||""
+        name: req.body.name,
+        lastName: req.body.lastName,
+        phd: req.body.phd||""
     };
 
     if(newTeacher.name && newTeacher.lastName )

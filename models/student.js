@@ -24,6 +24,19 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
     }
 });
 
+//---------count students and return your size--------------
+exports.countStudents =async function(where){
+
+return studentCollection.countDocuments(where);
+
+};
+
+//----------update all students if change course------------
+exports.updateStudent= async function(newCourse,where){
+    console.log('------>',newCourse);
+    return studentCollection.updateMany(where,{$set:newCourse});
+};
+
 
 //----------getalll----------------------
 exports.getall=(status,project)=>{

@@ -50,7 +50,7 @@ exports.post=function(req,res){
         age: req.body.age,
         status : 1
     };
-    if(!newStudent.name || !newStudent.lastName|| !newStudent.age)
+    if(!newStudent.name && !newStudent.lastName && !newStudent.age)
      {
          res.status(401).send("Campos obrigatorios não prenchidos.");
      }
@@ -92,7 +92,7 @@ exports.put=function(req,res){
         age: req.body.age,
         status : 1
     };
-    if(!newStudent.name || !newStudent.lastName|| !newStudent.age)
+    if(!newStudent.name && !newStudent.lastName && !newStudent.age)
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }

@@ -24,6 +24,12 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
     }
 });
 
+//----------update course---------------
+exports.updateOne= async function (newCourse,where) {
+    return courseCollection.findOneAndUpdate(where, {$set:{...newCourse }},{returnOriginal:false});
+    
+};
+
 
 //----------getalll----------------------
 exports.getall=(status,project)=>{
