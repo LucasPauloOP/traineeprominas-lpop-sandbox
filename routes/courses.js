@@ -6,9 +6,9 @@ const courses = require('../controller/courses');
 //console.log(courses);
 
 router.get('/',courses.getAll);
-/*
-router.get('/:id',courses.getOne);
 
+router.get('/:id',courses.getOne);
+/*
 router.post('/',courses.post);
 
 router.put('/:id',courses.put);

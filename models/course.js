@@ -33,12 +33,12 @@ exports.getall=(status,project)=>{
     return courseCollection.find(status,project).toArray();
 
 };
-/*
+
 //-----------getone---------------------
 exports.getone=(where,project)=>{
-    return teacherCollection.find(where, project).toArray();
+    return courseCollection.find(where, project).toArray();
 };
-
+/*
 //------------post----------------------
 exports.post=(newTeacher)=>{
     newTeacher.id=++id;
