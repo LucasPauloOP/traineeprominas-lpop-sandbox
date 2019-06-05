@@ -20,7 +20,6 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
         courseCollection.countDocuments().then((count) => {
             id = count;
-            console.log(count);
         });
     }
 });
@@ -38,14 +37,14 @@ exports.getall=(status,project)=>{
 exports.getone=(where,project)=>{
     return courseCollection.find(where, project).toArray();
 };
-/*
-//------------post----------------------
-exports.post=(newTeacher)=>{
-    newTeacher.id=++id;
-    //console.log('------>',newTeacher);
-    return teacherCollection.insertOne(newTeacher);
-};
 
+//------------post----------------------
+exports.post=(newCourse)=>{
+    newCourse.id=++id;
+    //console.log('------>',newTeacher);
+    return courseCollection.insertOne(newCourse);
+};
+/*
 //-------------put----------------------
 exports.put=(newTeacher,where)=>{
     // console.log('--------->',newTeacher);
