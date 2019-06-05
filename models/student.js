@@ -47,9 +47,8 @@ exports.put=(newCourse,where)=>{
 
     return courseCollection.findOneAndUpdate(where,{$set:{...newCourse}});
 };
-
+*/
 //---------------delete-------------------
 exports.delete=(where)=>{
-    return courseCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });
+    return studentCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });
 };
-*/

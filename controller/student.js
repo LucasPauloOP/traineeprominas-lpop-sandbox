@@ -181,27 +181,26 @@ exports.put=function (req,res) {
 };
 */
 
-/*
+
 //----------------------delete----------------------------------
 exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);
 
     let where = {status:1,'id':id};
-    modelCourse.delete(where).then(result=>{
+    modelStudent.delete(where).then(result=>{
         if (result)
         {
-            console.log(`INF: curso removido`);
-            res.status(200).send(`curso removido`);
+            console.log(`INF: estudante removido`);
+            res.status(200).send(`estudante removido`);
         }
         else
         {
-            console.log('Nenhum curso removido');
-            res.status(204).send('Nenhum curso removido');
+            console.log('Nenhum estudante removido');
+            res.status(204).send('Nenhum estudante removido');
         }
     }).catch(err=>{
-        console.error("Erro ao remover o curso", err);
-        res.status(500).send("Erro ao remover o curso");
+        console.error("Erro ao remover o estudante", err);
+        res.status(500).send("Erro ao estudante o curso");
 
     });
 };
-*/
