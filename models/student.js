@@ -29,12 +29,12 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 exports.getall=(status,project)=>{
     return studentCollection.find(status,project).toArray();
 };
-/*
+
 //-----------getone---------------------
 exports.getone=(where,project)=>{
-    return courseCollection.find(where, project).toArray();
+    return studentCollection.find(where, project).toArray();
 };
-
+/*
 //------------post----------------------
 exports.post=(newCourse)=>{
     newCourse.id=++id;

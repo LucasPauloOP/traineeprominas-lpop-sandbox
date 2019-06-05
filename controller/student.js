@@ -20,7 +20,7 @@ exports.getAll = (req,res) => {
     });
 };
 
-/*
+
 //-----------get one-------------------------------
 exports.getOne = (req,res)=>{
     let id = parseInt(req.params.id);
@@ -29,15 +29,15 @@ exports.getOne = (req,res)=>{
 
     let project = { projection: {  _id: 0, status: 0 } };
 
-    modelCourse.getone(where,project)
-        .then(coursers => {
-            res.status(201).send(coursers);
+    modelStudent.getone(where,project)
+        .then(students => {
+            res.status(201).send(students);
         }).catch(err => {
-        console.error("Erro ao conectar a collection course", err);
-        res.status(500).send("Erro ao conectar a collection course");
+        console.error("Erro ao conectar a collection student", err);
+        res.status(500).send("Erro ao conectar a collection student");
     });
 };
-*/
+
 
 /*
 //---------------post------------------------------
