@@ -39,84 +39,47 @@ exports.getOne = (req,res)=>{
 };
 
 
-/*
+
 //---------------post------------------------------
 exports.post=function(req,res){
 
-    let status = {status:1};
 
-    var newCourse = {
+    var newStudent = {
         name: req.body.name,
-        period:req.body.period.hasOwnProperty('period')||8,
-        city:req.body.city,
+        lastName: req.body.lastName,
+        age: req.body.age,
         status : 1
     };
-    if(!newCourse.name || !newCourse.city )
+    if(!newStudent.name || !newStudent.lastName|| !newStudent.age)
      {
          res.status(401).send("Campos obrigatorios não prenchidos.");
      }
-     else {
-         if(newCourse.name && newCourse.city)
-         {
-             modelCourse.post(newCourse).then(course=>{
-                 res.status(200).send('Curso cadastrado com sucesso.');
 
-             }).catch(err=>{
-                 console.error('Erro ao conectar a collection course',err);
-                 res.status(500).send("Erro ao conectar a collection course");
-             });
+    (async () => {
 
-         }
-     }
+        // replace course id by the entire course object
+        let where = {'id':parseInt(req.body.course),status:1};
+        let course = await modelCourse.getone(where);
 
-   (async () => {
+        // if course id is invalid abort the creation of the student
+        if (!course)
+            return res.status(401).send('O Curso Informado Não Existe.');
 
-        let validTeachers = [];
-        let invalidTeachers = [];
-
-        // If some teacher id is informed replace teachers ids by the entire teacher object
-        if (req.body.hasOwnProperty('teacher') && Array.isArray(req.body.teacher) && req.body.teacher.length > 0) {
-
-            for (let i = 0; i < req.body.teacher.length; i++) {
-                let where = {'id':parseInt(req.body.teacher[i]),status:1};
-                let teacher = await modelTeacher.getone(where);
-
-                if (teacher)
-                    validTeachers.push(teacher);
-                else
-                    invalidTeachers.push(req.body.teacher[i]);
-            }
-
-            newCourse.teacher = validTeachers;
-        }
+        // If course is valid continues
+        newStudent.course = course;
 
 
         // persists the new course on database
-        if(!newCourse.name || !newCourse.city )
-        {
-            res.status(401).send("Campos obrigatorios não prenchidos.");
-        }
-        if(newCourse.name && newCourse.city)
-        {
-            modelCourse.post(newCourse).then(course=>{
-
-                // If some invalid teacher id was informed
-                if (invalidTeachers.length > 0)
-                    return res.status(201).send(`Curso Cadastrado com Sucesso. Os seguintes ids de professores não foram encontrados: ${invalidTeachers}`);
-
-                res.status(200).send('Curso cadastrado com sucesso.');
-
-            }).catch(err=>{
-                console.error('Erro ao conectar a collection course',err);
-                res.status(500).send("Erro ao conectar a collection course");
-            });
-
-        }
-
+        modelStudent.post(newStudent).then(students => {
+            res.status(201).send("Estudante Cadastrado com Sucesso.");
+        }).catch(err=>{
+            console.error("Erro ao Criar Um Novo Estudante", err);
+            res.status(500).send("Erro ao Criar Um Novo Estudante");
+        });
     })();
 
 };
-*/
+
 
 /*
 //---------------------put--------------------------------

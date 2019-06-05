@@ -50,23 +50,10 @@ exports.post=function(req,res){
         city:req.body.city,
         status : 1
     };
-   /* if(!newCourse.name || !newCourse.city )
+   if(!newCourse.name || !newCourse.city )
     {
         res.status(401).send("Campos obrigatorios não prenchidos.");
     }
-    else {
-        if(newCourse.name && newCourse.city)
-        {
-            modelCourse.post(newCourse).then(course=>{
-                res.status(200).send('Curso cadastrado com sucesso.');
-
-            }).catch(err=>{
-                console.error('Erro ao conectar a collection course',err);
-                res.status(500).send("Erro ao conectar a collection course");
-            });
-
-        }
-    }*/
 
     (async () => {
 

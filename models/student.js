@@ -34,14 +34,14 @@ exports.getall=(status,project)=>{
 exports.getone=(where,project)=>{
     return studentCollection.find(where, project).toArray();
 };
-/*
+
 //------------post----------------------
-exports.post=(newCourse)=>{
-    newCourse.id=++id;
+exports.post=(newStudent)=>{
+    newStudent.id=  ++id;
 
-    return courseCollection.insertOne(newCourse);
+    return studentCollection.insertOne(newStudent);
 };
-
+/*
 //-------------put----------------------
 exports.put=(newCourse,where)=>{
 
