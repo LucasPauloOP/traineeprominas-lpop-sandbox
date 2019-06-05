@@ -74,3 +74,8 @@ exports.put=(newCourse,where)=>{
 exports.delete=(where)=>{
     return courseCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });
 };
+
+//--------------RemoveInactiveteachers------------
+exports.removeTeachers=function(where,reference){
+    return courseCollection.updateMany(where, { $pull: reference });
+};

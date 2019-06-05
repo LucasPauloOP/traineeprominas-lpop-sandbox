@@ -47,7 +47,7 @@ exports.post=function(req,res){
 
     var newCourse = {
         name: req.body.name,
-        period:req.body.period.hasOwnProperty('period')||8,
+        period:req.body.period||8,
         city:req.body.city,
         status : 1
     };

@@ -102,12 +102,13 @@ exports.put=function (req,res) {
                 // Updates the teacher from all courses that he is associated
                 await modelCourse.updateMany(
                     {"status": 1, "teacher.id": updatedTeacher.id},
-                    {"teacher.$": updatedTeacher});
+                    {"teacher.$": updatedTeacher}).then( () => {
 
                 // Updates the teacher from all student.course that he is associated
-                await modelStudent.updateMany(
+                modelStudent.updateMany(
                     {"status": 1, "course.teacher.id": updatedTeacher.id},
                     {"course.teacher.$": updatedTeacher});
+            })
 
             } catch (err) {
                 console.error(err);
@@ -134,16 +135,17 @@ exports.delete=function(req,res,err){
 
     modelTeacher.setInactive(where).then(result =>{
         if(result.value){
-
+            console.log("aki agr:",result.value);
             (async ()  => {
                 try{
+                    let teacher = result.value;
                     await modelCourse.removeTeachers(
-                        {"status":1, "teachers.id": result_value.id},
-                        {'teachers':{'id':result.value.id}})
-
+                        {"status":1, "teachers.id": teacher.id},
+                        {'teachers':{'id':teacher.id}});
+                    console.log("aki agr2:",result.value);
                     await modelStudent.removeTeachers(
-                        { "status": 1, "course.teachers._id": result.value._id },
-                        { "course.teachers": { "_id": result.value._id} } )
+                        { "status": 1, "course.teachers.id":teacher.id },
+                        { "course.teachers": { "id": teacher.id} });
                 } catch(err){
                     console.error(err);
                 }

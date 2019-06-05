@@ -41,7 +41,7 @@ exports.updateStudent= function(where,newCourse){
 exports.updateMany=function(where,newTeacher){
     console.log('where_student_model->',where);
     console.log('newTeacher->',newTeacher);
-    return studentCollection.updateMany(where,{$set:newTeacher});
+    return studentCollection.findOneAndUpdate(where,{$set:newTeacher});
 };
 //----------getalll----------------------
 exports.getall=(status,project)=>{
@@ -71,4 +71,9 @@ exports.put=(newStudent,where)=>{
 //---------------delete-------------------
 exports.delete=(where)=>{
     return studentCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });
+};
+
+//--------------RemoveInactiveteachers------------
+exports.removeTeachers=function(where,reference){
+    return studentCollection.updateMany(where, { $pull: reference });
 };
