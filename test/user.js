@@ -10,7 +10,7 @@ describe('Post(admin)', function() {
     it('register user as admin', () => {
         return request(app)
             .post('/api/v1/user')
-            .send({name: "Name1", lastName: "LastName1", profile: "admin"})
+            .send({name: "Teste1", lastName: "Teste1", profile: "admin"})
             .then(function (res) {
                 assert.equal(res.status, 201);
             });
@@ -24,6 +24,16 @@ describe('Post(gues)',function () {
            assert.equal(res.status,201);
         });
     });
+
+});
+
+describe('Post without gues or admin',function () {
+    it('register user without guess or admin',()=>{
+      return request(app).post('/api/v1/user').send({name:'Teste4',lastname:'Teste4',profile:'profile'})
+          .then(function (res) {
+             assert.equal(res.status,401);
+          });
+    })
 
 });
 
