@@ -1,7 +1,4 @@
-//example
-
 const assert = require('assert');
-//const expect = require('chai').expect;
 const request = require('supertest');
 const app = require('../app');
 
@@ -23,7 +20,7 @@ describe('register teacher ,phd as false',function () {
     });
 });
 
-escribe('register teacher ,phd as null',function () {
+describe('register teacher ,phd as null',function () {
     it('register teacher phd as null',()=>{
         return request(app).post('/api/v1/teacher')
             .send({name:'teste3',lastName:'teste3'}).then(function (res) {
