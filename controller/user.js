@@ -1,126 +1,127 @@
-var express = require('express');
-var router = express.Router();
+const userModel = require('../model/user');
 
-modelUser = require('../models/user');
+exports.getAllUsers = (req, res) => {
+    //  define query and projection for search
+    let query = {status:1};
+    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, profile:1}};
 
+    // send to model
+    userModel.getAll(query, projection)
+    .then(users => {
 
-//-----------get all-----------------------------------
-exports.getAll = (req,res) => {
-    let status={status:1};
-
-    let project = { projection:{ _id: 0, status: 0 } };
-
-    modelUser.getall(status, project)
-        .then(users => {
-            console.log('----->controlller',users);
-            res.status(201).send(users);
-        }).catch(err=>{
-            console.error("Erro ao conectar a collection 'user'", err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        });
-};
-
-//-----------get one-------------------------------
-exports.getOne = (req,res)=>{
-    let id = parseInt(req.params.id);
-    let where = {status:1,'id':id};
-
-    let project = { projection: {  _id: 0, status: 0 } };
-
-    modelUser.getone(where,project)
-        .then(users => {
-            res.status(201).send(users);
-        }).catch(err => {
-            console.error("Erro ao conectar a collection 'user'", err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        });
-};
-
-//---------------post------------------------------
-exports.post=function(req,res){
-
-    let status = {status:1};
-
-        var newUser = {
-            name: req.body.name,
-            lastName: req.body.lastName,
-            profile: req.body.profile,
-            status : 1
-        };
-        if(!newUser.name && !newUser.lastName && !newUser['profile'] )
-        {
-            res.status(401).send("Campos obrigatorios não prenchidos.");
+        if(users.length > 0){ 
+            res.status(200).send(users);        
+        }else{
+            res.status(404).send('Nenhum usuário cadastrado');
         }
-        else {
-            if(newUser.name && newUser.lastName && newUser['profile'])
-            {
-                modelUser.post(newUser).then(user=>{
-                    res.status(200).send('Usuário cadastrado com sucesso.');
-
-                }).catch(err=>{
-                    console.error('Erro ao conectar a collection user',err);
-                    res.status(500).send("Erro ao conectar a collection 'user'");
-            });
-
-            }
-        }
-
-    };
-
-//---------------------put--------------------------------
-exports.put=function (req,res) {
-    let id = parseInt(req.params.id);
-
-    let where = {status:1,'id':id};
-
-    let project = { projection: {_id: 0, status: 0 } };
-
-    var newUser = {
-        name: req.body.name,
-        lastName: req.body.lastName,
-        profile: req.body.profile,
-    };
-
-    if(newUser.name && newUser.lastName && newUser['profile'])
-    {
-        modelUser.post(newUser,where,project).then(user=>{
-            res.status(201).send('Usuário atualizado com sucesso.');
-        }).catch(err=>{
-            console.error('Erro ao conectar a collection user',err);
-            res.status(500).send("Erro ao conectar a collection 'user'");
-        });
-    }
-
-    else{
-        res.status(401).send("Campos obrigatorios não prenchidos.");
-    }
-
-};
-
-
-//----------------------delete----------------------------------
-exports.delete=function(req,res,err){
-    let id = parseInt(req.params.id);
-
-    let where = {status:1,'id':id};
-    modelUser.delete(where).then(result=>{
-            if (result)
-            {
-                console.log(`INF: Usuário Removido`);
-                res.status(200).send(`Usuário Removido`);
-            }
-            else
-                {
-                console.log('Nenhum Usuário Removido');
-                res.status(204).send('Nenhum Usuário Removido');
-            }
-    }).catch(err=>{
-            console.error("Erro ao remover o usuário", err);
-            res.status(500).send("Erro ao remover o usuário");
-
+    })
+    .catch(err => {
+        console.error("Erro ao conectar a collection user: ", err);
+        res.status(500);
     });
 };
 
+exports.getFilteredUser = (req,res) => {
+    //  define query and projection for search
+    let query = {'id':parseInt(req.params.id), 'status':1};
+    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, profile:1}};
 
+    // send to model
+    userModel.getFiltered(query, projection)
+    .then(user => {
+        if(user.length > 0){
+            res.status(200).send(user);        
+        }else{
+            res.status(404).send('O usuário não foi encontrado');
+        }
+    })
+    .catch(err => {
+        console.error("Erro ao conectar a collection user: ", err);
+        res.status(500);
+    });
+};
 
+exports.postUser = (req, res) => {
 
+    // check required attributes
+    if(req.body.name && req.body.lastName && req.body.profile){
+        
+        // creates user array to be inserted
+        let user = {
+            id:0,
+            name:req.body.name,
+            lastName:req.body.lastName,
+            profile:req.body.profile,
+            status:1
+        };
+
+            // send to model
+            userModel.post(user)
+            .then(result => {
+                if(result != false){
+                    res.status(201).send('Usuário cadastrado com sucesso!');
+                }else{
+                    res.status(401).send('Não foi possível cadastrar o usuário (profile inválido)');
+                }
+            })
+            .catch(err => {
+                console.error("Erro ao conectar a collection user: ", err);
+                res.status(500);
+            });
+        }else{
+            res.status(401).send('Não foi possível cadastrar o usuário (profile inválido)');
+        }
+};
+
+exports.putUser = (req, res) => {
+    // check required attributes
+    if(req.body.name && req.body.lastName && req.body.profile){
+
+        //  define query and set for search and update    
+        let query = {'id': parseInt(req.params.id), 'status': 1};
+        let set = {name: req.body.name, lastName: req.body.lastName, profile: req.body.profile};
+        
+            // send to model
+            userModel.put(query, set)
+            .then(result => {
+                if(result != false){
+                    if(result.value){ // if user exists
+                        res.status(200).send('Usuário editado com sucesso!');
+                    }else{
+                        res.status(401).send('Não é possível editar usuário inexistente');
+                    }
+                }else{
+                    res.status(401).send('Não é possível editar usuário (profile inválido)');                    
+                }
+            })
+            
+            .catch(err => {
+                console.error("Erro ao conectar a collection user: ", err);
+                res.status(500);
+            });
+        
+    }else{
+        res.status(401).send('Não foi possível editar o usuário');
+    }
+};
+
+exports.deleteUser = (req, res) => {
+    //  define query and set for search and delete    
+    let query = {'id': parseInt(req.params.id), 'status':1};
+
+    // send to model
+    userModel.delete(query)
+    .then(result => {
+        if(result.value){ // if user exists
+            console.log('O usuário foi removido');
+            res.status(200).send('O usuário foi removido com sucesso');
+          }else{
+            console.log('Nenhum usuário foi removido');
+            res.status(204).send();
+          }
+    })
+    .catch(err => {
+        console.error("Erro ao conectar a collection user: ", err);
+        res.status(500);
+    });
+};

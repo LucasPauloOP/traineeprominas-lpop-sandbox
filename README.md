@@ -1,2 +1,2 @@
-# Primeiro Node App do Programa Trainee
-
+José Júlio Alves Campolina
+Grupo Prominas

@@ -1,11 +1,11 @@
 {
-  "name": "trainee-27-05",
+  "name": "trainee27-05",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "test": "mocha --exit",
+    "start": "node app.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,5 +13,13 @@
     "body-parse": "^0.1.0",
     "express": "^4.17.1",
     "mongodb": "^3.2.6"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }

@@ -1,149 +1,161 @@
-var express = require('express');
-var router = express.Router();
+const studentModel = require('../model/student');
+const courseModel = require('../model/course');
 
-modelStudent = require('../models/student');
-modelCourse = require('../models/course');
+exports.getAllStudents = (req, res) => {
+    //  define query and projection for search
+    let query = {status:1};
+    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, age:1, "course.id":1, "course.name":1, "course.period":1, "course.city":1, "course.teacher.id":1, "course.teacher.name":1, "course.teacher.lastName":1, "course.teacher.phd":1}};
 
-//-----------get all-----------------------------------
-exports.getAll = (req,res) => {
-    let status={status:1};
-
-    let project = { projection:{ _id: 0, status: 0 } };
-
-    modelStudent.getall(status,project)
-        .then(students => {
-            //console.log('----->controlller',students);
-            res.status(201).send(students);
-        }).catch(err=>{
-        console.error("Erro ao conectar a collection student", err);
-        res.status(500).send("Erro ao conectar a collection student");
+    // send to model
+    studentModel.getAll(query, projection)
+    .then(students => {
+        if(students.length > 0){
+            res.status(200).send(students);        
+        }else{
+            res.status(404).send('Nenhum estudante cadastrado');
+        }
+    })
+    .catch(err => {
+        console.error("Erro ao conectar a collection student: ", err);
+        res.status(500);
     });
 };
 
+exports.getFilteredStudent = (req,res) => {
+    //  define query and projection for search
+    let query = {'id':parseInt(req.params.id), 'status':1};
+    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, age:1, "course.id":1, "course.name":1, "course.period":1, "course.city":1, "course.teacher.id":1, "course.teacher.name":1, "course.teacher.lastName":1, "course.teacher.phd":1}};
 
-//-----------get one-------------------------------
-exports.getOne = (req,res)=>{
-    let id = parseInt(req.params.id);
-
-    let where = {status:1,'id':id};
-
-    let project = { projection: {  _id: 0, status: 0 } };
-
-    modelStudent.getone(where,project)
-        .then(students => {
-            res.status(201).send(students);
-        }).catch(err => {
-        console.error("Erro ao conectar a collection student", err);
-        res.status(500).send("Erro ao conectar a collection student");
+    // send to model
+    studentModel.getFiltered(query, projection)
+    .then(student => {
+        if(student.length > 0){
+            res.status(200).send(student);
+        }else{
+            res.status(404).send('O estudante não foi encontrado');
+        }
+    })
+    .catch(err => {
+        console.error("Erro ao conectar a collection student: ", err);
+        res.status(500);
     });
 };
 
+exports.postStudent = (req, res) => {
+    // check required attributes
+    if (req.body.name && req.body.lastName && req.body.age && req.body.course){
 
+        // creates user array to be inserted
+        var student = {
+            id:0,
+            name:req.body.name,
+            lastName:req.body.lastName,
+            age:req.body.age,
+            course:req.body.course,
+            status:1
+        };
 
-//---------------post------------------------------
-exports.post=function(req,res){
-
-
-    var newStudent = {
-        name: req.body.name,
-        lastName: req.body.lastName,
-        age: req.body.age,
-        status : 1
-    };
-    if(!newStudent.name && !newStudent.lastName && !newStudent.age)
-     {
-         res.status(401).send("Campos obrigatorios não prenchidos.");
-     }
-
-    (async () => {
-
-        // replace course id by the entire course object
-        let where = {'id':parseInt(req.body.course),status:1};
-        let course = await modelCourse.getone(where);
-
-        // if course id is invalid abort the creation of the student
-        if (course.length   <= 0)
-            return res.status(401).send('O Curso Informado Não Existe.');
-
-        // If course is valid continues
-        newStudent.course = course;
-
-
-        // persists the new course on database
-        modelStudent.post(newStudent).then(students => {
-            res.status(201).send("Estudante Cadastrado com Sucesso.");
-        }).catch(err=>{
-            console.error("Erro ao Criar Um Novo Estudante", err);
-            res.status(500).send("Erro ao Criar Um Novo Estudante");
-        });
+        (async () => {
+            // receive the course related to the inserted id
+            for(let i = 0; i < student.course.length; i++){
+                let course = await courseModel.getCourse(student.course[i]);
+                if(course.length > 0){ // if course exists
+                    student.course[i] = course[0]; 
+                  }else{
+                    student.course.splice(i, 1);
+                  }
+            } 
+          if(student.course.length > 0){ // verifies if the student is registered in a valid course
+            
+            // send to model
+            studentModel.post(student)
+            .then(result => {
+                if(result != false){
+                    res.status(201).send('Estudante cadastrado com sucesso!');
+                }else{
+                    res.status(401).send('Não foi possível cadastrar o estudante (idade ou curso inválido(s))');
+                }
+            })
+            .catch(err => {
+                console.error("Erro ao conectar a collection student: ", err);
+                res.status(500);
+            });
+        }
     })();
-
-};
-
-
-
-//---------------------put--------------------------------
-exports.put=function(req,res){
-
-
-    var newStudent = {
-        name: req.body.name,
-        lastName: req.body.lastName,
-        age: req.body.age,
-        status : 1
-    };
-    if(!newStudent.name && !newStudent.lastName && !newStudent.age)
-    {
-        res.status(401).send("Campos obrigatorios não prenchidos.");
+    }else{
+        res.status(401).send('Não foi possível cadastrar o estudante');
     }
-
-    (async () => {
-
-        // replace course id by the entire course object
-        let where = {'id':parseInt(req.body.course),status:1};
-        let course = await modelCourse.getone(where);
-
-        // if course id is invalid abort the creation of the student
-        if (course.length   <= 0)
-            return res.status(401).send('O Curso Informado Não Existe.');
-
-        // If course is valid continues
-        newStudent.course = course;
-
-
-        // persists the new course on database
-        modelStudent.put(newStudent,where).then(students => {
-            res.status(201).send("Estudante atualizado com sucesso.");
-        }).catch(err=>{
-            console.error("Erro ao Criar Um Novo Estudante", err);
-            res.status(500).send("Erro ao Criar Um Novo Estudante");
-        });
-    })();
-
 };
 
+exports.putStudent = (req, res) => {
+    //  define query for search    
+    let query = {'id': parseInt(req.params.id), 'status': 1};
 
+    // check required attributes
+    if (req.body.name && req.body.lastName && req.body.age && req.body.course){
 
+        // creates user array to update
+        var student = {
+            course:req.body.course
+        };
 
-//----------------------delete----------------------------------
-exports.delete=function(req,res,err){
-    let id = parseInt(req.params.id);
+        //  define set for update    
+        let set = {name: req.body.name, lastName: req.body.lastName, age: req.body.age, course: student.course};
 
-    let where = {status:1,'id':id};
-    modelStudent.delete(where).then(result=>{
-        if (result)
-        {
-            console.log(`INF: estudante removido`);
-            res.status(200).send(`estudante removido`);
+        (async () => {
+          // receive the course related to the inserted id  
+          for(let i = 0; i < student.course.length; i++){
+            let course = await courseModel.getCourse(student.course[i]);
+            
+            if(course.length > 0){ // if course exists
+                student.course[i] = course[0]; 
+              }else{
+                student.course.splice(i, 1);
+              }
+          }
+          if(student.course.length > 0){// verifies if the student is registered in a valid course
+            
+            // send to model
+            studentModel.put(query, set)
+            .then(result => {
+                if(result != false){
+                    res.status(200).send('Estudante editado com sucesso!');
+                }else{
+                    res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
+                }
+            })
+            .catch(err => {
+                console.error("Erro ao conectar a collection student: ", err);
+                res.status(500);
+            });
+        }else{
+            res.status(401).send('Não foi possível editar o estudante');
         }
-        else
-        {
-            console.log('Nenhum estudante removido');
-            res.status(204).send('Nenhum estudante removido');
-        }
-    }).catch(err=>{
-        console.error("Erro ao remover o estudante", err);
-        res.status(500).send("Erro ao estudante o curso");
+        })();
+      }else{
+      res.status(401).send('Não foi possível editar o estudante');
+  
+      }
+};
 
+exports.deleteStudent = (req, res) => {
+    //  define query and set for search and delete    
+    let query = {'id': parseInt(req.params.id), 'status':1};
+    let set = {$set: {status:0}};
+
+    // send to model
+    studentModel.delete(query, set)
+    .then(result => {
+        if(result.value){ // if user exists
+            console.log('O estudante foi removido');
+            res.status(200).send('O estudante foi removido com sucesso');
+          }else{
+            console.log('Nenhum estudante foi removido');
+            res.status(204).send();
+          }
+    })
+    .catch(err => {
+        console.error("Erro ao conectar a collection student: ", err);
+        res.status(500);
     });
 };
