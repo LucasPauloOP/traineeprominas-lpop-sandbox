@@ -81,6 +81,9 @@ exports.postStudent = (req, res) => {
                 res.status(500);
             });
         }
+          else{
+              res.status(401).send('Não foi possivel cadastrar estudante, curso invalido');
+          }
     })();
     }else{
         res.status(401).send('Não foi possível cadastrar o estudante');
