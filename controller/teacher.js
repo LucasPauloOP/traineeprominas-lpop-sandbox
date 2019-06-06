@@ -76,8 +76,6 @@ exports.post=function(req,res){
 exports.put=function (req,res) {
     let id = parseInt(req.params.id);
 
-    let where = {status:1,'id':id};
-
     var newTeacher = {
         name: req.body.name,
         lastName: req.body.lastName,
@@ -92,40 +90,38 @@ exports.put=function (req,res) {
         res.status(401).send('Campos obrigatorios foram deixados em branco');
     }
 
-    modelTeacher.updateOne(newTeacher,{'id':id,status:1}).then(result=> {
-        let updatedTeacher = result.value;
-        console.log('----->result:',result.value);
-        (async () => {
+    modelTeacher.change(newTeacher,{'id':id,status:1}).then(result=> {
+        if(result == null)
+        {
+            res.status(403).send("Não foi possivel completar a atualização");
+        }
+        else {
+            modelCourse.updateMany(
+                {'teacher.id': newTeacher.id},
+                {$set: {'teacher.$': newTeacher}}).then(results => {
+                if (results) {
+                    modelCourse.get({'teahcer.id': id, 'status': 1}, {}).then(courses => {
+                        courses.forEach((found) => {
+                            modelStudent.replace(
+                                {'status': 1, 'course.id': found.id},
+                                {$set: {'course': found}})
+                        })
+                    });
+                    res.status(201).send('Professor atualizado');
+                } else {
+                    res.send('Erro na modificação');
+                }
 
-            try {
-
-                // Updates the teacher from all courses that he is associated
-                await modelCourse.updateMany(
-                    {"status": 1, "teacher.id": updatedTeacher.id},
-                    {"teacher.$": updatedTeacher}).then( () => {
-
-                // Updates the teacher from all student.course that he is associated
-                modelStudent.updateMany(
-                    {"status": 1, "course.teacher.id": updatedTeacher.id},
-                    {"course.teacher.$": updatedTeacher});
             })
-
-            } catch (err) {
-                console.error(err);
-            }
-
-            console.log(`INF: Professor Atualizado`);
-            res.status(200).send(`Professor Atualizado`);
-
-        })();
+        }
+            }).catch(found =>{
+        console.error('Ocorreu um erro ao se conectar a colecao teacher',found);
+        res.status(500);
     })
-        .catch(err => {
-            console.error("Erro ao conectar a collection teacher", err);
-            res.status(500).send("Erro ao conectar a collection teacher");
-        });
-
 
 };
+
+    //let where = {status:1,'id':id};
 
 
 //----------------------delete----------------------------------
@@ -133,29 +129,23 @@ exports.delete=function(req,res,err){
     let id = parseInt(req.params.id);
     let where = {status:1,'id':id};
 
-    modelTeacher.setInactive(where).then(result =>{
-        if(result.value){
-            console.log("aki agr:",result.value);
-            (async ()  => {
-                try{
-                    let teacher = result.value;
-                    await modelCourse.removeTeachers(
-                        {"status":1, "teachers.id": teacher.id},
-                        {'teachers':{'id':teacher.id}});
-                    console.log("aki agr2:",result.value);
-                    await modelStudent.removeTeachers(
-                        { "status": 1, "course.teachers.id":teacher.id },
-                        { "course.teachers": { "id": teacher.id} });
-                } catch(err){
-                    console.error(err);
-                }
-                console.log('Nenhum Professor Removido');
-                res.status(204).send('Nenhum Professor Removido');
-
-            })();
-        }
-    }).catch(err=>{
-        console.error("Erro ao remover o Professor", err);
+    modelTeacher.delete(where).then(result =>{
+            if (results.value == null) {
+                res.status(204).send("Não foi possivel encontrar o usuário")
+            }
+            else {
+                modelCourse.updateMany({}, {$pull: {"teacher": {"id": id}}}).then(result => {
+                    modelCourse.get({"status": 1}).then(courses => {
+                        courses.forEach((found) => {
+                            modelStudent.replace(
+                                {"status": 1, "course.id": found.id},
+                                {$set: {"course": found}})
+                        })
+                    })});
+                res.status(201).send('O professor foi removido com sucesso')
+            }
+    }).catch(found=>{
+        console.error("Erro ao remover o Professor", found);
         res.status(500).send("Erro ao remover o Professor");
     })
 
