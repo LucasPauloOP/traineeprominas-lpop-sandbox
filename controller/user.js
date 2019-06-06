@@ -9,7 +9,7 @@ exports.getAllUsers = (req, res) => {
     userModel.getAll(query, projection)
     .then(users => {
         if(users.length > 0){ 
-            res.status(200).send(users);        
+            res.status(200).send(users);
         }else{
             res.status(204).send('Nenhum usuário cadastrado');
         }

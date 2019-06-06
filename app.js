@@ -28,8 +28,8 @@ app.get('/'+baseAPI, function (req, res){
   res.send('Endpoints: \n /user \n /student \n /course \n /teacher');
 });
 
-app.listen(process.env.PORT || 3000);
-
+//app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT);
 });
 
 module.exports = app;
