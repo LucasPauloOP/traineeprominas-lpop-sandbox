@@ -67,3 +67,8 @@ exports.put=(newTeacher,where)=>{
 exports.delete=(where)=>{
     return teacherCollection.findOneAndUpdate(where,{ $set: { 'status': 0 } });
 };
+
+//--------------change-------------------
+exports.change=(newTeacher,where)=>{
+  return teacherCollection.findOneAndReplace(where,newTeacher);
+};

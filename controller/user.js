@@ -8,7 +8,6 @@ exports.getAllUsers = (req, res) => {
     // send to model
     userModel.getAll(query, projection)
     .then(users => {
-
         if(users.length > 0){ 
             res.status(200).send(users);        
         }else{
@@ -42,7 +41,6 @@ exports.getFilteredUser = (req,res) => {
 };
 
 exports.postUser = (req, res) => {
-
     // check required attributes
     if(req.body.name && req.body.lastName && req.body.profile){
         

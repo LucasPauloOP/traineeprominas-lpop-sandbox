@@ -25,15 +25,15 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 });
 
 
-exports.findteacher=function(where){
-  return courseCollection.find({where});
+exports.get=function(where,array){
+  return courseCollection.find(where).toArray();
 };
 
 //----------update all courses if teacher change--------------
 exports.updateMany=function(where,newCourse){
     //console.log('------->where: ',where);
     //console.log('------->newCourse:',newCourse);
-    return  courseCollection.findOneAndUpdate(where,{$set:newCourse});
+    return  courseCollection.updateMany(where,newCourse);
 };
 
 //----------update course---------------

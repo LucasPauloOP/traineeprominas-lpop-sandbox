@@ -32,7 +32,7 @@ exports.put = (query, set) => {
   }else{
     return new Promise((resolve, reject) => {
       resolve(false);
-  });
+    });
   }
 };
 

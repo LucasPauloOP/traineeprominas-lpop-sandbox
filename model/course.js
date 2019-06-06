@@ -28,7 +28,6 @@ exports.post = (course) => {
 
 exports.put = (query, set) => {
   if(set.teacher.length >= 2){
-    set.id = ++id;
     return collection.findOneAndUpdate(query, {$set: set}, {returnOriginal:false} );
   }else{
     return new Promise((resolve, reject) => {

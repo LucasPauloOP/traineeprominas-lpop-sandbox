@@ -20,7 +20,6 @@ exports.post = (user) => {
         user.id = ++id;
         return collection.insertOne(user);
     }else{
-        // return false;
         return new Promise((resolve, reject) => {
             resolve(false);
         });
