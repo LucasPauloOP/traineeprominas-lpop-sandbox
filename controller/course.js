@@ -11,7 +11,7 @@ exports.getAllCourses = (req, res) => {
   courseModel.getAll(query, projection)
   .then(courses => {
     if(courses.length == 0){
-        res.status(404).send('Nenhum curso cadastrado');
+        res.status(204).send('Nenhum curso cadastrado');
     }else{
       res.status(200).send(courses);        
     }
@@ -31,7 +31,7 @@ exports.getFilteredCourse = (req,res) => {
   courseModel.getFiltered(query, projection)
   .then(course => {
     if(course.length == 0){
-      res.status(404).send('O curso não foi encontrado');
+      res.status(204).send('O curso não foi encontrado');
     }else{
       res.status(200).send(course);        
     }

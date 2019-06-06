@@ -13,7 +13,7 @@ exports.getAllTeachers = (req, res) => {
         if(teachers.length > 0){
             res.status(200).send(teachers);        
         }else{
-            res.status(404).send('Nenhum professor cadastrado');
+            res.status(204).send('Nenhum professor cadastrado');
         }
     })
     .catch(err => {
@@ -33,7 +33,7 @@ exports.getFilteredTeacher = (req,res) => {
         if(teacher.length > 0){
             res.status(200).send(teacher);        
         }else{
-            res.status(404).send('O professor não foi encontrado');
+            res.status(204).send('O professor não foi encontrado');
         }
     })
     .catch(err => {

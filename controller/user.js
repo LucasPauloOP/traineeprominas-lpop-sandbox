@@ -31,7 +31,7 @@ exports.getFilteredUser = (req,res) => {
         if(user.length > 0){
             res.status(200).send(user);        
         }else{
-            res.status(404).send('O usuário não foi encontrado');
+            res.status(204).send('O usuário não foi encontrado');
         }
     })
     .catch(err => {

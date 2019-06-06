@@ -2,6 +2,14 @@ const assert = require('assert');
 const request = require('supertest');
 const app = require('../app');
 
+describe('Get with teachers register',function () {
+    it('Get with registered teachers and return is empty',()=>{
+        return request(app).get('/api/v1/teacher').then(function (res) {
+            assert.equal(res.status,204);
+        });
+    });
+});
+
 describe('register teacher ,phd as true',function () {
     it('register teacher phd as true',()=>{
         return request(app).post('/api/v1/teacher')
@@ -9,6 +17,15 @@ describe('register teacher ,phd as true',function () {
                assert.equal(res.status, 201);
             });
         });
+});
+
+describe('Get with teachers register',function () {
+    it('Register teachers with users register in mongodb',()=>{
+        return request(app).get('/api/v1/teacher').then(function(res){
+            assert.equal(res.status,200);
+        });
+    })
+
 });
 
 describe('register teacher ,phd as false',function () {

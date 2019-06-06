@@ -3,14 +3,6 @@ const assert = require('assert');
 const request = require('supertest');
 const app = require('../app');
 
-describe('Get with users register',function () {
-    it('Register user with users register in mongodb',()=>{
-        return request(app).get('/api/v1/user').then(function(res){
-            assert.equal(res.status,200);
-        });
-    })
-
-});
 
 describe('Get with users register',function () {
    it('Get with registered users and return is empty',()=>{
@@ -29,6 +21,15 @@ describe('Post(admin)', function() {
                 assert.equal(res.status, 201);
             });
     });
+});
+
+describe('Get with users register',function () {
+    it('Register user with users register in mongodb',()=>{
+        return request(app).get('/api/v1/user').then(function(res){
+            assert.equal(res.status,200);
+        });
+    })
+
 });
 
 describe('Post(guess)',function () {

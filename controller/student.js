@@ -12,7 +12,7 @@ exports.getAllStudents = (req, res) => {
         if(students.length > 0){
             res.status(200).send(students);        
         }else{
-            res.status(404).send('Nenhum estudante cadastrado');
+            res.status(204).send('Nenhum estudante cadastrado');
         }
     })
     .catch(err => {
@@ -32,7 +32,7 @@ exports.getFilteredStudent = (req,res) => {
         if(student.length > 0){
             res.status(200).send(student);
         }else{
-            res.status(404).send('O estudante não foi encontrado');
+            res.status(204).send('O estudante não foi encontrado');
         }
     })
     .catch(err => {
