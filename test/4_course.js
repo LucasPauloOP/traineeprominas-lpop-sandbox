@@ -20,3 +20,12 @@ describe('register course as 1 teacher',function () {
     });
 });
 
+describe('register course as undefined teacher',function () {
+        it('register course as undefine teacher',()=>{
+            return request(app).post('/api/v1/course').send({name:'teste3',city:'teste3',period:'1',teacher:[100]})
+                .then(function (res) {
+                    assert.equal(res.status, 401);
+                })
+        })
+});
+
