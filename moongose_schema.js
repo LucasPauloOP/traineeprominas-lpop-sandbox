@@ -2,8 +2,7 @@ var mongoose = require('mongoose');
 const schema = mongoose.schema;
 
 
-exports.userSchema=()=>{
-    return users = new mongoose.schema ({
+var users = new mongoose.schema ({
 
         id:{
             type:Number,
@@ -23,40 +22,62 @@ exports.userSchema=()=>{
 
         profile:{
            type:String,
+            Enum:['admin','guess'],
             require:true
         },
 
         status:{
             type:Number,
             require:true,
-            enum:[0,1]
+            enum:[0,1],
+            unique:1
         }
     });
-};
 
-exports.teacherSchema=(req,res)=>{
-    req=new schema({
+
+
+var teacher = new schema({
+
+        id:{
+            type:Number,
+            require:true,
+            unique:1
+        },
 
         name:{
             Type: String,
-            Require:true
+            require:true
         },
 
         lastName:{
             Type:String,
-            Require:true
+            require:true
         },
 
         phd:{
             Type:Boolean,
-            Require:true,
+            require:true,
+            validate:{
+            validator:function (value) {
+                return value == true ? true : false;
+                }
+            },
+            message:props => "O campo phd deve ter o valor true"
+        },
+
+        status:{
+            type:Number,
+            require:true,
+            enum:[0,1],
+            unique:1
         }
 
     });
-};
 
-exports.courseSchema=(req,res)=>{
-  var course=new schema({
+
+
+var course  =  new schema({
+
       name:{
           type: String,
           require:true
@@ -64,7 +85,6 @@ exports.courseSchema=(req,res)=>{
 
       period:{
           type:String,
-
       },
 
       city:{
@@ -77,11 +97,10 @@ exports.courseSchema=(req,res)=>{
           require:true
       }
 
+});
 
-  })
-};
 
-exports.studentSchema=(req,res)=>{
+
   var Student =new schema({
 
       name:{
@@ -104,5 +123,4 @@ exports.studentSchema=(req,res)=>{
           require:true,
       }
 
-  })
-};
+  });
