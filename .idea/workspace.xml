@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ee7ad3b-455a-454f-b5df-ce7a32bf23f5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/test/2_user.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/2_user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test/3_teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/test/3_teacher.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -46,8 +45,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test/2_user.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="65" selection-start-line="65" selection-end-line="65" />
+            <state relative-caret-position="180">
+              <caret line="105" column="53" selection-start-line="105" selection-start-column="8" selection-end-line="105" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -55,15 +54,19 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/test/3_teacher.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="172">
-              <caret line="49" column="14" lean-forward="true" selection-start-line="49" selection-start-column="14" selection-end-line="49" selection-end-column="14" />
+            <state relative-caret-position="280">
+              <caret line="105" column="96" selection-start-line="105" selection-start-column="96" selection-end-line="105" selection-end-column="96" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/teacher.js">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-465">
+              <caret line="50" column="17" lean-forward="true" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -183,7 +186,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10543000" />
+    <option name="totallyTimeSpent" value="11007000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="25" width="1317" height="743" extended-state="6" />
@@ -279,9 +282,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/teacher.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/model/teacher.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -308,15 +308,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/2_user.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="65" selection-start-line="65" selection-end-line="65" />
+        <state relative-caret-position="180">
+          <caret line="105" column="53" selection-start-line="105" selection-start-column="8" selection-end-line="105" selection-end-column="57" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/teacher.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-465">
+          <caret line="50" column="17" lean-forward="true" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/3_teacher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="49" column="14" lean-forward="true" selection-start-line="49" selection-start-column="14" selection-end-line="49" selection-end-column="14" />
+        <state relative-caret-position="280">
+          <caret line="105" column="96" selection-start-line="105" selection-start-column="96" selection-end-line="105" selection-end-column="96" />
         </state>
       </provider>
     </entry>

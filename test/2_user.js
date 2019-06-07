@@ -134,7 +134,7 @@ describe('Delete with id invalid',function () {
 
 describe('Delete with id deleted',function () {
     it('Delete with id deleted in user',()=>{
-        return request(app).get('/api/v1/user/10').send({name:'testeput1',lastName:'testeput1',profile:'guess'})
+        return request(app).get('/api/v1/user/2')
             .then(function (res) {
                 assert.equal(res.status,204);
             })

@@ -52,6 +52,16 @@ describe('Put with id valid',function () {
 
 });
 
+describe('Delete with id valid',function () {
+    it('Delete with existing ID in teacher',()=>{
+        return request(app).delete('/api/v1/teacher/2')
+            .then(function (res) {
+                assert.equal(res.status,200);
+            })
+    })
+
+});
+
 
 //--------------------------------------------------------------------------------------------------------------
 
@@ -100,6 +110,17 @@ describe('Put with id invalid',function () {
     })
 
 });
+
+describe('Put with id valid',function () {
+    it('put with existing ID and incorrect data in teacher',()=>{
+        return request(app).put('/api/v1/teacher/1').send({name:'testeput1',lastName:'testeput1'})
+            .then(function (res) {
+                assert.equal(res.status,401);
+            })
+    })
+
+});
+
 
 
 
