@@ -91,6 +91,18 @@ describe('Get invalid id of teachers register',function () {
 
 });*/
 
+describe('Put with id invalid',function () {
+    it('put with non existent id and correct data in teacher',()=>{
+        return request(app).put('/api/v1/teacher/30').send({name:'testeput1',lastName:'testeput1',phd:true})
+            .then(function (res) {
+                assert.equal(res.status,401);
+            })
+    })
+
+});
+
+
+
 
 
 
