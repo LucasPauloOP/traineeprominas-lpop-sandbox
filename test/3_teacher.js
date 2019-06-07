@@ -42,7 +42,18 @@ describe('Get id of teacher register',function () {
     })
 });
 
+describe('Put with id valid',function () {
+    it('put with existing ID and correct data in teacher',()=>{
+        return request(app).put('/api/v1/teacher/1').send({name:'testeput1',lastName:'testeput1',phd:true})
+            .then(function (res) {
+                assert.equal(res.status,200);
+            })
+    })
 
+});
+
+
+//--------------------------------------------------------------------------------------------------------------
 
 //routes that test errors
 describe('Register teacher ,phd as false',function () {
@@ -62,5 +73,24 @@ describe('Register teacher ,phd as null',function () {
             });
     });
 });
+
+describe('Get invalid id of teachers register',function () {
+    it('teacher with invalid id in teacher',()=>{
+        return request(app).get('/api/v1/teacher/30').then(function (res) {
+            assert.equal(res.status, 204);
+        });
+    })
+});
+
+/*describe('Get with id invalid',function () {
+    it('Get on an inactive user (status: 0)',()=>{
+        return request(app).get('/api/v1/user/2').then(function (res) {
+            assert.equal(res.status,204);
+        });
+    });
+
+});*/
+
+
 
 

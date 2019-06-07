@@ -53,13 +53,16 @@ describe('Put with id valid',function () {
 
 describe('Delete with id valid',function () {
     it('Delete with existing ID in user',()=>{
-        return request(app).delete('/api/v1/user/10')
+        return request(app).delete('/api/v1/user/2')
             .then(function (res) {
                 assert.equal(res.status,200);
             })
     })
 
 });
+
+
+//-----------------------------------------------------------------------------------------------------------
 
 //routes that test errors
 describe('Post(guess)',function () {
@@ -83,12 +86,20 @@ describe('Post without gues or admin',function () {
 });
 
 describe('Get with id invalid',function () {
-   it('Get with id invalid in user',()=>{
-       return request(app).get('/api/v1/user/100').then(function (res) {
+   it('Get on an inactive user (status: 0)',()=>{
+       return request(app).get('/api/v1/user/2').then(function (res) {
           assert.equal(res.status,204);
        });
    });
 
+});
+
+describe('Get id of users register',function () {
+    it('active user with active id in user',()=>{
+        return request(app).get('/api/v1/user/1').then(function (res) {
+            assert.equal(res.status, 200);
+        });
+    })
 });
 
 describe('Put with id invalid',function () {
