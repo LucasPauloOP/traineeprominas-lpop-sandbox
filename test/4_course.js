@@ -11,8 +11,7 @@ describe('Get with courses register',function () {
     });
 });
 
-//----------------------------------------------------------------------------------------------------------------
-//post
+//----------------------------------------POST------------------------------------------------------------------------
 
 describe('register course as 2 teacher',function () {
     it('register course as 2 teacher',()=>{
@@ -43,8 +42,8 @@ describe('register course as undefined teacher',function () {
 });
 
 
-//---------------------------------------------------------------------------
-//GET
+//---------------------------------GET------------------------------------------
+
 describe('Get with courses register',function () {
     it('Register courses with users register in mongodb',()=>{
         return request(app).get('/api/v1/course').then(function(res){
@@ -78,3 +77,49 @@ describe('Get invalid id of course register',function () {
     });
 
 });*/
+
+
+//---------------------------------PUT---------------------------------------
+
+describe('Put with id valid',function () {
+    it('put with existing ID and correct data in course',()=>{
+        return request(app).put('/api/v1/course/1').send({name:'testeput1',city:'testeput1',period:'5',teacher:[1,2]})
+            .then(function (res) {
+                assert.equal(res.status,200);
+            })
+    })
+
+});
+
+describe('Put with id invalid',function () {
+    it('put with non existent id and correct data in course',()=>{
+        return request(app).put('/api/v1/course/30').send({name:'teste1',city:'teste1',period:'5',teacher:[1,2]})
+            .then(function (res) {
+                assert.equal(res.status,401);
+            })
+    })
+
+});
+
+describe('Put with id valid',function () {
+    it('put with existing ID and incorrect data in course',()=>{
+        return request(app).put('/api/v1/course/1').send({name:'teste1',city:'teste1',period:'5'})
+            .then(function (res) {
+                assert.equal(res.status,401);
+            })
+    })
+
+});
+
+describe('Put with id valid',function () {
+    it('put with existing ID and incorrect data in course(one teacher)',()=>{
+        return request(app).put('/api/v1/course/1').send({name:'teste1',city:'teste1',period:'5',teacher:[1]})
+            .then(function (res) {
+                assert.equal(res.status,401);
+            })
+    })
+
+});
+
+
+
