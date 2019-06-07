@@ -83,7 +83,6 @@ exports.putUser = (req, res) => {
             userModel.put(query, set)
             .then(result => {
                 if(result != false){
-                    console.log('------->>>>>>>>>>>>>>',result);
                     if(result.value){ // if user exists
                         res.status(200).send('Usuário editado com sucesso!');
                     }else{
