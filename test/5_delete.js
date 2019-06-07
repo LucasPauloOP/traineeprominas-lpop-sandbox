@@ -17,15 +17,6 @@ describe('Delete with id valid',function () {
 
 });
 
-describe('Get with id invalid',function () {
-    it('Get on an inactive user (status: 0)',()=>{
-        return request(app).get('/api/v1/user/2').then(function (res) {
-            assert.equal(res.status,204);
-        });
-    });
-
-});
-
 describe('Delete with id invalid',function () {
     it('Delete with non existing ID in user',()=>{
         return request(app).delete('/api/v1/user/50')
@@ -47,15 +38,6 @@ describe('Delete with id deleted',function () {
 });
 
 //----------------------------------------TEACHER------------------------------------------------------------------------
-
-describe('Get with id invalid',function () {
-    it('Get on an inactive user (status: 0)',()=>{
-        return request(app).get('/api/v1/user/1').then(function (res) {
-            assert.equal(res.status,204);
-        });
-    });
-
-});
 
 describe('Delete with id invalid',function () {
     it('Delete with non existing ID in teacher',()=>{

@@ -1,4 +1,5 @@
 const userModel = require('../model/user');
+const moongoseSchema=require('../moongose_schema');
 
 exports.getAllUsers = (req, res) => {
     //  define query and projection for search
@@ -45,13 +46,15 @@ exports.postUser = (req, res) => {
     if(req.body.name && req.body.lastName && req.body.profile){
         
         // creates user array to be inserted
-        let user = {
+         newUser= {
             id:0,
             name:req.body.name,
             lastName:req.body.lastName,
             profile:req.body.profile,
             status:1
         };
+
+         newUser=moongoseSchema.userSchema();
 
             // send to model
             userModel.post(user)
@@ -73,11 +76,11 @@ exports.postUser = (req, res) => {
 
 exports.putUser = (req, res) => {
     // check required attributes
-    if(req.body.name && req.body.lastName && req.body['profile']){
+    if(req.body.name && req.body.lastName && req.body.profile){
 
         //  define query and set for search and update    
         let query = {'id': parseInt(req.params.id), 'status': 1};
-        let set = {name: req.body.name, lastName: req.body.lastName, profile: req.body['profile']};
+        let set = {name: req.body.name, lastName: req.body.lastName, profile: req.body.profile};
         
             // send to model
             userModel.put(query, set)
