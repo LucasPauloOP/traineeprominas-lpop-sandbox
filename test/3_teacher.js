@@ -12,8 +12,8 @@ describe('Get with teachers register',function () {
     });
 });
 
-//----------------------------------------
-//POST
+//---------------------POST------------------------------------
+
 describe('Register teacher ,phd as true',function () {
     it('Register teacher phd as true',()=>{
         return request(app).post('/api/v1/teacher')
@@ -42,8 +42,8 @@ describe('Register teacher ,phd as null',function () {
 });
 
 
-//---------------------------------------------------
-//GET
+//--------------------------GET-------------------------
+
 describe('Get with teachers register',function () {
     it('Register teachers with users register in mongodb',()=>{
         return request(app).get('/api/v1/teacher').then(function(res){
@@ -70,17 +70,9 @@ describe('Get invalid id of teachers register',function () {
     })
 });
 
-describe('Get with id invalid',function () {
-    it('Get on an inactive user (status: 0)',()=>{
-        return request(app).get('/api/v1/user/2').then(function (res) {
-            assert.equal(res.status,204);
-        });
-    });
 
-});
 
-//-------------------------------------------------------
-//PUT
+//---------------------------PUT----------------------------
 
 describe('Put with id valid',function () {
     it('put with existing ID and correct data in teacher',()=>{
@@ -112,8 +104,8 @@ describe('Put with id valid',function () {
 
 });
 
-//------------------------------------------------------------
-//DELETE
+//-------------------------DELETE-----------------------------------
+
 describe('Delete with id valid',function () {
     it('Delete with existing ID in teacher',()=>{
         return request(app).delete('/api/v1/teacher/2')
@@ -121,6 +113,15 @@ describe('Delete with id valid',function () {
                 assert.equal(res.status,200);
             })
     })
+
+});
+
+describe('Get with id invalid',function () {
+    it('Get on an inactive user (status: 0)',()=>{
+        return request(app).get('/api/v1/user/2').then(function (res) {
+            assert.equal(res.status,204);
+        });
+    });
 
 });
 

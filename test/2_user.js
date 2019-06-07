@@ -12,8 +12,8 @@ describe('Get with users register',function () {
    });
 });
 
-//-------------------------------------------------------------------------
-//POST
+//------------------------------------POST-------------------------------------
+
 describe('Post(admin)', function() {
     it('register user as admin in user', () => {
         return request(app)
@@ -45,8 +45,8 @@ describe('Post without gues or admin',function () {
 
 });
 
-//--------------------------------------------------------------------------
-//GET
+//--------------------------------GET------------------------------------------
+
 describe('Get with users register',function () {
     it('Register user with users register in mongodb in user',()=>{
         return request(app).get('/api/v1/user').then(function(res){
@@ -64,15 +64,6 @@ describe('Get id of users register',function () {
    })
 });
 
-describe('Get with id invalid',function () {
-    it('Get on an inactive user (status: 0)',()=>{
-        return request(app).get('/api/v1/user/2').then(function (res) {
-            assert.equal(res.status,204);
-        });
-    });
-
-});
-
 describe('Get id of users register',function () {
     it('active user with active id in user',()=>{
         return request(app).get('/api/v1/user/1').then(function (res) {
@@ -82,8 +73,8 @@ describe('Get id of users register',function () {
 });
 
 
-//------------------------------------------------------------------------------
-//PUT
+//-----------------------------------PUT-------------------------------------------
+
 describe('Put with id valid',function () {
     it('put with existing ID and correct data in user',()=>{
         return request(app).put('/api/v1/user/1').send({name:'testeput1',lastName:'testeput1',profile:'guess'})
@@ -114,8 +105,8 @@ describe('Put with id valid',function () {
 
 });
 
-//----------------------------------------------------------------
-//DELETE
+//-----------------------------DELETE-----------------------------------
+
 describe('Delete with id valid',function () {
     it('Delete with existing ID in user',()=>{
         return request(app).delete('/api/v1/user/2')
@@ -123,6 +114,15 @@ describe('Delete with id valid',function () {
                 assert.equal(res.status,200);
             })
     })
+
+});
+
+describe('Get with id invalid',function () {
+    it('Get on an inactive user (status: 0)',()=>{
+        return request(app).get('/api/v1/user/2').then(function (res) {
+            assert.equal(res.status,204);
+        });
+    });
 
 });
 
