@@ -91,8 +91,15 @@ describe('Put with id invalid',function () {
 
 });
 
+describe('Put with id valid',function () {
+    it('put with existing ID and incorrect data',()=>{
+        return request(app).get('/api/v1/user/1').send({name:'testeput1',profile:'algo'})
+            .then(function (res) {
+                assert.equal(res.status,200);
+            })
+    })
 
-
+});
 
 
 
