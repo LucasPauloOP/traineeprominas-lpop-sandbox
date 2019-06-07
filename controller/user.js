@@ -73,16 +73,17 @@ exports.postUser = (req, res) => {
 
 exports.putUser = (req, res) => {
     // check required attributes
-    if(req.body.name && req.body.lastName && req.body.profile){
+    if(req.body.name && req.body.lastName && req.body['profile']){
 
         //  define query and set for search and update    
         let query = {'id': parseInt(req.params.id), 'status': 1};
-        let set = {name: req.body.name, lastName: req.body.lastName, profile: req.body.profile};
+        let set = {name: req.body.name, lastName: req.body.lastName, profile: req.body['profile']};
         
             // send to model
             userModel.put(query, set)
             .then(result => {
                 if(result != false){
+                    console.log('------->>>>>>>>>>>>>>',result);
                     if(result.value){ // if user exists
                         res.status(200).send('Usuário editado com sucesso!');
                     }else{

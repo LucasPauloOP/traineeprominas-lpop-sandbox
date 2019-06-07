@@ -43,7 +43,17 @@ describe('Get id of users register',function () {
 
 describe('Put with id valid',function () {
     it('put with existing ID and correct data',()=>{
-        return request(app).get('/api/v1/user/1').send({name:'testeput1',lastName:'testeput1',profile:'guess'})
+        return request(app).put('/api/v1/user/1').send({name:'testeput1',lastName:'testeput1',profile:'guess'})
+            .then(function (res) {
+                assert.equal(res.status,200);
+            })
+    })
+
+});
+
+describe('Delete with id valid',function () {
+    it('Delete with existing ID',()=>{
+        return request(app).delete('/api/v1/user/10')
             .then(function (res) {
                 assert.equal(res.status,200);
             })
@@ -83,9 +93,9 @@ describe('Get with id invalid',function () {
 
 describe('Put with id invalid',function () {
     it('put with non existent id and correct data',()=>{
-        return request(app).get('/api/v1/user/10').send({name:'testeput2',lastName:'testeput2',profile:'guess'})
+        return request(app).put('/api/v1/user/20').send({name:'testeput2',lastName:'testeput2',profile:'guess'})
             .then(function (res) {
-                assert.equal(res.status,204);
+                assert.equal(res.status,401);
             })
     })
 
@@ -93,13 +103,17 @@ describe('Put with id invalid',function () {
 
 describe('Put with id valid',function () {
     it('put with existing ID and incorrect data',()=>{
-        return request(app).get('/api/v1/user/1').send({name:'testeput1',profile:'algo'})
+        return request(app).put('/api/v1/user/1').send({name:'testeput8000',profile:'nao entra'})
             .then(function (res) {
-                assert.equal(res.status,200);
+                assert.equal(res.status,401);
             })
     })
 
 });
+
+
+
+
 
 
 

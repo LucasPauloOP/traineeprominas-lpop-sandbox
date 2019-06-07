@@ -28,6 +28,7 @@ exports.post = (user) => {
 
 exports.put = (query, set) => {
     if(set.profile == 'guess' || set.profile == 'admin'){
+        console.log('--->>>>>>>>>>>>',set.profile);
         return collection.findOneAndUpdate(query, {$set: set});
     }else{
         return new Promise((resolve, reject) => {
