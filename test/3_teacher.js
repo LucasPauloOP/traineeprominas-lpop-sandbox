@@ -121,6 +121,26 @@ describe('Put with id valid',function () {
 
 });
 
+describe('Delete with id invalid',function () {
+    it('Delete with non existing ID in teacher',()=>{
+        return request(app).delete('/api/v1/teacher/50')
+            .then(function (res) {
+                assert.equal(res.status,204);
+            })
+    })
+
+});
+
+describe('Delete with id deleted',function () {
+    it('Delete with id deleted in teacher',()=>{
+        return request(app).delete('/api/v1/teacher/2')
+            .then(function (res) {
+                assert.equal(res.status,204);
+            })
+    })
+
+});
+
 
 
 
