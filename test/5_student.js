@@ -4,7 +4,7 @@ const app = require('../app');
 
 describe('Get with students register',function () {
     it('Get with registered students and return is empty',()=>{
-        return request(app).get('/api/v1/user').then(function (res) {
+        return request(app).get('/api/v1/student').then(function (res) {
             assert.equal(res.status,204);
         });
     });

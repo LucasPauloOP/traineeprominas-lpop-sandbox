@@ -12,9 +12,8 @@ describe('Get with teachers register',function () {
     });
 });
 
-
-
-//successful routes
+//----------------------------------------
+//POST
 describe('Register teacher ,phd as true',function () {
     it('Register teacher phd as true',()=>{
         return request(app).post('/api/v1/teacher')
@@ -24,48 +23,6 @@ describe('Register teacher ,phd as true',function () {
         });
 });
 
-describe('Get with teachers register',function () {
-    it('Register teachers with users register in mongodb',()=>{
-        return request(app).get('/api/v1/teacher').then(function(res){
-            assert.equal(res.status,200);
-        });
-    })
-
-});
-
-
-describe('Get id of teacher register',function () {
-    it('Active teacher with active id in teacher',()=>{
-        return request(app).get('/api/v1/teacher/1').then(function (res) {
-            assert.equal(res.status, 200);
-        });
-    })
-});
-
-describe('Put with id valid',function () {
-    it('put with existing ID and correct data in teacher',()=>{
-        return request(app).put('/api/v1/teacher/1').send({name:'testeput1',lastName:'testeput1',phd:true})
-            .then(function (res) {
-                assert.equal(res.status,200);
-            })
-    })
-
-});
-
-describe('Delete with id valid',function () {
-    it('Delete with existing ID in teacher',()=>{
-        return request(app).delete('/api/v1/teacher/2')
-            .then(function (res) {
-                assert.equal(res.status,200);
-            })
-    })
-
-});
-
-
-//--------------------------------------------------------------------------------------------------------------
-
-//routes that test errors
 describe('Register teacher ,phd as false',function () {
     it('Register teacher phd as false',()=>{
         return request(app).post('/api/v1/teacher')
@@ -84,6 +41,27 @@ describe('Register teacher ,phd as null',function () {
     });
 });
 
+
+//---------------------------------------------------
+//GET
+describe('Get with teachers register',function () {
+    it('Register teachers with users register in mongodb',()=>{
+        return request(app).get('/api/v1/teacher').then(function(res){
+            assert.equal(res.status,200);
+        });
+    })
+
+});
+
+
+describe('Get id of teacher register',function () {
+    it('Active teacher with active id in teacher',()=>{
+        return request(app).get('/api/v1/teacher/1').then(function (res) {
+            assert.equal(res.status, 200);
+        });
+    })
+});
+
 describe('Get invalid id of teachers register',function () {
     it('teacher with invalid id in teacher',()=>{
         return request(app).get('/api/v1/teacher/30').then(function (res) {
@@ -92,14 +70,27 @@ describe('Get invalid id of teachers register',function () {
     })
 });
 
-/*describe('Get with id invalid',function () {
+describe('Get with id invalid',function () {
     it('Get on an inactive user (status: 0)',()=>{
         return request(app).get('/api/v1/user/2').then(function (res) {
             assert.equal(res.status,204);
         });
     });
 
-});*/
+});
+
+//-------------------------------------------------------
+//PUT
+
+describe('Put with id valid',function () {
+    it('put with existing ID and correct data in teacher',()=>{
+        return request(app).put('/api/v1/teacher/1').send({name:'testeput1',lastName:'testeput1',phd:true})
+            .then(function (res) {
+                assert.equal(res.status,200);
+            })
+    })
+
+});
 
 describe('Put with id invalid',function () {
     it('put with non existent id and correct data in teacher',()=>{
@@ -116,6 +107,18 @@ describe('Put with id valid',function () {
         return request(app).put('/api/v1/teacher/1').send({name:'testeput1',lastName:'testeput1'})
             .then(function (res) {
                 assert.equal(res.status,401);
+            })
+    })
+
+});
+
+//------------------------------------------------------------
+//DELETE
+describe('Delete with id valid',function () {
+    it('Delete with existing ID in teacher',()=>{
+        return request(app).delete('/api/v1/teacher/2')
+            .then(function (res) {
+                assert.equal(res.status,200);
             })
     })
 
