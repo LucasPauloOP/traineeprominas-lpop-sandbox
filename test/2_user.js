@@ -111,6 +111,16 @@ describe('Put with id valid',function () {
 
 });
 
+describe('Delete with id invalid',function () {
+    it('Delete with non existing ID',()=>{
+        return request(app).delete('/api/v1/user/50')
+            .then(function (res) {
+                assert.equal(res.status,204);
+            })
+    })
+
+});
+
 
 
 
