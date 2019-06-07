@@ -81,6 +81,17 @@ describe('Get with id invalid',function () {
 
 });
 
+describe('Put with id invalid',function () {
+    it('put with non existent id and correct data',()=>{
+        return request(app).get('/api/v1/user/10').send({name:'testeput2',lastName:'testeput2',profile:'guess'})
+            .then(function (res) {
+                assert.equal(res.status,204);
+            })
+    })
+
+});
+
+
 
 
 
