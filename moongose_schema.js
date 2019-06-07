@@ -32,7 +32,7 @@ var users = new mongoose.schema ({
             enum:[0,1],
             unique:1
         }
-    });
+});
 
 
 
@@ -45,7 +45,7 @@ var teacher = new schema({
         },
 
         name:{
-            Type: String,
+            type: String,
             require:true
         },
 
@@ -55,7 +55,7 @@ var teacher = new schema({
         },
 
         phd:{
-            Type:Boolean,
+            type:Boolean,
             require:true,
             validate:{
             validator:function (value) {
@@ -85,6 +85,7 @@ var course  =  new schema({
 
       period:{
           type:String,
+
       },
 
       city:{
@@ -101,7 +102,7 @@ var course  =  new schema({
 
 
 
-  var Student =new schema({
+  var student =new schema({
 
       name:{
           type:String,
@@ -122,5 +123,6 @@ var course  =  new schema({
           type:Array,
           require:true,
       }
-
   });
+
+  module.exports({user,course,teacher,student});

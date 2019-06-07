@@ -54,8 +54,6 @@ exports.postUser = (req, res) => {
             status:1
         };
 
-         newUser=moongoseSchema.userSchema();
-
             // send to model
             userModel.post(user)
             .then(result => {
