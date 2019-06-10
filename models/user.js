@@ -28,7 +28,7 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
 //----------getalll----------------------
 exports.getall=(status,project)=>{
-    console.log('------>model',status);
+    // console.log('------>model',status);
     //console.log(userCollection.count())
     return userCollection.find(status,project).toArray();
 
@@ -42,13 +42,13 @@ exports.getone=(where,project)=>{
 //------------post----------------------
 exports.post=(newUser)=>{
     newUser.id=++id;
-    console.log('------>',newUser);
+    // console.log('------>',newUser);
     return userCollection.insertOne(newUser);
 };
 
 //-------------put----------------------
 exports.put=(newUser,where,project)=>{
-  console.log('--------->',newUser);
+  // console.log('--------->',newUser);
   return userCollection.findOneAndUpdate(where,{$set:{...newUser}});
 };
 

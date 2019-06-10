@@ -33,7 +33,7 @@ return studentCollection.countDocuments(where);
 
 //----------update all students if change course------------
 exports.updateStudent= function(where,newCourse){
-    console.log('------>',where);
+    // console.log('------>',where);
     return studentCollection.findOneAndUpdate(where,{$set:newCourse});
 };
 
@@ -63,7 +63,7 @@ exports.post=(newStudent)=>{
 //-------------put----------------------
 exports.put=(newStudent,where)=>{
 
-    console.log('------>',newStudent);
+    // console.log('------>',newStudent);
 
     return studentCollection.findOneAndUpdate(where,{$set:{...newStudent}});
 };

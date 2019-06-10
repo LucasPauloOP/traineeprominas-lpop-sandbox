@@ -78,9 +78,7 @@ exports.postStudent = (req, res) => {
                   status:1
               });
 
-            console.log('---------->', student);
               student.validate(error=>{
-                  console.log(error);
                   // send to model
                   if(!error){
                       studentModel.post(student)

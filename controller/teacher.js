@@ -17,6 +17,15 @@ var id;
     id = await collection.countDocuments({});
 })();
 
+//joi schema of validation
+const Joi = require('joi');
+
+const joiSchemaUser = Joi.object().keys({
+    name: Joi.string().required(),
+    lastName: Joi.string().required(),
+    phd:Joi.boolean().required()
+});
+
 exports.getAllTeachers = (req, res) => {
     //  define query and projection for search
     let query = {'status':1};
@@ -106,12 +115,10 @@ exports.putTeacher = (req, res) => {
     let validate = new Teacher(teacher);
 
     validate.validate(error => {
-        console.log(error);
         if (!error) {
             // send to model
             teacherModel.put(query, teacher)
                 .then(async (result) => {
-                    // console.log('>>>>>>>.', result);
                     if (result.value) { // if professor exists
                             res.status(200).send('Professor editado com sucesso!');
 
