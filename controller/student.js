@@ -16,6 +16,16 @@ var id;
     id = await collection.countDocuments({});
 })();
 
+//joi schema of validation
+const Joi = require('joi');
+
+const joiSchemaStudent = Joi.object().keys({
+    name: Joi.string().required(),
+    lastName: Joi.string().required(),
+    age:Joi.number().required(),
+    course:Joi.array().required()
+});
+
 exports.getAllStudents = (req, res) => {
     //  define query and projection for search
     let query = {status:1};
@@ -58,47 +68,54 @@ exports.getFilteredStudent = (req,res) => {
 
 exports.postStudent = (req, res) => {
 
-        (async () => {
-            // receive the course related to the inserted id
-            for(let i = 0; i < req.body.course.length; i++){
-                let course = await courseModel.getCourse(req.body.course[i]);
-                if(course.length > 0){ // if course exists
-                    req.body.course[i] = course[0];
-                  }else{
-                    req.body.course.splice(i, 1);
-                  }
-            }
-              // creates student array to be inserted
-              let student = new Student ({
-                  id:parseInt(++id),
-                  name:req.body.name,
-                  lastName:req.body.lastName,
-                  age:req.body.age,
-                  course:req.body.course,
-                  status:1
-              });
+        joiSchemaStudent.validate(req.body,{abortEarly:false})
+            .then(result=>{
 
-              student.validate(error=>{
-                  // send to model
-                  if(!error){
-                      studentModel.post(student)
-                          .then(result => {
+                (async () => {
+                    // receive the course related to the inserted id
+                    for(let i = 0; i < req.body.course.length; i++){
+                        let course = await courseModel.getCourse(req.body.course[i]);
+                        if(course.length > 0){ // if course exists
+                            req.body.course[i] = course[0];
+                        }else{
+                            req.body.course.splice(i, 1);
+                        }
+                    }
+                    // creates student array to be inserted
+                    let student = new Student ({
+                        id:parseInt(++id),
+                        name:req.body.name,
+                        lastName:req.body.lastName,
+                        age:req.body.age,
+                        course:req.body.course,
+                        status:1
+                    });
 
-                                  res.status(201).send('Estudante cadastrado com sucesso!');
-                          })
-                          .catch(err => {
-                              console.error("Erro ao conectar a collection student: ", err);
-                              res.status(500);
-                          });
-                  }
-                  else{
-                      student.id=parseInt(--id);
-                      res.status(401).send('Não foi possivel cadastrar estudante, campos obrigatórios não preenchidos');
-                  }
+                    student.validate(error=>{
+                        // send to model
+                        if(!error){
+                            studentModel.post(student)
+                                .then(result => {
 
-              });
+                                    res.status(201).send('Estudante cadastrado com sucesso!');
+                                })
+                                .catch(err => {
+                                    console.error("Erro ao conectar a collection student: ", err);
+                                    res.status(500);
+                                });
+                        }
+                        else{
+                            student.id=parseInt(--id);
+                            res.status(401).send('Não foi possivel cadastrar estudante, campos obrigatórios não preenchidos');
+                        }
 
-    })();
+                    });
+
+                })();
+
+            }).catch(err=>{
+                res.status(401).send('Campo obrigatório não cadastrado');
+        });
 
 };
 
