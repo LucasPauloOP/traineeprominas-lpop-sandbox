@@ -6,6 +6,16 @@ const mongoose = require('mongoose');
 const teacherSchema = require('../moongose_schema').schemaTeacher;
 const Teacher = mongoose.model('Teacher', teacherSchema);
 
+//id
+const database = require('../database');
+const collection = database.getCollection('teacher');
+
+var id;
+
+(async () => {
+    id = await collection.countDocuments({});
+})();
+
 exports.getAllTeachers = (req, res) => {
     //  define query and projection for search
     let query = {'status':1};
@@ -48,27 +58,36 @@ exports.getFilteredTeacher = (req,res) => {
 
 exports.postTeacher = (req, res) => {
     // check required attributes
-    let teacher= new Teacher({
+    let teacher = new Teacher({
+        id:parseInt(id++),
         name:req.body.name,
         lastName:req.body.lastName,
-        profile:req.body.profile,
+        phd:req.body.phd,
         status:1
     });
-        // creates teacher array to be inserted
-        
-        // send to model
-        teacherModel.post(teacher)
-        .then(result => {
-            if(result != false){
-                res.status(201).send('Professor cadastrado com sucesso!');
-            }else{
-                res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
-            }
-        })
-        .catch(err => {
-            console.error("Erro ao conectar a collection teacher: ", err);
-            res.status(500);
-        });
+
+    teacher.validate(error=>{
+        // console.log('------>',error);
+        if(!error){
+            // creates teacher array to be inserted
+
+            // send to model
+
+            teacherModel.post(teacher)
+                .then(result => {
+                        res.status(201).send('Professor cadastrado com sucesso!');
+                })
+                .catch(err => {
+                    console.error("Erro ao conectar a collection teacher: ", err);
+                    res.status(500);
+                });
+        }
+        else{
+            res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
+        }
+    });
+
+
 };
 
 exports.putTeacher = (req, res) => {

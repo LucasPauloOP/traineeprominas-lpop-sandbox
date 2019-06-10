@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
-var schemaUser = new Schema ({
+schemaUser = new Schema ({
 
     id:{
         type:Number,
@@ -22,7 +22,7 @@ var schemaUser = new Schema ({
 
     profile:{
         type:String,
-        Enum:['admin','guess'],
+        enum:['admin','guess'],
         required:true
     },
 
@@ -36,7 +36,7 @@ var schemaUser = new Schema ({
 
 
 
-var schemaTeacher = new Schema({
+schemaTeacher = new Schema({
 
     id:{
         type:Number,
@@ -50,8 +50,8 @@ var schemaTeacher = new Schema({
     },
 
     lastName:{
-        Type:String,
-
+        type:String,
+        required:true
     },
 
     phd:{
@@ -72,7 +72,7 @@ var schemaTeacher = new Schema({
 
 
 
-var schemaCourse  =  new Schema({
+schemaCourse  =  new Schema({
     id:{
         type:Number,
         required:true,
@@ -108,7 +108,7 @@ var schemaCourse  =  new Schema({
 
 
 
-var schemaStudent =new Schema({
+schemaStudent =new Schema({
     id:{
         type:Number,
         required:true,

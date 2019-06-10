@@ -4,6 +4,15 @@ const mongoose = require('mongoose');
 const userSchema = require('../moongose_schema').schemaUser;
 const User = mongoose.model('User', userSchema);
 
+const database = require('../database');
+const collection = database.getCollection('user');
+
+var id;
+
+(async () => {
+    id = await collection.countDocuments({});
+})();
+
 exports.getAllUsers = (req, res) => {
     //  define query and projection for search
     let query = {status:1};
@@ -47,24 +56,28 @@ exports.getFilteredUser = (req,res) => {
 exports.postUser = (req, res) => {
     // check required attributes
     let users= new User({
+        id: id++,
         name:req.body.name,
         lastName:req.body.lastName,
         profile:req.body.profile,
         status:1
     });
 
-        userModel.post(users).then(result => {
-            if (result != false) {
+    users.validate(error => {
+        // console.log('>>>>>', error);
+        if(!error){
+            userModel.post(users).then(result => {
                 res.status(201).send('Usuário cadastrado com sucesso!');
-            } else {
+            }).catch(err => {
+                console.error("Erro ao conectar a collection user ->>>>>>>>>> ", err);
+                res.status(500);
+            });
+        }else{
+            res.status(401).send('Não foi possível cadastrar o usuário');
 
-                res.status(401).send('Não foi possível cadastrar o usuário');
-            }
-        }).catch(err => {
-            console.error("Erro ao conectar a collection user ->>>>>>>>>> ", err);
-            res.status(500);
-        });
+        }
 
+    })
 };
 
 exports.putUser = (req, res) => {

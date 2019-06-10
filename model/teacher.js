@@ -1,11 +1,11 @@
 const database = require('../database');
 const collection = database.getCollection('teacher');
 
-var id;
-
-(async () => {
-     id = await collection.countDocuments({});
-})();
+// var id;
+//
+// (async () => {
+//      id = await collection.countDocuments({});
+// })();
 
 exports.getAll = (query, projection) => {
   return collection.find(query, projection).toArray();
@@ -16,14 +16,7 @@ exports.getFiltered = (query, projection) => {
 };
 
 exports.post = (teacher) => {
-  if (teacher.phd == true){
-    teacher.id = ++id;
-    return collection.insertOne(teacher);  
-  }else{
-    return new Promise((resolve, reject) => {
-      resolve(false);
-    });
-  }
+    return collection.insertOne(teacher);
 };
 
 exports.put = (query, set) => {

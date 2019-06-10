@@ -16,14 +16,14 @@ exports.getFiltered = (query, projection) => {
 };
 
 exports.post = (user) => {
-    if(user.profile == 'guess' || user.profile == 'admin'){
-        user.id = ++id;
+    // if(user.profile == 'guess' || user.profile == 'admin'){
+    //     user.id = ++id;
         return collection.insertOne(user);
-    }else{
-        return new Promise((resolve, reject) => {
-            resolve(false);
-        });
-    }
+    // }else{
+    //     return new Promise((resolve, reject) => {
+            // resolve(false);
+        // });
+//    }
 };
 
 exports.put = (query, set) => {
