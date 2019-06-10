@@ -20,10 +20,11 @@ var id;
 //joi schema of validation
 const Joi = require('joi');
 
-const joiSchemaTeacher = Joi.object().keys({
+const joiSchemaCourse = Joi.object().keys({
   name: Joi.string().required(),
-  lastName: Joi.string().required(),
-  phd:Joi.boolean().required()
+  city: Joi.string().required(),
+  period:Joi.number().default(8),
+  teacher:Joi.array().required()
 });
 
 exports.getAllCourses = (req, res) => {
@@ -68,52 +69,55 @@ exports.getFilteredCourse = (req,res) => {
 
 exports.postCourse = (req, res) => {
 
-  (async () => {
-    // check if any teacher id has been entered
-    if(req.body.teacher == undefined || req.body.teacher.length == 0){
-      delete course.teacher;
-    }else{
-      // receive the teacher related to the inserted id
-      for(let i = req.body.teacher.length-1; i > -1 ; i--){
-        teacher = await teacherModel.getTeacher(req.body.teacher[i]);
-        if(teacher == null){
-          req.body.teacher.splice(i, 1);
-        }else{ // if teacher exists
-          req.body.teacher[i] = teacher[0];
+  joiSchemaCourse.validate(req.body,{abortEarly:false}).then(result=>{
+    (async () => {
+      // check if any teacher id has been entered
+      if(req.body.teacher == undefined || req.body.teacher.length == 0){
+        delete course.teacher;
+      }else{
+        // receive the teacher related to the inserted id
+        for(let i = req.body.teacher.length-1; i > -1 ; i--){
+          teacher = await teacherModel.getTeacher(req.body.teacher[i]);
+          if(teacher == null){
+            req.body.teacher.splice(i, 1);
+          }else{ // if teacher exists
+            req.body.teacher[i] = teacher[0];
+          }
         }
-      }
-      // creates course array to be inserted
-    let course = new Course ({
-      id:parseInt(++id),
-      name:req.body.name,
-      period:req.body.period || 8,
-      city:req.body.city,
-      teacher:req.body.teacher,
-      status:1,
-    });
+        // creates course array to be inserted
+        let course = new Course ({
+          id:parseInt(++id),
+          name:req.body.name,
+          period:req.body.period || 8,
+          city:req.body.city,
+          teacher:req.body.teacher,
+          status:1,
+        });
 
-    course.validate(error=>{
-        if(!error){
-          // send to model
-          courseModel.post(course)
-              .then(result => {
+        course.validate(error=>{
+          if(!error){
+            // send to model
+            courseModel.post(course)
+                .then(result => {
                   res.status(201).send('Curso cadastrado com sucesso!');
-              })
-              .catch(err => {
-                console.error('Erro ao conectar a collection course:', err);
-                res.status(500);
-              });
-        }
-        else{
-          course.id=parseInt(--id);
-          res.status(401).send('Não foi possível cadastrar o curso');
-        }
-      })
-    }
+                })
+                .catch(err => {
+                  console.error('Erro ao conectar a collection course:', err);
+                  res.status(500);
+                });
+          }
+          else{
+            course.id=parseInt(--id);
+            res.status(401).send('Não foi possível cadastrar o curso');
+          }
+        })
+      }
 
-  })();
+    })();
 
-
+  }).catch(err=>{
+    res.status(401).send('Campos obrigatórios não preenchidos.');
+  });
 };
 
 exports.putCourse = (req, res) => {
