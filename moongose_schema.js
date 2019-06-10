@@ -85,8 +85,6 @@ schemaCourse  =  new Schema({
 
     period:{
         type:Number,
-        required:true
-
     },
 
     city:{
@@ -132,7 +130,7 @@ schemaStudent =new Schema({
 
     course:{
         type:[schemaCourse],
-        validate:[val=>{return val.length>=1},
+        validate:[val=>{return val.length=1},
             'Para cadastrr um estudante é necessário que ele tenha 1 curso'],
         required:true,
     },

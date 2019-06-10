@@ -2,6 +2,21 @@ const courseModel = require('../model/course');
 const teacherModel = require('../model/teacher');
 const studentModel = require('../model/student');
 
+//schema moongose
+const mongoose = require('mongoose');
+const courseSchema = require('../moongose_schema').schemaCourse;
+const Course = mongoose.model('Course', courseSchema);
+
+//id
+const database = require('../database');
+const collection = database.getCollection('course');
+
+var id;
+
+(async () => {
+  id = await collection.countDocuments({});
+})();
+
 exports.getAllCourses = (req, res) => {
   //  define query and projection for search
   let query = {status:1};
@@ -43,52 +58,52 @@ exports.getFilteredCourse = (req,res) => {
 };
 
 exports.postCourse = (req, res) => {
-  // check required attributes 
-  if(req.body.name && req.body.city){
 
-    // creates course array to be inserted
-    var course = {
-      id:0,
+  (async () => {
+    // check if any teacher id has been entered
+    if(req.body.teacher == undefined || req.body.teacher.length == 0){
+      delete course.teacher;
+    }else{
+      // receive the teacher related to the inserted id
+      for(let i = req.body.teacher.length-1; i > -1 ; i--){
+        teacher = await teacherModel.getTeacher(req.body.teacher[i]);
+        if(teacher == null){
+          req.body.teacher.splice(i, 1);
+        }else{ // if teacher exists
+          req.body.teacher[i] = teacher[0];
+        }
+      }
+      // creates course array to be inserted
+    let course = new Course ({
+      id:parseInt(++id),
       name:req.body.name,
       period:req.body.period || 8,
       city:req.body.city,
       teacher:req.body.teacher,
       status:1,
-    };
+    });
 
-    (async () => { 
-      // check if any teacher id has been entered
-      if(course.teacher == undefined || course.teacher.length == 0){
-        delete course.teacher;
-      }else{
-        // receive the teacher related to the inserted id
-        for(let i = course.teacher.length-1; i > -1 ; i--){
-          teacher = await teacherModel.getTeacher(course.teacher[i]);
-          if(teacher == null){
-            course.teacher.splice(i, 1);
-          }else{ // if teacher exists
-            course.teacher[i] = teacher[0]; 
-          }
+    course.validate(error=>{
+        if(!error){
+          // send to model
+          courseModel.post(course)
+              .then(result => {
+                  res.status(201).send('Curso cadastrado com sucesso!');
+              })
+              .catch(err => {
+                console.error('Erro ao conectar a collection course:', err);
+                res.status(500);
+              });
         }
-      }
-        
-      // send to model
-      courseModel.post(course)
-      .then(result => {
-        if(result != false){
-          res.status(201).send('Curso cadastrado com sucesso!');
-        }else{
-          res.status(401).send('Não foi possível cadastrar o curso (necessário pelo menos 2 professores)');
+        else{
+          res.status(401).send('Não foi possível cadastrar o curso');
         }
       })
-      .catch(err => {
-        console.error('Erro ao conectar a collection course:', err);
-        res.status(500);
-      });
-    })();
-  }else{
-      res.status(401).send('Não foi possível cadastrar o curso');
-  }
+    }
+
+  })();
+
+
 };
 
 exports.putCourse = (req, res) => {
@@ -96,50 +111,60 @@ exports.putCourse = (req, res) => {
   let query = {'id': parseInt(req.params.id),'status': 1};
 
   // check required attributes
-  if(req.body.name && req.body.period && req.body.city){
+
 
       // creates course array to update
-    var course = {
-      teacher:req.body.teacher
+    let course = {
+      id: parseInt(req.params.id),
+      name:req.body.name,
+      period:req.body.period || 8,
+      city:req.body.city,
+      teacher:req.body.teacher,
+      status:1
     };
 
-      //  define set for update 
-    let set = {id:parseInt(req.params.id), name: req.body.name, period: req.body.period || 8, city: req.body.city, teacher: course.teacher, status:1};
-    (async () => {
-      // receive the teacher related to the inserted id  
-      for(let i = course.teacher.length-1; i > -1 ; i--){
-        teacher = await teacherModel.getTeacher(course.teacher[i]);
-        if(teacher == null){
-          course.teacher.splice(i, 1);
-        }else{ // if teacher exists
-          course.teacher[i] = teacher[0]; 
-        }
-      }
-      // send to model
-      courseModel.put(query, set)
-      .then(result => {
-        // update course in student
-        if(result.value){
-          if(result != false){
-            res.status(200).send('Curso editado com sucesso!');
-            studentModel.updateCourse(parseInt(req.params.id), result.value);
-          }else{
-            res.status(401).send('Não foi possível editar o curso (necessário pelo menos 2 professores)');
+
+
+        (async () => {
+          // receive the teacher related to the inserted id
+          for(let i = req.body.teacher.length-1; i > -1 ; i--){
+            teacher = await teacherModel.getTeacher(req.body.teacher[i]);
+            if(teacher == null){
+              req.body.teacher.splice(i, 1);
+            }else{ // if teacher exists
+              req.body.teacher[i] = teacher[0];
+            }
           }
+          // send to model
+          let validate  = new Course(course);
+          validate.validate(error =>{
+            console.log(error);
+           if(!error){
+             courseModel.put(query, course)
+                 .then(result => {
+                   if(result.value)
+                   {
+                     // update course in student
+                     res.status(200).send('Curso editado com sucesso!');
+                     studentModel.updateCourse(parseInt(req.params.id), result.value);
+                   }
+                   else{
+                     res.status(401).send('Não é possível editar curso inexistente');
+                   }
+                 })
+                 .catch(err => {
+                   console.error('Erro ao conectar a collection course:', err);
+                   res.status(500);
+                 });
 
-        }else{
-          res.status(401).send('Não foi possível editar o curso (necessário pelo menos 2 professores)');
-        }
+           }
+           else{
+             res.status(401).send('Não é possível editar curso inexistente');
+           }
+          });
 
-      })
-      .catch(err => {
-          console.error('Erro ao conectar a collection course:', err);
-          res.status(500);
-      });
-    })();
-  }else{
-    res.status(401).send('Não foi possível editar o curso');
-  }
+        })();
+
 };
 
 exports.deleteCourse = (req, res) => {

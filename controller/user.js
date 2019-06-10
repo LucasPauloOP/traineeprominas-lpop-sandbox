@@ -56,7 +56,7 @@ exports.getFilteredUser = (req,res) => {
 exports.postUser = (req, res) => {
     // check required attributes
     let users= new User({
-        id: id++,
+        id: ++id,
         name:req.body.name,
         lastName:req.body.lastName,
         profile:req.body.profile,

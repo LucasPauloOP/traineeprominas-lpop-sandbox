@@ -2,6 +2,7 @@ const teacherModel = require('../model/teacher');
 const courseModel = require('../model/course');
 const studentModel = require('../model/student');
 
+//schema
 const mongoose = require('mongoose');
 const teacherSchema = require('../moongose_schema').schemaTeacher;
 const Teacher = mongoose.model('Teacher', teacherSchema);

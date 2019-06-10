@@ -1,6 +1,21 @@
 const studentModel = require('../model/student');
 const courseModel = require('../model/course');
 
+//moongose
+const mongoose = require('mongoose');
+const studentSchema = require('../moongose_schema').schemaStudent;
+const Student = mongoose.model('Student', studentSchema);
+
+//id
+const database = require('../database');
+const collection = database.getCollection('student');
+
+var id;
+
+(async () => {
+    id = await collection.countDocuments({});
+})();
+
 exports.getAllStudents = (req, res) => {
     //  define query and projection for search
     let query = {status:1};
@@ -42,12 +57,58 @@ exports.getFilteredStudent = (req,res) => {
 };
 
 exports.postStudent = (req, res) => {
-    // check required attributes
-    if (req.body.name && req.body.lastName && req.body.age && req.body.course){
 
-        // creates student array to be inserted
-        var student = {
-            id:0,
+        (async () => {
+            // receive the course related to the inserted id
+            for(let i = 0; i < req.body.course.length; i++){
+                let course = await courseModel.getCourse(req.body.course[i]);
+                if(course.length > 0){ // if course exists
+                    req.body.course[i] = course[0];
+                  }else{
+                    req.body.course.splice(i, 1);
+                  }
+            }
+              // creates student array to be inserted
+              let student = new Student ({
+                  id:parseInt(++id),
+                  name:req.body.name,
+                  lastName:req.body.lastName,
+                  age:req.body.age,
+                  course:req.body.course,
+                  status:1
+              });
+              student.validate(error=>{
+                  console.log(error);
+                  // send to model
+                  if(!error){
+                      studentModel.post(student)
+                          .then(result => {
+
+                                  res.status(201).send('Estudante cadastrado com sucesso!');
+                          })
+                          .catch(err => {
+                              console.error("Erro ao conectar a collection student: ", err);
+                              res.status(500);
+                          });
+                  }
+                  else{
+                      res.status(401).send('Não foi possivel cadastrar estudante, campos obrigatórios não preenchidos');
+                  }
+
+              });
+
+    })();
+
+};
+
+exports.putStudent = (req, res) => {
+    //  define query for search    
+    let query = {'id': parseInt(req.params.id), 'status': 1};
+
+
+        // creates student array to update
+        let student = {
+            id:parseInt(req.params.id),
             name:req.body.name,
             lastName:req.body.lastName,
             age:req.body.age,
@@ -55,95 +116,44 @@ exports.postStudent = (req, res) => {
             status:1
         };
 
-        (async () => {
-            // receive the course related to the inserted id
-            for(let i = 0; i < student.course.length; i++){
-                let course = await courseModel.getCourse(student.course[i]);
-                if(course.length > 0){ // if course exists
-                    student.course[i] = course[0]; 
-                  }else{
-                    student.course.splice(i, 1);
-                  }
-            } 
-          if(student.course.length > 0){ // verifies if the student is registered in a valid course
-            
-            // send to model
-            studentModel.post(student)
-            .then(result => {
-                if(result != false){
-                    res.status(201).send('Estudante cadastrado com sucesso!');
-                }else{
-                    res.status(401).send('Não foi possível cadastrar o estudante (idade ou curso inválido(s))');
-                }
-            })
-            .catch(err => {
-                console.error("Erro ao conectar a collection student: ", err);
-                res.status(500);
-            });
-        }
-          else{
-              res.status(401).send('Não foi possivel cadastrar estudante, curso invalido');
-          }
-    })();
-    }else{
-        res.status(401).send('Não foi possível cadastrar o estudante');
-    }
-};
-
-exports.putStudent = (req, res) => {
-    //  define query for search    
-    let query = {'id': parseInt(req.params.id), 'status': 1};
-
-    // check required attributes
-    if (req.body.name && req.body.lastName && req.body.age && req.body.course){
-
-        // creates student array to update
-        var student = {
-            course:req.body.course
-        };
-
         //  define set for update    
-        let set = {name: req.body.name, lastName: req.body.lastName, age: req.body.age, course: student.course};
+        // let set = {name: req.body.name, lastName: req.body.lastName, age: req.body.age, course: student.course};
 
         (async () => {
           // receive the course related to the inserted id  
-          for(let i = 0; i < student.course.length; i++){
-            let course = await courseModel.getCourse(student.course[i]);
+          for(let i = 0; i < req.body.course.length; i++){
+            let course = await courseModel.getCourse(req.body.course[i]);
             
-            if(course.length > 0){ // if course exists
-                student.course[i] = course[0]; 
+            if(req.body.length > 0){ // if course exists
+                req.body.course[i] = course[0];
               }else{
-                student.course.splice(i, 1);
+                req.body.course.splice(i, 1);
               }
           }
-          if(student.course.length > 0){// verifies if the student is registered in a valid course
             
             // send to model
-            studentModel.put(query, set)
-            .then(result => {
-                if(result.value){
-                    if(result != false){
-                        res.status(200).send('Estudante editado com sucesso!');
-                    }else{
-                        res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
-                    }
+            let validate = new Student(student);
+            validate.validate(error=>{
+                console.log(error);
+                if(!error)
+                {
+                    studentModel.put(query,student)
+                        .then(result => {
+                            if(result.value){
+                                    res.status(200).send('Estudante editado com sucesso!');
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Erro ao conectar a collection student: ", err);
+                            res.status(500);
+                        });
                 }
                 else{
                     res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
                 }
-            })
-            .catch(err => {
-                console.error("Erro ao conectar a collection student: ", err);
-                res.status(500);
             });
-        }else{
-            res.status(401).send('Não foi possível editar o estudante');
-        }
+
         })();
-      }else{
-      res.status(401).send('Não foi possível editar o estudante');
-  
-      }
 };
 
 exports.deleteStudent = (req, res) => {
