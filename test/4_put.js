@@ -108,7 +108,7 @@ describe('Put with teacher invalid',function () {
 //--------------------------STUDENT--------------------------------------------------------------
 describe('Put with id valid',function () {
     it('Put with existing ID and correct data in student',()=>{
-        return request(app).put('/api/v1/student/1').send({name:'teste1',lastName:'teste1',age:'20',course:[2]})
+        return request(app).put('/api/v1/student/1').send({name:'teste1',lastName:'teste1',age:'20',course:[1]})
             .then(function (res) {
                 assert.equal(res.status,200);
             })
@@ -118,7 +118,7 @@ describe('Put with id valid',function () {
 
 describe('Put with id invalid',function () {
     it('Put with non existent id and correct data in student',()=>{
-        return request(app).put('/api/v1/student/30').send({name:'teste1',lastName:'teste1',age:'20',course:[2]})
+        return request(app).put('/api/v1/student/30').send({name:'teste1',lastName:'teste1',age:'20',course:[1]})
             .then(function (res) {
                 assert.equal(res.status,401);
             })

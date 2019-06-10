@@ -117,15 +117,8 @@ describe('Get invalid id of student register',function () {
     })
 });
 
-describe('Delete with id valid',function () {
-    it('Delete with existing ID in teacher',()=>{
-        return request(app).delete('/api/v1/teacher/1')
-            .then(function (res) {
-                assert.equal(res.status,200);
-            })
-    })
 
-});
+
 
 
 

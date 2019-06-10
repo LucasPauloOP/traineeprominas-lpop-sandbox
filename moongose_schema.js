@@ -1,128 +1,147 @@
 var mongoose = require('mongoose');
-const schema = mongoose.schema;
+const Schema = mongoose.Schema;
 
 
-var users = new mongoose.schema ({
+var schemaUser = new Schema ({
 
-        id:{
-            type:Number,
-            require:true,
-            unique:1
-        },
-
-       name: {
-           type: String,
-           require: true
-       },
-
-        lastName:{
-           type:String,
-            require:true
-        },
-
-        profile:{
-           type:String,
-            Enum:['admin','guess'],
-            require:true
-        },
-
-        status:{
-            type:Number,
-            require:true,
-            enum:[0,1],
-            unique:1
-        }
-});
-
-
-
-var teacher = new schema({
-
-        id:{
-            type:Number,
-            require:true,
-            unique:1
-        },
-
-        name:{
-            type: String,
-            require:true
-        },
-
-        lastName:{
-            Type:String,
-            require:true
-        },
-
-        phd:{
-            type:Boolean,
-            require:true,
-            validate:{
-            validator:function (value) {
-                return value == true ? true : false;
-                }
-            },
-            message:props => "O campo phd deve ter o valor true"
-        },
-
-        status:{
-            type:Number,
-            require:true,
-            enum:[0,1],
-            unique:1
-        }
-
-    });
-
-
-
-var course  =  new schema({
-
-      name:{
-          type: String,
-          require:true
-      },
-
-      period:{
-          type:String,
-
-      },
-
-      city:{
-          type:String,
-          require:true
-      },
-
-      teacher:{
-          type:Array,
-          require:true
-      }
-
-});
-
-
-
-  var student =new schema({
-
-      name:{
-          type:String,
-          require:true
-      },
-
-      lastName:{
-          type:String,
-          require:true
-      },
-
-      age:{
+    id:{
         type:Number,
-          min:18
-      },
+        required:true,
+        unique:true
+    },
 
-      course:{
-          type:Array,
-          require:true,
-      }
-  });
+    name: {
+        type: String,
+        required: true
+    },
 
-  module.exports({user,course,teacher,student});
+    lastName:{
+        type: String,
+        required:true
+    },
+
+    profile:{
+        type:String,
+        Enum:['admin','guess'],
+        required:true
+    },
+
+    status:{
+        type:Number,
+        required:true,
+        enum:[0,1],
+        unique:1
+    }
+});
+
+
+
+var schemaTeacher = new Schema({
+
+    id:{
+        type:Number,
+        required:true,
+        unique:true
+    },
+
+    name:{
+        type: String,
+        required:true
+    },
+
+    lastName:{
+        Type:String,
+
+    },
+
+    phd:{
+        type:Boolean,
+        required:true,
+        validate:[val =>{return val == true},
+            'PHD de professor deve ser verdadeiro para ser cadastrado'
+        ]},
+
+    status:{
+        type:Number,
+        required:true,
+        enum:[0,1],
+        unique:true
+    }
+
+});
+
+
+
+var schemaCourse  =  new Schema({
+    id:{
+        type:Number,
+        required:true,
+        unique:true
+    },
+    name:{
+        type: String,
+        required:true
+    },
+
+    period:{
+        type:Number,
+        required:true
+
+    },
+
+    city:{
+        type:String,
+        required:true
+    },
+
+    teacher: {
+        type:[schemaTeacher],validate:[val =>{return val.length>=2}
+            ,'Para cadastrar um curso é necessário no mínimo 2 professores.'],
+        required: true
+    },
+    status:{
+        type:Number,
+        required:true
+    }
+
+});
+
+
+
+var schemaStudent =new Schema({
+    id:{
+        type:Number,
+        required:true,
+        unique:true
+    },
+    name:{
+        type:String,
+        required:true
+    },
+
+    lastName:{
+        type:String,
+        required:true
+    },
+
+    age:{
+        type:Number,
+        min:18,
+        required:true
+    },
+
+    course:{
+        type:[schemaCourse],
+        validate:[val=>{return val.length>=1},
+            'Para cadastrr um estudante é necessário que ele tenha 1 curso'],
+        required:true,
+    },
+    status:{
+        type:Number,
+        required:true,
+        enum:[0,1]
+    }
+});
+
+module.exports={schemaUser,schemaTeacher,schemaCourse,schemaStudent};
+

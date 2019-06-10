@@ -119,12 +119,18 @@ exports.putCourse = (req, res) => {
       courseModel.put(query, set)
       .then(result => {
         // update course in student
-        if(result != false){
-          res.status(200).send('Curso editado com sucesso!');
-          studentModel.updateCourse(parseInt(req.params.id), result.value);
+        if(result.value){
+          if(result != false){
+            res.status(200).send('Curso editado com sucesso!');
+            studentModel.updateCourse(parseInt(req.params.id), result.value);
+          }else{
+            res.status(401).send('Não foi possível editar o curso (necessário pelo menos 2 professores)');
+          }
+
         }else{
           res.status(401).send('Não foi possível editar o curso (necessário pelo menos 2 professores)');
         }
+
       })
       .catch(err => {
           console.error('Erro ao conectar a collection course:', err);

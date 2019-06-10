@@ -86,6 +86,15 @@ describe('Register teacher ,phd as true',function () {
     });
 });
 
+describe('Register teacher ,phd as true',function () {
+    it('Register teacher phd as true',()=>{
+        return request(app).post('/api/v1/teacher')
+            .send({name:'teste2',lastName:'teste2',phd:true}).then(function (res) {
+                assert.equal(res.status, 201);
+            });
+    });
+});
+
 describe('Register teacher ,phd as false',function () {
     it('Register teacher phd as false',()=>{
         return request(app).post('/api/v1/teacher')
@@ -106,15 +115,6 @@ describe('Register teacher ,phd as null',function () {
 
 
 //-----------------------------------COURSE-------------------------------------------
-
-describe('register course as 2 teacher',function () {
-    it('register course as 2 teacher',()=>{
-        return request(app).post('/api/v1/course').send({name:'teste1',city:'teste1',period:'5',teacher:[1,2]})
-            .then(function (res) {
-                assert.equal(res.status, 201);
-            });
-    });
-});
 
 describe('register course as 2 teacher',function () {
     it('register course as 2 teacher',()=>{
@@ -148,7 +148,7 @@ describe('register course as undefined teacher',function () {
 //-----------------------------STUDENT-----------------------------------
 describe('register student as 18 years or more',function () {
     it('register student as 20 years',()=>{
-        return request(app).post('/api/v1/student').send({name:'teste1',lastName:'teste1',age:'20',course:[2]})
+        return request(app).post('/api/v1/student').send({name:'teste1',lastName:'teste1',age:'20',course:[1]})
             .then(function (res) {
                 assert.equal(res.status,201);
             });

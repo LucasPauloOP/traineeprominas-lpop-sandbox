@@ -1,5 +1,8 @@
 const userModel = require('../model/user');
-const moongoseSchema=require('../moongose_schema');
+//const moongoseSchema=require('../moongose_schema');
+const mongoose = require('mongoose');
+const userSchema = require('../moongose_schema').schemaUser;
+const User = mongoose.model('User', userSchema);
 
 exports.getAllUsers = (req, res) => {
     //  define query and projection for search
@@ -43,33 +46,32 @@ exports.getFilteredUser = (req,res) => {
 
 exports.postUser = (req, res) => {
     // check required attributes
-    if(req.body.name && req.body.lastName && req.body.profile){
-        
-        // creates user array to be inserted
-         newUser= {
-            id:0,
-            name:req.body.name,
-            lastName:req.body.lastName,
-            profile:req.body.profile,
-            status:1
-        };
+    let users= new User({
+        name:req.body.name,
+        lastName:req.body.lastName,
+        profile:req.body.profile,
+        status:1
+    });
+    if(req.body.name && req.body.lastName) {
 
-            // send to model
-            userModel.post(user)
-            .then(result => {
-                if(result != false){
-                    res.status(201).send('Usuário cadastrado com sucesso!');
-                }else{
-                    res.status(401).send('Não foi possível cadastrar o usuário (profile inválido)');
-                }
-            })
-            .catch(err => {
-                console.error("Erro ao conectar a collection user: ", err);
-                res.status(500);
-            });
-        }else{
-            res.status(401).send('Não foi possível cadastrar o usuário (profile inválido)');
-        }
+
+        userModel.post(users).then(result => {
+            if (result != false) {
+                res.status(201).send('Professor cadastrado com sucesso!');
+            } else {
+
+                res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
+            }
+        }).catch(err => {
+            console.error("Erro ao conectar a collection teacher: ", err);
+            res.status(500);
+        });
+    }
+        else
+    {
+        res.status(401).send('Não foi possível cadastrar o professor');
+    }
+
 };
 
 exports.putUser = (req, res) => {

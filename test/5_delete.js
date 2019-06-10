@@ -9,7 +9,7 @@ const app = require('../app');
 
 describe('Delete with id valid',function () {
     it('Delete with existing ID in user',()=>{
-        return request(app).delete('/api/v1/user/2')
+        return request(app).delete('/api/v1/user/1')
             .then(function (res) {
                 assert.equal(res.status,200);
             })
@@ -28,10 +28,12 @@ describe('Delete with id invalid',function () {
 });
 
 describe('Delete with id deleted',function () {
+
+
     it('Delete with id deleted in user',()=>{
         return request(app).delete('/api/v1/user/2')
             .then(function (res) {
-                assert.equal(res.status,204);
+                assert.equal(res.status,200);
             })
     })
 
@@ -53,7 +55,7 @@ describe('Delete with id deleted',function () {
     it('Delete with id deleted in teacher',()=>{
         return request(app).delete('/api/v1/teacher/1')
             .then(function (res) {
-                assert.equal(res.status,204);
+                assert.equal(res.status,200);
             })
     })
 
@@ -70,7 +72,7 @@ describe('DELETE /api/v1/student', function() {
 
     it('it should NOT DELETE student 2 (not exists)', () => {
         return request(app)
-            .delete('/api/v1/student/2')
+            .delete('/api/v1/student/30')
             .then(function(res) {
                 assert.equal(res.status, 204);
             });
