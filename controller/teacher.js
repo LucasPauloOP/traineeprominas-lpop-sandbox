@@ -59,7 +59,7 @@ exports.getFilteredTeacher = (req,res) => {
 exports.postTeacher = (req, res) => {
     // check required attributes
     let teacher = new Teacher({
-        id:parseInt(id++),
+        id:parseInt(++id),
         name:req.body.name,
         lastName:req.body.lastName,
         phd:req.body.phd,
@@ -95,18 +95,19 @@ exports.putTeacher = (req, res) => {
 
     //  define query and set for search and update
     let query = {'id': parseInt(req.params.id), 'status': 1};
-    let teacher = ({
+    let teacher = {
         id: parseInt(req.params.id),
         name: req.body.name,
         lastName: req.body.lastName,
-        phd: req.body.profile,
+        phd: req.body.phd,
         status: 1
-    });
+    };
 
     let validate = new Teacher(teacher);
 
-    validate.validate(err => {
-        if (!err) {
+    validate.validate(error => {
+        console.log(error);
+        if (!error) {
             // send to model
             teacherModel.put(query, teacher)
                 .then(async (result) => {

@@ -20,13 +20,7 @@ exports.post = (teacher) => {
 };
 
 exports.put = (query, set) => {
-  if(set.phd == true){
     return collection.findOneAndUpdate(query, {$set: set}, {returnOriginal:false});
-  }else{
-    return new Promise((resolve, reject) => {
-      resolve(false);
-    });
-  }
 };
 
 exports.delete = (query, set) => {
