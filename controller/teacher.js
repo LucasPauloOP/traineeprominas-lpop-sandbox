@@ -20,7 +20,7 @@ var id;
 //joi schema of validation
 const Joi = require('joi');
 
-const joiSchemaUser = Joi.object().keys({
+const joiSchemaTeacher = Joi.object().keys({
     name: Joi.string().required(),
     lastName: Joi.string().required(),
     phd:Joi.boolean().required()
@@ -68,35 +68,40 @@ exports.getFilteredTeacher = (req,res) => {
 
 exports.postTeacher = (req, res) => {
     // check required attributes
-    let teacher = new Teacher({
-        id:parseInt(++id),
-        name:req.body.name,
-        lastName:req.body.lastName,
-        phd:req.body.phd,
-        status:1
+    joiSchemaTeacher.validate(req.body,{abortEarly:false})
+        .then(result=>{
+
+            let teacher = new Teacher({
+                id:parseInt(++id),
+                name:req.body.name,
+                lastName:req.body.lastName,
+                phd:req.body.phd,
+                status:1
+            });
+
+            teacher.validate(error=>{
+                if(!error){
+                    // creates teacher array to be inserted
+
+                    // send to model
+
+                    teacherModel.post(teacher)
+                        .then(result => {
+                            res.status(201).send('Professor cadastrado com sucesso!');
+                        })
+                        .catch(err => {
+                            console.error("Erro ao conectar a collection teacher: ", err);
+                            res.status(500);
+                        });
+                }
+                else{
+                    res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
+                }
+            });
+
+        }).catch(err=>{
+            res.status(401).send('Campos obrigatorios não preenchidos.');
     });
-
-    teacher.validate(error=>{
-        if(!error){
-            // creates teacher array to be inserted
-
-            // send to model
-
-            teacherModel.post(teacher)
-                .then(result => {
-                        res.status(201).send('Professor cadastrado com sucesso!');
-                })
-                .catch(err => {
-                    console.error("Erro ao conectar a collection teacher: ", err);
-                    res.status(500);
-                });
-        }
-        else{
-            res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
-        }
-    });
-
-
 };
 
 exports.putTeacher = (req, res) => {

@@ -72,7 +72,7 @@ exports.getFilteredUser = (req,res) => {
 exports.postUser = (req, res) => {
     // check required attributes
     joiSchemaUser.validate(req.body,{abortEarly:false})
-        .then(validatedJoiUser=>{
+        .then(result=>{
             let users= new User({
                 id:parseInt(++id),
                 name:req.body.name,
