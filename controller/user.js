@@ -89,6 +89,7 @@ exports.postUser = (req, res) => {
                         res.status(500);
                     });
                 }else{
+                    users.id=parseInt(--id);
                     res.status(401).send('Não foi possível cadastrar o usuário');
 
                 }

@@ -17,6 +17,15 @@ var id;
   id = await collection.countDocuments({});
 })();
 
+//joi schema of validation
+const Joi = require('joi');
+
+const joiSchemaTeacher = Joi.object().keys({
+  name: Joi.string().required(),
+  lastName: Joi.string().required(),
+  phd:Joi.boolean().required()
+});
+
 exports.getAllCourses = (req, res) => {
   //  define query and projection for search
   let query = {status:1};
@@ -96,6 +105,7 @@ exports.postCourse = (req, res) => {
               });
         }
         else{
+          course.id=parseInt(--id);
           res.status(401).send('Não foi possível cadastrar o curso');
         }
       })

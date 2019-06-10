@@ -95,11 +95,13 @@ exports.postTeacher = (req, res) => {
                         });
                 }
                 else{
+                    teacher.id=parseInt(--id);
                     res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
                 }
             });
 
         }).catch(err=>{
+            // console.log(err);
             res.status(401).send('Campos obrigatorios não preenchidos.');
     });
 };
@@ -109,50 +111,59 @@ exports.putTeacher = (req, res) => {
 
     //  define query and set for search and update
     let query = {'id': parseInt(req.params.id), 'status': 1};
-    let teacher = {
-        id: parseInt(req.params.id),
-        name: req.body.name,
-        lastName: req.body.lastName,
-        phd: req.body.phd,
-        status: 1
-    };
 
-    let validate = new Teacher(teacher);
+    joiSchemaTeacher.validate(req.body,{abortEarly:false})
+        .then(result=>{
+            // console.log(result);
+            let teacher = {
+                id: parseInt(req.params.id),
+                name: req.body.name,
+                lastName: req.body.lastName,
+                phd: req.body.phd,
+                status: 1
+            };
 
-    validate.validate(error => {
-        if (!error) {
-            // send to model
-            teacherModel.put(query, teacher)
-                .then(async (result) => {
-                    if (result.value) { // if professor exists
-                            res.status(200).send('Professor editado com sucesso!');
+            let validate = new Teacher(teacher);
 
-                            //  updates the course that contains this teacher
-                            await courseModel.updateTeacher(parseInt(req.params.id), result.value);
+            validate.validate(error => {
+                if (!error) {
+                    // send to model
+                    teacherModel.put(query, teacher)
+                        .then(async (result) => {
+                            if (result.value) { // if professor exists
+                                res.status(200).send('Professor editado com sucesso!');
 
-                            // receives the updated teacher and updates the student that contains this teacher
-                            courseModel.getCoursebyTeacher().then(courses => {
-                                for (var i = 0; i < courses.length; i++) {
-                                    studentModel.updateTeacher(courses[i]);
-                                }
+                                //  updates the course that contains this teacher
+                                await courseModel.updateTeacher(parseInt(req.params.id), result.value);
 
-                            });
+                                // receives the updated teacher and updates the student that contains this teacher
+                                courseModel.getCoursebyTeacher().then(courses => {
+                                    for (var i = 0; i < courses.length; i++) {
+                                        studentModel.updateTeacher(courses[i]);
+                                    }
 
-                        } else {
-                            res.status(401).send('Não é possível editar professor inexistente');
-                        }
+                                });
 
-                }).catch(err => {
-                console.error("Erro ao conectar a collection teacher: ", err);
-                res.status(500);
-            })
-        }
+                            } else {
+                                res.status(401).send('Não é possível editar professor inexistente');
+                            }
 
-        else {
-                res.status(401).send('Não foi possível editar o professor');
-            }
+                        }).catch(err => {
+                        console.error("Erro ao conectar a collection teacher: ", err);
+                        res.status(500);
+                    })
+                }
+
+                else {
+                    res.status(401).send('Não foi possível editar o professor');
+                }
 
 
+            });
+
+        }).catch(err=>{
+            // console.log(err);
+        res.status(401).send('Campos obrigatórios não preenchidos.');
     });
 };
 

@@ -92,6 +92,7 @@ exports.postStudent = (req, res) => {
                           });
                   }
                   else{
+                      student.id=parseInt(--id);
                       res.status(401).send('Não foi possivel cadastrar estudante, campos obrigatórios não preenchidos');
                   }
 
