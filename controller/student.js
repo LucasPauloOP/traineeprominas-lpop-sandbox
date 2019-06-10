@@ -123,56 +123,62 @@ exports.putStudent = (req, res) => {
     //  define query for search    
     let query = {'id': parseInt(req.params.id), 'status': 1};
 
+        joiSchemaStudent.validate(req.body,{abortEarly:false})
+            .then(result=>{
 
-        // creates student array to update
-        let student = {
-            id:parseInt(req.params.id),
-            name:req.body.name,
-            lastName:req.body.lastName,
-            age:req.body.age,
-            course:req.body.course,
-            status:1
-        };
-        (async () => {
-          // receive the course related to the inserted id  
-          for(let i = 0; i < req.body.course.length; i++){
-            let course = await courseModel.getCourse(req.body.course[i]);
-            
-            if(course.length > 0){ // if course exists
-                req.body.course[i] = course[0];
-              }else{
-                req.body.course.splice(i, 1);
-              }
+                // creates student array to update
+                let student = {
+                    id:parseInt(req.params.id),
+                    name:req.body.name,
+                    lastName:req.body.lastName,
+                    age:req.body.age,
+                    course:req.body.course,
+                    status:1
+                };
+                (async () => {
+                    // receive the course related to the inserted id
+                    for(let i = 0; i < req.body.course.length; i++){
+                        let course = await courseModel.getCourse(req.body.course[i]);
 
-          }
-            
-            // send to model
-            let validate = new Student(student);
-            validate.validate(error=>{
-                if(!error)
-                {
-                    studentModel.put(query,student)
-                        .then(result => {
-                            if(result.value)
-                            {
-                                res.status(200).send('Estudante editado com sucesso!');
-                            }
-                             else{
-                                res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
-                            }
+                        if(course.length > 0){ // if course exists
+                            req.body.course[i] = course[0];
+                        }else{
+                            req.body.course.splice(i, 1);
+                        }
 
-                        })
-                        .catch(err => {
-                            console.error("Erro ao conectar a collection student: ", err);
-                            res.status(500);
-                        });
-                }
-                else{
-                    res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
-                }
-            });
+                    }
 
-        })();
+                    // send to model
+                    let validate = new Student(student);
+                    validate.validate(error=>{
+                        if(!error)
+                        {
+                            studentModel.put(query,student)
+                                .then(result => {
+                                    if(result.value)
+                                    {
+                                        res.status(200).send('Estudante editado com sucesso!');
+                                    }
+                                    else{
+                                        res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
+                                    }
+
+                                })
+                                .catch(err => {
+                                    console.error("Erro ao conectar a collection student: ", err);
+                                    res.status(500);
+                                });
+                        }
+                        else{
+                            res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
+                        }
+                    });
+
+                })();
+
+            }).catch(err=>{
+              res.status(401).send('Campos obrigatórios não preenchidos.');
+        });
 };
 
 exports.deleteStudent = (req, res) => {
