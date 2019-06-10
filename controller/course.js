@@ -124,18 +124,17 @@ exports.putCourse = (req, res) => {
   // define query for search
   let query = {'id': parseInt(req.params.id),'status': 1};
 
-  // check required attributes
-
-
-      // creates course array to update
-    let course = {
-      id: parseInt(req.params.id),
-      name:req.body.name,
-      period:req.body.period || 8,
-      city:req.body.city,
-      teacher:req.body.teacher,
-      status:1
-    };
+  joiSchemaCourse.validate(req.body,{abortEarly:false})
+      .then(result=>{
+        // creates course array to update
+        let course = {
+          id: parseInt(req.params.id),
+          name:req.body.name,
+          period:req.body.period || 8,
+          city:req.body.city,
+          teacher:req.body.teacher,
+          status:1
+        };
 
 
 
@@ -152,31 +151,35 @@ exports.putCourse = (req, res) => {
           // send to model
           let validate  = new Course(course);
           validate.validate(error =>{
-           if(!error){
-             courseModel.put(query, course)
-                 .then(result => {
-                   if(result.value)
-                   {
-                     // update course in student
-                     res.status(200).send('Curso editado com sucesso!');
-                     studentModel.updateCourse(parseInt(req.params.id), result.value);
-                   }
-                   else{
-                     res.status(401).send('Não é possível editar curso inexistente');
-                   }
-                 })
-                 .catch(err => {
-                   console.error('Erro ao conectar a collection course:', err);
-                   res.status(500);
-                 });
+            if(!error){
+              courseModel.put(query, course)
+                  .then(result => {
+                    if(result.value)
+                    {
+                      // update course in student
+                      res.status(200).send('Curso editado com sucesso!');
+                      studentModel.updateCourse(parseInt(req.params.id), result.value);
+                    }
+                    else{
+                      res.status(401).send('Não é possível editar curso inexistente');
+                    }
+                  })
+                  .catch(err => {
+                    console.error('Erro ao conectar a collection course:', err);
+                    res.status(500);
+                  });
 
-           }
-           else{
-             res.status(401).send('Não é possível editar curso inexistente');
-           }
+            }
+            else{
+              res.status(401).send('Não é possível editar curso inexistente');
+            }
           });
 
         })();
+
+      }).catch(err=>{
+        res.status(401).send('Campos obrigatórios não preenchidos.');
+  });
 
 };
 
