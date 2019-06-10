@@ -2,6 +2,10 @@ const teacherModel = require('../model/teacher');
 const courseModel = require('../model/course');
 const studentModel = require('../model/student');
 
+const mongoose = require('mongoose');
+const teacherSchema = require('../moongose_schema').schemaTeacher;
+const Teacher = mongoose.model('Teacher', teacherSchema);
+
 exports.getAllTeachers = (req, res) => {
     //  define query and projection for search
     let query = {'status':1};
@@ -43,17 +47,14 @@ exports.getFilteredTeacher = (req,res) => {
 };
 
 exports.postTeacher = (req, res) => {
-    // check required attributes    
-    if(req.body.name && req.body.lastName){
-
-        // creates teacher array to be inserted        
-        let teacher = {
-            id:0,
-            name:req.body.name,
-            lastName:req.body.lastName,
-            phd:req.body.phd,
-            status:1
-        };
+    // check required attributes
+    let teacher= new Teacher({
+        name:req.body.name,
+        lastName:req.body.lastName,
+        profile:req.body.profile,
+        status:1
+    });
+        // creates teacher array to be inserted
         
         // send to model
         teacherModel.post(teacher)
@@ -68,50 +69,60 @@ exports.postTeacher = (req, res) => {
             console.error("Erro ao conectar a collection teacher: ", err);
             res.status(500);
         });
-    }else{
-        res.status(401).send('Não foi possível cadastrar o professor');
-    }
 };
 
 exports.putTeacher = (req, res) => {
     // check required attributes
-    if(req.body.name && req.body.lastName){
 
-        //  define query and set for search and update    
-        let query = {'id': parseInt(req.params.id), 'status': 1};
-        let set = {id:parseInt(req.params.id), name:req.body.name, lastName:req.body.lastName, phd:req.body.phd, status:1};
+    //  define query and set for search and update
+    let query = {'id': parseInt(req.params.id), 'status': 1};
+    let teacher = ({
+        id: parseInt(req.params.id),
+        name: req.body.name,
+        lastName: req.body.lastName,
+        phd: req.body.profile,
+        status: 1
+    });
 
-        // send to model
-        teacherModel.put(query, set)
-        .then(async (result) => {
-            // console.log('>>>>>>>.', result);
-            if(result.value){ // if professor exists
-                if(result != false){
-                    res.status(200).send('Professor editado com sucesso!');
+    let validate = new Teacher(teacher);
 
-                     //  updates the course that contains this teacher
-                await courseModel.updateTeacher(parseInt(req.params.id), result.value);
+    validate.validate(err => {
+        if (!err) {
+            // send to model
+            teacherModel.put(query, teacher)
+                .then(async (result) => {
+                    // console.log('>>>>>>>.', result);
+                    if (result.value) { // if professor exists
+                        if (result != false) {
+                            res.status(200).send('Professor editado com sucesso!');
 
-                // receives the updated teacher and updates the student that contains this teacher
-                courseModel.getCoursebyTeacher().then(courses => {
-                    for(var i = 0; i<courses.length; i++){
-                        studentModel.updateTeacher(courses[i]);
-                      }
-            });
-                }else{
-                    res.status(401).send('Não foi possível editar o professor (phd inválido)');
-                }
-            }else{
-                res.status(401).send('Não é possível editar professor inexistente');
+                            //  updates the course that contains this teacher
+                            await courseModel.updateTeacher(parseInt(req.params.id), result.value);
+
+                            // receives the updated teacher and updates the student that contains this teacher
+                            courseModel.getCoursebyTeacher().then(courses => {
+                                for (var i = 0; i < courses.length; i++) {
+                                    studentModel.updateTeacher(courses[i]);
+                                }
+
+                            });
+
+                        } else {
+                            res.status(401).send('Não é possível editar professor inexistente');
+                        }
+                    }
+                }).catch(err => {
+                console.error("Erro ao conectar a collection teacher: ", err);
+                res.status(500);
+            })
+        }
+
+        else {
+                res.status(401).send('Não foi possível editar o professor');
             }
-        })
-        .catch(err => {
-            console.error("Erro ao conectar a collection teacher: ", err);
-            res.status(500);
-        });
-    }else{
-        res.status(401).send('Não foi possível editar o professor');
-    }
+
+
+    });
 };
 
 exports.deleteTeacher = (req, res) => {

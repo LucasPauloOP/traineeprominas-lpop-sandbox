@@ -52,58 +52,55 @@ exports.postUser = (req, res) => {
         profile:req.body.profile,
         status:1
     });
-    if(req.body.name && req.body.lastName) {
-
 
         userModel.post(users).then(result => {
             if (result != false) {
-                res.status(201).send('Professor cadastrado com sucesso!');
+                res.status(201).send('Usuário cadastrado com sucesso!');
             } else {
 
-                res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
+                res.status(401).send('Não foi possível cadastrar o usuário');
             }
         }).catch(err => {
-            console.error("Erro ao conectar a collection teacher: ", err);
+            console.error("Erro ao conectar a collection user ->>>>>>>>>> ", err);
             res.status(500);
         });
-    }
-        else
-    {
-        res.status(401).send('Não foi possível cadastrar o professor');
-    }
 
 };
 
 exports.putUser = (req, res) => {
     // check required attributes
-    if(req.body.name && req.body.lastName && req.body.profile){
+    let query = {'id': parseInt(req.params.id), 'status': 1};
 
-        //  define query and set for search and update    
-        let query = {'id': parseInt(req.params.id), 'status': 1};
-        let set = {name: req.body.name, lastName: req.body.lastName, profile: req.body.profile};
-        
-            // send to model
-            userModel.put(query, set)
-            .then(result => {
-                if(result != false){
-                    if(result.value){ // if user exists
+    let user=({
+        id:parseInt(req.params.id),
+        name:req.body.name,
+        lastName:req.body.lastName,
+        profile:req.body.profile,
+        status:1
+
+    });
+
+     let validate = new User(user);
+
+        validate.validate(err=>{
+            if(!err){
+                userModel.put(query,user).then(result=>{
+                    //console.log('>>>>>>',user);
+                    if(result.value){
                         res.status(200).send('Usuário editado com sucesso!');
-                    }else{
-                        res.status(401).send('Não é possível editar usuário inexistente');
                     }
-                }else{
-                    res.status(401).send('Não é possível editar usuário (profile inválido)');                    
-                }
-            })
-            
-            .catch(err => {
-                console.error("Erro ao conectar a collection user: ", err);
-                res.status(500);
-            });
-        
-    }else{
-        res.status(401).send('Não foi possível editar o usuário');
-    }
+                    else{
+                        res.status(401).send('Não é possível editar usuário');
+                    }
+                }).catch(err=>{
+                  console.error('Erro ao conectar a collection user',err);
+                  res.status(500).send('Erro ao conectar a collection user');
+                })
+            }
+            else{
+                res.status(401).send('Não é possível editar usuário');
+            }
+        });
 };
 
 exports.deleteUser = (req, res) => {

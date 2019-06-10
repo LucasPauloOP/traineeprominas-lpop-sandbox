@@ -98,7 +98,7 @@ describe('Register teacher ,phd as true',function () {
 describe('Register teacher ,phd as false',function () {
     it('Register teacher phd as false',()=>{
         return request(app).post('/api/v1/teacher')
-            .send({name:'teste2',lastName:'teste2',phd:false}).then(function (res) {
+            .send({name:'teste3',lastName:'teste3',phd:false}).then(function (res) {
                 assert.equal(res.status, 401);
             });
     });
@@ -107,7 +107,7 @@ describe('Register teacher ,phd as false',function () {
 describe('Register teacher ,phd as null',function () {
     it('Register teacher phd as null',()=>{
         return request(app).post('/api/v1/teacher')
-            .send({name:'teste3',lastName:'teste3'}).then(function (res) {
+            .send({name:'teste4',lastName:'teste4'}).then(function (res) {
                 assert.equal(res.status, 401);
             });
     });
