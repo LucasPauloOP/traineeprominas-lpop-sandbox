@@ -138,7 +138,6 @@ exports.putCourse = (req, res) => {
           // send to model
           let validate  = new Course(course);
           validate.validate(error =>{
-            console.log(error);
            if(!error){
              courseModel.put(query, course)
                  .then(result => {

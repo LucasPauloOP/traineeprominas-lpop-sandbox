@@ -21,7 +21,6 @@ mongoClient.connect(mdbURL, { native_parser: true }, (err, database) => {
 
          userCollection.countDocuments().then((count) => {
            id = count;
-         console.log(count);
         });
     }
 });

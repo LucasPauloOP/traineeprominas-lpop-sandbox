@@ -16,24 +16,11 @@ exports.getFiltered = (query, projection) => {
 };
 
 exports.post = (student) => {
-  if (student.age >= 17 && student.course.length == 1){
-    student.id = ++id;    
     return collection.insertOne(student);
-  }else{
-    return new Promise((resolve, reject) => {
-      resolve(false);
-    });
-  }
 };
 
 exports.put = (query, set) => {
-  if (set.age >= 17 && set.course.length == 1){
-    return collection.findOneAndUpdate(query, {$set:set});
-  }else{
-    return new Promise((resolve, reject) => {
-      resolve(false);
-    });
-  }
+    return collection.findOneAndUpdate(query, {$set:set},{returnOriginal:false});
 };
 
 exports.delete = (query, set) => {

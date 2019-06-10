@@ -68,7 +68,6 @@ exports.postTeacher = (req, res) => {
     });
 
     teacher.validate(error=>{
-        // console.log('------>',error);
         if(!error){
             // creates teacher array to be inserted
 
@@ -114,7 +113,6 @@ exports.putTeacher = (req, res) => {
                 .then(async (result) => {
                     // console.log('>>>>>>>.', result);
                     if (result.value) { // if professor exists
-                        if (result != false) {
                             res.status(200).send('Professor editado com sucesso!');
 
                             //  updates the course that contains this teacher
@@ -131,7 +129,7 @@ exports.putTeacher = (req, res) => {
                         } else {
                             res.status(401).send('Não é possível editar professor inexistente');
                         }
-                    }
+
                 }).catch(err => {
                 console.error("Erro ao conectar a collection teacher: ", err);
                 res.status(500);

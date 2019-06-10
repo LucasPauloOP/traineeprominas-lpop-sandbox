@@ -38,7 +38,6 @@ async function aggregate (newCourse,res) {
 
         for (let aux = 0; aux < variavel; aux++) {
 
-            console.log('seta',newCourse);
             var teachers;
             teachers = await _getoneTeacher(newCourse.teacher[aux]);
 
@@ -46,11 +45,9 @@ async function aggregate (newCourse,res) {
             newCourse.teacher[aux] = teachers;
         }
     }
-    console.log('seta2',newCourse);
     collection.insertOne(newCourse, (err) => {
         if (err) {
             console.error("Erro ao criar um novo curso", err);
-            console.log("err",err);
             res.status(500).send("Erro ao criar um novo curso");
 
         } else {

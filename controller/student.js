@@ -77,6 +77,8 @@ exports.postStudent = (req, res) => {
                   course:req.body.course,
                   status:1
               });
+
+            console.log('---------->', student);
               student.validate(error=>{
                   console.log(error);
                   // send to model
@@ -115,33 +117,34 @@ exports.putStudent = (req, res) => {
             course:req.body.course,
             status:1
         };
-
-        //  define set for update    
-        // let set = {name: req.body.name, lastName: req.body.lastName, age: req.body.age, course: student.course};
-
         (async () => {
           // receive the course related to the inserted id  
           for(let i = 0; i < req.body.course.length; i++){
             let course = await courseModel.getCourse(req.body.course[i]);
             
-            if(req.body.length > 0){ // if course exists
+            if(course.length > 0){ // if course exists
                 req.body.course[i] = course[0];
               }else{
                 req.body.course.splice(i, 1);
               }
+
           }
             
             // send to model
             let validate = new Student(student);
             validate.validate(error=>{
-                console.log(error);
                 if(!error)
                 {
                     studentModel.put(query,student)
                         .then(result => {
-                            if(result.value){
-                                    res.status(200).send('Estudante editado com sucesso!');
+                            if(result.value)
+                            {
+                                res.status(200).send('Estudante editado com sucesso!');
                             }
+                             else{
+                                res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
+                            }
+
                         })
                         .catch(err => {
                             console.error("Erro ao conectar a collection student: ", err);

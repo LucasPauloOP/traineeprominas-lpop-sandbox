@@ -38,7 +38,6 @@ exports.updateMany=function(where,newCourse){
 
 //----------update course---------------
 exports.updateOne=  function (newCourse,where) {
-    console.log('where------>',where);
     return courseCollection.updateMany(where, {$set:{...newCourse }},{returnOriginal:false});
     
 };

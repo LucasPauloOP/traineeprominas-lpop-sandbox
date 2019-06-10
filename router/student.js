@@ -96,7 +96,6 @@ async function put_aggregate (id,newStudent,res) {
 app.get('/',function (req,res) {
     collection.find({'status': 1},{projection:{ _id: 0,status: 0}}).toArray((err, students) => {
         if (err) {
-            console.log(err);
             console.error("Ocorreu um erro ao conectar a collection student");
             res.status(500);
         }
@@ -111,7 +110,6 @@ app.get('/:id',function(req,res){
 
     collection.find({'id': id,'status': 1},{projection:{ _id: 0,status:0}}).toArray((err, students) => {
         if (err) {
-            console.log (err);
             console.error("Ocorreu um erro ao conectar a collection student");
             res.status(500);
         } else {
