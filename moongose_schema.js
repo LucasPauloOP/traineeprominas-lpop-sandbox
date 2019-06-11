@@ -1,7 +1,11 @@
+//constant to use moongose
 var mongoose = require('mongoose');
+
+// constant to facilitate the calling of the schema function
 const Schema = mongoose.Schema;
 
 
+//------------------schema user-----------------------------------
 schemaUser = new Schema ({
 
     id:{
@@ -35,7 +39,7 @@ schemaUser = new Schema ({
 });
 
 
-
+//---------------------------------schema teacher----------------------------
 schemaTeacher = new Schema({
 
     id:{
@@ -71,7 +75,7 @@ schemaTeacher = new Schema({
 });
 
 
-
+//-----------------------------------schema course----------------------------------------------
 schemaCourse  =  new Schema({
     id:{
         type:Number,
@@ -105,7 +109,7 @@ schemaCourse  =  new Schema({
 });
 
 
-
+//------------------------------------schema student-----------------------------------------
 schemaStudent =new Schema({
     id:{
         type:Number,
@@ -141,5 +145,6 @@ schemaStudent =new Schema({
     }
 });
 
+//module that exports the schemas
 module.exports={schemaUser,schemaTeacher,schemaCourse,schemaStudent};
 
