@@ -19,7 +19,7 @@ exports.getFiltered = (query, projection) => {
 
 //-----------------POST---------------------------------
 exports.post = (user) => {
-    //insert in the bd
+    //insert in the bd the data passed by parameter
         return collection.insertOne(user);
 };
 
