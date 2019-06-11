@@ -44,7 +44,7 @@ exports.getAllCourses = (req, res) => {
     if(courses.length == 0){
         res.status(204).send('Nenhum curso cadastrado');
     }else{
-      res.status(200).json(courses);
+      res.status(200).send(courses);
     }
   })
   .catch(err => {
@@ -65,7 +65,7 @@ exports.getFilteredCourse = (req,res) => {
     if(course.length == 0){
       res.status(204).send('O curso não foi encontrado');
     }else{
-      res.status(200).json(course);
+      res.status(200).send(course);
     }
   })
   .catch(err => {
@@ -93,6 +93,7 @@ exports.postCourse = (req, res) => {
           }
         }
         // creates course array to be inserted
+        console.log(req.body.teacher);
         let course = new Course ({
           id:parseInt(++id),
           name:req.body.name,
@@ -101,22 +102,34 @@ exports.postCourse = (req, res) => {
           teacher:req.body.teacher,
           status:1,
         });
-
+        console.log('>>>>>>',course.teacher);
         course.validate(error=>{
-          if(!error){
-            // send to model
-            courseModel.post(course)
-                .then(result => {
-                  res.status(201).send('Curso cadastrado com sucesso!');
-                })
-                .catch(err => {
-                  console.error('Erro ao conectar a collection course:', err);
-                  res.status(500);
-                });
+          if(course.teacher != [null])
+          {
+            if(!error){
+              // send to model
+              courseModel.post(course)
+                  .then(result => {
+                    res.status(201).send('Curso cadastrado com sucesso!');
+                  })
+                  .catch(err => {
+                    console.error('Erro ao conectar a collection course:', err);
+                    res.status(500);
+                  });
+            }
           }
           else{
             course.id=parseInt(--id);
-            res.status(401).send('Não foi possível cadastrar o curso');
+            try{
+              if(course.teacher < 2 ){
+                throw new BussinessError('cadastro não autorizado.');
+              }
+
+            }catch (Error) {
+              res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
+            }
+
+
           }
         })
       }

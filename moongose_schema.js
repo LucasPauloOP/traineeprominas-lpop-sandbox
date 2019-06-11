@@ -97,9 +97,9 @@ schemaCourse  =  new Schema({
     },
 
     teacher: {
-        type:[schemaTeacher],validate:[val =>{return val.length>=2}
-            ,'Para cadastrar um curso é necessário no mínimo 2 professores.'],
-        required: true
+        required: true,
+        type:[schemaTeacher],validate:[schemaTeacher =>{return schemaTeacher.length>=2}
+            ,'Para cadastrar um curso é necessário no mínimo 2 professores.']
     },
     status:{
         type:Number,
@@ -129,13 +129,13 @@ schemaStudent =new Schema({
     age:{
         type:Number,
         min:17,
-        required:true
+        required:true,
     },
 
     course:{
         type:[schemaCourse],
         validate:[val=>{return val.length == 1},
-            'Para cadastrr um estudante é necessário que ele tenha 1 curso'],
+            'Para cadastrar um estudante é necessário que ele tenha 1 curso'],
         required:true,
     },
     status:{

@@ -42,7 +42,7 @@ exports.getAllTeachers = (req, res) => {
     teacherModel.getAll(query, projection)
     .then(teachers => {
         if(teachers.length > 0){
-            res.status(200).json(teachers);
+            res.status(200).send(teachers);
         }else{
             res.status(204).send('Nenhum professor cadastrado');
         }
@@ -63,7 +63,7 @@ exports.getFilteredTeacher = (req,res) => {
     teacherModel.getFiltered(query, projection)
     .then(teacher => {
         if(teacher.length > 0){
-            res.status(200).json(teacher);
+            res.status(200).send(teacher);
         }else{
             res.status(204).send('O professor não foi encontrado');
         }
@@ -106,7 +106,15 @@ exports.postTeacher = (req, res) => {
                 }
                 else{
                     teacher.id=parseInt(--id);
-                    res.status(401).send('Não foi possível cadastrar o professor (phd inválido)');
+
+                    try{
+                        if(!teacher.phd ){
+                            throw new BussinessError('cadastro não autorizado');
+                        }
+
+                    }catch (Error) {
+                        res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd deverá ser verdadeiro.');
+                    }
                 }
             });
 

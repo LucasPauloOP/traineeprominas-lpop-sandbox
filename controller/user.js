@@ -31,7 +31,7 @@ const joiSchemaUser = Joi.object().keys({
 });
 
 
-//-----------------GET--ALL---------------------------
+//-----------------GET ALL---------------------------
 
 exports.getAllUsers = (req, res) => {
     //  define query and projection for search
@@ -42,7 +42,7 @@ exports.getAllUsers = (req, res) => {
     userModel.getAll(query, projection)
     .then(users => {
         if(users.length > 0){ 
-            res.json(users);
+            res.send(users);
         }else{
             res.status(204).send('Nenhum usuário cadastrado');
         }
@@ -64,7 +64,7 @@ exports.getFilteredUser = (req,res) => {
     userModel.getFiltered(query, projection)
     .then(user => {
         if(user.length > 0){
-            res.status(200).json(user);
+            res.status(200).send(user);
         }else{
             res.status(204).send('O usuário não foi encontrado');
         }
@@ -98,7 +98,14 @@ exports.postUser = (req, res) => {
                     });
                 }else{
                     users.id=parseInt(--id);
-                    res.status(401).send('Não foi possível cadastrar o usuário');
+                    try{
+                        if(user.profile != 'admin'||user.profile != "guess"){
+                            throw new BussinessError('cadastro não autorizado');
+                        }
+
+                    }catch (Error) {
+                        res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
+                    }
 
                 }
 

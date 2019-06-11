@@ -41,7 +41,7 @@ exports.getAllStudents = (req, res) => {
     studentModel.getAll(query, projection)
     .then(students => {
         if(students.length > 0){
-            res.status(200).json(students);
+            res.status(200).send(students);
         }else{
             res.status(204).send('Nenhum estudante cadastrado');
         }
@@ -62,7 +62,7 @@ exports.getFilteredStudent = (req,res) => {
     studentModel.getFiltered(query, projection)
     .then(student => {
         if(student.length > 0){
-            res.status(200).json(student);
+            res.status(200).send(student);
         }else{
             res.status(204).send('O estudante não foi encontrado');
         }
@@ -114,7 +114,25 @@ exports.postStudent = (req, res) => {
                         }
                         else{
                             student.id=parseInt(--id);
-                            res.status(401).send('Não foi possivel cadastrar estudante, campos obrigatórios não preenchidos');
+                            try {
+                                if (student.age < 17) {
+                                    throw new BussinessError('Cadastro não autorizado.');
+                                }
+
+                            }
+                            catch (age) {
+                                    res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
+                            }
+
+                            try{
+                                if(student.course!=1){
+                                    throw new BussinessError('Cadastro não autorizado.');
+                                }
+                            }
+                            catch(course){
+                                res.status(401).send('Cadastro de estudantes só é possível com estudantes que possuem curso válido.');
+                            }
+
                         }
 
                     });
