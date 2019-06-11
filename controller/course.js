@@ -189,14 +189,14 @@ exports.putCourse = (req, res) => {
             }
           }
 
-          // send to model
+          //variable that validates by mongoose the data of the body
           let validate  = new Course(course);
 
           //validation if no error returns and proceeds with data
           // if error return sends error message
           validate.validate(error =>{
             if(!error){
-              //send
+              // send to model
               courseModel.put(query, course)
                   .then(result => {
                     if(result.value)

@@ -76,9 +76,12 @@ exports.getFilteredStudent = (req,res) => {
 //---------------------------------POST-------------------------------------------------------------------------
 exports.postStudent = (req, res) => {
 
+    // check required attributes by joi schema
+    //receives the data by the body and validates them,
+    // abortEarly false avoids sending messages
+    // if passed, the validations continue if you do not send an error message
         joiSchemaStudent.validate(req.body,{abortEarly:false})
             .then(result=>{
-
                 (async () => {
                     // receive the course related to the inserted id
                     for(let i = 0; i < req.body.course.length; i++){
@@ -89,7 +92,7 @@ exports.postStudent = (req, res) => {
                             req.body.course.splice(i, 1);
                         }
                     }
-                    // creates student array to be inserted
+                    //variable that validates by mongoose the data of the body
                     let student = new Student ({
                         id:parseInt(++id),
                         name:req.body.name,
@@ -99,9 +102,12 @@ exports.postStudent = (req, res) => {
                         status:1
                     });
 
+                    //validation if no error returns and proceeds with data
+                    // if error return sends error message.
                     student.validate(error=>{
-                        // send to model
                         if(!error){
+
+                            // send to model
                             studentModel.post(student)
                                 .then(result => {
 
@@ -113,7 +119,12 @@ exports.postStudent = (req, res) => {
                                 });
                         }
                         else{
+                            //decrements the id to prevent id
+                            // from leaving the expected count
                             student.id=parseInt(--id);
+
+                            //sends a custom error message accordingly if
+                            // client try to register a student with age < 17 or course that does not exist.
                             try {
                                 if (student.age < 17) {
                                     throw new BussinessError('Cadastro não autorizado.');
@@ -147,13 +158,17 @@ exports.postStudent = (req, res) => {
 
 //-------------------------------------------PUT-------------------------------------------------------------------------
 exports.putStudent = (req, res) => {
-    //  define query for search    
+    //  define query and set for search and update
     let query = {'id': parseInt(req.params.id), 'status': 1};
 
+    //check required attributes by joi schema
+    // receives the data by the body and validates them,
+    // abortEarly false avoids sending messages
+    //if passed, the validations continue if you do not send an error message
         joiSchemaStudent.validate(req.body,{abortEarly:false})
             .then(result=>{
 
-                // creates student array to update
+                //variable that validates by mongoose the data of the body
                 let student = {
                     id:parseInt(req.params.id),
                     name:req.body.name,
@@ -175,11 +190,15 @@ exports.putStudent = (req, res) => {
 
                     }
 
-                    // send to model
+                    //variable that validates by mongoose the data of the body
                     let validate = new Student(student);
+
+                    //validation if no error returns and proceeds with data
+                    // if error return sends error message
                     validate.validate(error=>{
                         if(!error)
                         {
+                            // send to model
                             studentModel.put(query,student)
                                 .then(result => {
                                     if(result.value)
@@ -198,6 +217,8 @@ exports.putStudent = (req, res) => {
                         }
                         else{
 
+                            //sends a custom error message accordingly if
+                            // client try to register a student with age < 17 or course that does not exist.
                             try {
                                 if (student.age < 17) {
                                     throw new BussinessError('Cadastro não autorizado.');
