@@ -85,7 +85,6 @@ exports.postCourse = (req, res) => {
   //receives the data by the body and validates them,
   // abortEarly false avoids sending messages
   // if passed, the validations continue if you do not send an error message
-
   joiSchemaCourse.validate(req.body,{abortEarly:false}).then(result=>{
     (async () => {
       // check if any teacher id has been entered
@@ -103,7 +102,8 @@ exports.postCourse = (req, res) => {
             }
           }
         }
-        // creates course array to be inserted
+
+        //variable that validates by mongoose the data of the body
         let course = new Course ({
           id:parseInt(++id),
           name:req.body.name,
@@ -112,8 +112,12 @@ exports.postCourse = (req, res) => {
           teacher:req.body.teacher,
           status:1,
         });
+
+        //validation if no error returns and proceeds with data
+        // if error return sends error message.
         course.validate(error=>{
             if(!error){
+
               // send to model
               courseModel.post(course)
                   .then(result => {
@@ -125,7 +129,12 @@ exports.postCourse = (req, res) => {
                   });
             }
           else{
+              //decrements the id to prevent id
+              // from leaving the expected count
             course.id=parseInt(--id);
+
+              //sends a custom error message accordingly if
+              // client try to register a course with 2 invalid teachers
             try{
               if(course.teacher < 2 ){
                 throw new BussinessError('cadastro não autorizado.');
@@ -150,12 +159,16 @@ exports.postCourse = (req, res) => {
 
 //---------------------------------------PUT------------------------------------------------------------------------
 exports.putCourse = (req, res) => {
-  // define query for search
+  //  define query and set for search and update
   let query = {'id': parseInt(req.params.id),'status': 1};
 
+  //check required attributes by joi schema
+  // receives the data by the body and validates them,
+  // abortEarly false avoids sending messages
+  //if passed, the validations continue if you do not send an error message
   joiSchemaCourse.validate(req.body,{abortEarly:false})
       .then(result=>{
-        // creates course array to update
+        //variable that validates by mongoose the data of the body
         let course = {
           id: parseInt(req.params.id),
           name:req.body.name,
@@ -164,8 +177,6 @@ exports.putCourse = (req, res) => {
           teacher:req.body.teacher,
           status:1
         };
-
-
 
         (async () => {
           // receive the teacher related to the inserted id
@@ -177,10 +188,15 @@ exports.putCourse = (req, res) => {
               req.body.teacher[i] = teacher[0];
             }
           }
+
           // send to model
           let validate  = new Course(course);
+
+          //validation if no error returns and proceeds with data
+          // if error return sends error message
           validate.validate(error =>{
             if(!error){
+              //send
               courseModel.put(query, course)
                   .then(result => {
                     if(result.value)
@@ -201,6 +217,8 @@ exports.putCourse = (req, res) => {
             }
             else{
               try{
+                //sends a custom error message accordingly if
+                // client try to register a course with 2 invalid teachers
                 if(course.teacher < 2 ){
                   throw new BussinessError('cadastro não autorizado.');
                 }

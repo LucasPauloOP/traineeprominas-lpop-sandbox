@@ -87,7 +87,6 @@ exports.postUser = (req, res) => {
     //receives the data by the body and validates them,
     // abortEarly false avoids sending messages
     // if passed, the validations continue if you do not send an error message
-
     joiSchemaUser.validate(req.body,{abortEarly:false})
         .then(result=>{
 
@@ -117,7 +116,7 @@ exports.postUser = (req, res) => {
                     users.id=parseInt(--id);
 
                     //sends a custom error message accordingly if
-                    // you try to register a profile other than admin or guess
+                    // client try to register a profile other than admin or guess
                     try{
                         if(user.profile != 'admin'||user.profile != "guess"){
                             throw new BussinessError('cadastro não autorizado');

@@ -120,7 +120,7 @@ exports.postTeacher = (req, res) => {
                     teacher.id=parseInt(--id);
 
                     //sends a custom error message accordingly if
-                    // you try to register a phd different from true
+                    // client try to register a phd different from true
                     try{
                         if(!teacher.phd ){
                             throw new BussinessError('cadastro não autorizado');
@@ -152,6 +152,7 @@ exports.putTeacher = (req, res) => {
     joiSchemaTeacher.validate(req.body,{abortEarly:false})
         .then(result=>{
             // console.log(result);
+            //variable that validates by mongoose the data of the body
             let teacher = {
                 id: parseInt(req.params.id),
                 name: req.body.name,
@@ -173,7 +174,7 @@ exports.putTeacher = (req, res) => {
                             if (result.value) { // if professor exists
                                 res.status(200).send('Professor editado com sucesso!');
 
-                                //  updates the course that contains this teacher
+                                //updates the course that contains this teacher
                                 await courseModel.updateTeacher(parseInt(req.params.id), result.value);
 
                                 // receives the updated teacher and updates the student that contains this teacher
