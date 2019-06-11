@@ -41,7 +41,7 @@ exports.getAllStudents = (req, res) => {
     studentModel.getAll(query, projection)
     .then(students => {
         if(students.length > 0){
-            res.status(200).send(students);        
+            res.status(200).json(students);
         }else{
             res.status(204).send('Nenhum estudante cadastrado');
         }
@@ -62,7 +62,7 @@ exports.getFilteredStudent = (req,res) => {
     studentModel.getFiltered(query, projection)
     .then(student => {
         if(student.length > 0){
-            res.status(200).send(student);
+            res.status(200).json(student);
         }else{
             res.status(204).send('O estudante não foi encontrado');
         }

@@ -31,7 +31,7 @@ const joiSchemaUser = Joi.object().keys({
 });
 
 
-//-----------------GET FOR ID---------------------------
+//-----------------GET--ALL---------------------------
 
 exports.getAllUsers = (req, res) => {
     //  define query and projection for search
@@ -42,7 +42,7 @@ exports.getAllUsers = (req, res) => {
     userModel.getAll(query, projection)
     .then(users => {
         if(users.length > 0){ 
-            res.status(200).send(users);
+            res.json(users);
         }else{
             res.status(204).send('Nenhum usuário cadastrado');
         }
@@ -64,7 +64,7 @@ exports.getFilteredUser = (req,res) => {
     userModel.getFiltered(query, projection)
     .then(user => {
         if(user.length > 0){
-            res.status(200).send(user);        
+            res.status(200).json(user);
         }else{
             res.status(204).send('O usuário não foi encontrado');
         }

@@ -44,7 +44,7 @@ exports.getAllCourses = (req, res) => {
     if(courses.length == 0){
         res.status(204).send('Nenhum curso cadastrado');
     }else{
-      res.status(200).send(courses);        
+      res.status(200).json(courses);
     }
   })
   .catch(err => {
@@ -65,7 +65,7 @@ exports.getFilteredCourse = (req,res) => {
     if(course.length == 0){
       res.status(204).send('O curso não foi encontrado');
     }else{
-      res.status(200).send(course);        
+      res.status(200).json(course);
     }
   })
   .catch(err => {

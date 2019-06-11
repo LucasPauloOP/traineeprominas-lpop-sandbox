@@ -42,7 +42,7 @@ exports.getAllTeachers = (req, res) => {
     teacherModel.getAll(query, projection)
     .then(teachers => {
         if(teachers.length > 0){
-            res.status(200).send(teachers);        
+            res.status(200).json(teachers);
         }else{
             res.status(204).send('Nenhum professor cadastrado');
         }
@@ -63,7 +63,7 @@ exports.getFilteredTeacher = (req,res) => {
     teacherModel.getFiltered(query, projection)
     .then(teacher => {
         if(teacher.length > 0){
-            res.status(200).send(teacher);        
+            res.status(200).json(teacher);
         }else{
             res.status(204).send('O professor não foi encontrado');
         }
