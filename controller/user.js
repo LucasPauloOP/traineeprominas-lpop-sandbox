@@ -1,6 +1,10 @@
+//constant to use the user model
 const userModel = require('../model/user');
-//const moongoseSchema=require('../moongose_schema');
+
+//constant to use moongose
 const mongoose = require('mongoose');
+
+//constant to call the moongose ​​scheme
 const userSchema = require('../moongose_schema').schemaUser;
 const User = mongoose.model('User', userSchema);
 
@@ -10,21 +14,25 @@ const collection = database.getCollection('user');
 
 var id;
 
+//async function to count documents and send their size
 (async () => {
     id = await collection.countDocuments({});
 })();
 
+
 //joi schema of validation
 const Joi = require('joi');
 
+//which will be used to validate the required fields
 const joiSchemaUser = Joi.object().keys({
     name: Joi.string().required(),
     lastName: Joi.string().required(),
     profile:Joi.string().required()
 });
-//---------------------------------------------------
 
-//-----------------GET--ID---------------------------
+
+//-----------------GET FOR ID---------------------------
+
 exports.getAllUsers = (req, res) => {
     //  define query and projection for search
     let query = {status:1};

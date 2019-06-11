@@ -1,17 +1,21 @@
+//constants to use the required models
 const studentModel = require('../model/student');
 const courseModel = require('../model/course');
 
-//moongose
+//constant to use moongose
 const mongoose = require('mongoose');
+
+//constants to call the moongose ​​scheme
 const studentSchema = require('../moongose_schema').schemaStudent;
 const Student = mongoose.model('Student', studentSchema);
 
-//id
+//define id of course
 const database = require('../database');
 const collection = database.getCollection('student');
 
 var id;
 
+//async function to count documents and send their size
 (async () => {
     id = await collection.countDocuments({});
 })();
@@ -19,6 +23,7 @@ var id;
 //joi schema of validation
 const Joi = require('joi');
 
+//which will be used to validate the required fields
 const joiSchemaStudent = Joi.object().keys({
     name: Joi.string().required(),
     lastName: Joi.string().required(),
@@ -26,6 +31,7 @@ const joiSchemaStudent = Joi.object().keys({
     course:Joi.array().required()
 });
 
+//------------------------------------GET ALL-----------------------------------------------------------------------
 exports.getAllStudents = (req, res) => {
     //  define query and projection for search
     let query = {status:1};
@@ -46,6 +52,7 @@ exports.getAllStudents = (req, res) => {
     });
 };
 
+//-----------------------------------GET FOR ID-------------------------------------------------------------------------
 exports.getFilteredStudent = (req,res) => {
     //  define query and projection for search
     let query = {'id':parseInt(req.params.id), 'status':1};
@@ -66,6 +73,7 @@ exports.getFilteredStudent = (req,res) => {
     });
 };
 
+//---------------------------------POST-------------------------------------------------------------------------
 exports.postStudent = (req, res) => {
 
         joiSchemaStudent.validate(req.body,{abortEarly:false})
@@ -119,6 +127,7 @@ exports.postStudent = (req, res) => {
 
 };
 
+//-------------------------------------------PUT-------------------------------------------------------------------------
 exports.putStudent = (req, res) => {
     //  define query for search    
     let query = {'id': parseInt(req.params.id), 'status': 1};
@@ -181,6 +190,8 @@ exports.putStudent = (req, res) => {
         });
 };
 
+
+//----------------------------------------DELETE--------------------------------------------------------------------
 exports.deleteStudent = (req, res) => {
     //  define query and set for search and delete    
     let query = {'id': parseInt(req.params.id), 'status':1};

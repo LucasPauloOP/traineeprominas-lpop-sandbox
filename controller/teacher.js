@@ -1,18 +1,22 @@
+//constants to use the required models
 const teacherModel = require('../model/teacher');
 const courseModel = require('../model/course');
 const studentModel = require('../model/student');
 
-//schema
+//constant to use moongose
 const mongoose = require('mongoose');
+
+//constants to call the moongose ​​scheme
 const teacherSchema = require('../moongose_schema').schemaTeacher;
 const Teacher = mongoose.model('Teacher', teacherSchema);
 
-//id
+//define id of teacher
 const database = require('../database');
 const collection = database.getCollection('teacher');
 
 var id;
 
+//async function to count documents and send their size
 (async () => {
     id = await collection.countDocuments({});
 })();
@@ -20,12 +24,15 @@ var id;
 //joi schema of validation
 const Joi = require('joi');
 
+//which will be used to validate the required fields
 const joiSchemaTeacher = Joi.object().keys({
     name: Joi.string().required(),
     lastName: Joi.string().required(),
     phd:Joi.boolean().required()
 });
 
+
+//-----------------------------GET ALL------------------------------------------------------------
 exports.getAllTeachers = (req, res) => {
     //  define query and projection for search
     let query = {'status':1};
@@ -46,6 +53,7 @@ exports.getAllTeachers = (req, res) => {
     });
 };
 
+//-------------------------GET FOR ID--------------------------------------------------------------
 exports.getFilteredTeacher = (req,res) => {
     //  define query and projection for search    
     let query = {'id':parseInt(req.params.id), 'status':1};
@@ -66,6 +74,8 @@ exports.getFilteredTeacher = (req,res) => {
     });
 };
 
+
+//-----------------------------POST-----------------------------------------------------------------
 exports.postTeacher = (req, res) => {
     // check required attributes
     joiSchemaTeacher.validate(req.body,{abortEarly:false})
@@ -106,6 +116,8 @@ exports.postTeacher = (req, res) => {
     });
 };
 
+
+//--------------------------------PUT---------------------------------------------------------------
 exports.putTeacher = (req, res) => {
     // check required attributes
 
@@ -167,6 +179,8 @@ exports.putTeacher = (req, res) => {
     });
 };
 
+
+//--------------------------------DELETE FOR ID----------------------------------------------------
 exports.deleteTeacher = (req, res) => {
     //  define query and set for search and delete  
     let query = {'id': parseInt(req.params.id), 'status':1};

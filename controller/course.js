@@ -1,18 +1,22 @@
+//constants to use the required models
 const courseModel = require('../model/course');
 const teacherModel = require('../model/teacher');
 const studentModel = require('../model/student');
 
-//schema moongose
+//constant to use moongose
 const mongoose = require('mongoose');
+
+//constants to call the moongose ​​scheme
 const courseSchema = require('../moongose_schema').schemaCourse;
 const Course = mongoose.model('Course', courseSchema);
 
-//id
+//define id of course
 const database = require('../database');
 const collection = database.getCollection('course');
 
 var id;
 
+//async function to count documents and send their size
 (async () => {
   id = await collection.countDocuments({});
 })();
@@ -20,6 +24,7 @@ var id;
 //joi schema of validation
 const Joi = require('joi');
 
+//which will be used to validate the required fields
 const joiSchemaCourse = Joi.object().keys({
   name: Joi.string().required(),
   city: Joi.string().required(),
@@ -27,6 +32,7 @@ const joiSchemaCourse = Joi.object().keys({
   teacher:Joi.array().required()
 });
 
+//------------------------GET ALL----------------------------------------------------------------
 exports.getAllCourses = (req, res) => {
   //  define query and projection for search
   let query = {status:1};
@@ -47,6 +53,7 @@ exports.getAllCourses = (req, res) => {
   });
 };
 
+//--------------------------------------------GET FOR ID---------------------------------------------------------------
 exports.getFilteredCourse = (req,res) => {
   //  define query and projection for search
   let query = {'id':parseInt(req.params.id), 'status':1};
@@ -67,6 +74,7 @@ exports.getFilteredCourse = (req,res) => {
   });
 };
 
+//------------------------------------------POST-----------------------------------------------------------------------
 exports.postCourse = (req, res) => {
 
   joiSchemaCourse.validate(req.body,{abortEarly:false}).then(result=>{
@@ -120,6 +128,8 @@ exports.postCourse = (req, res) => {
   });
 };
 
+
+//---------------------------------------PUT------------------------------------------------------------------------
 exports.putCourse = (req, res) => {
   // define query for search
   let query = {'id': parseInt(req.params.id),'status': 1};
@@ -183,6 +193,7 @@ exports.putCourse = (req, res) => {
 
 };
 
+//-------------------------------------------DELETE--------------------------------------------------------------
 exports.deleteCourse = (req, res) => {
   // define query and set to search and delete
   let query = {'id': parseInt(req.params.id),'status':1};
