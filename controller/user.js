@@ -142,7 +142,8 @@ exports.postUser = (req, res) => {
 
 //--------------------PUT--------------------------------------------
 exports.putUser = (req, res) => {
-    // variable for find
+
+    //  define query and set for search and update
     let query = {'id': parseInt(req.params.id), 'status': 1};
 
     //check required attributes by joi schema
@@ -160,13 +161,14 @@ exports.putUser = (req, res) => {
 
             });
 
-            // //variable that validates by mongoose the data of the body
+             //variable that validates by mongoose the data of the body
             let validate = new User(user);
 
             //validation if no error returns and proceeds with data
             // if error return sends error message
             validate.validate(err=>{
                 if(!err){
+                    // send to model
                     userModel.put(query,user).then(result=>{
                         //console.log('>>>>>>',user);
                         if(result.value){
@@ -183,7 +185,7 @@ exports.putUser = (req, res) => {
                 else{
 
                     //sends a custom error message accordingly if
-                    // you try to register a profile other than admin or guess
+                    // client try to register a profile other than admin or guess
                     try{
                         if(user.profile != 'admin'||user.profile != "guess"){
                             throw new BussinessError('cadastro não autorizado');

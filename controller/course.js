@@ -39,6 +39,8 @@ exports.getAllCourses = (req, res) => {
   let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}
 
   // send to model
+  //if the return is greater than 0 it shows on the screen
+  // if it does not show an error message
   courseModel.getAll(query, projection)
   .then(courses => {
     if(courses.length == 0){
@@ -60,6 +62,8 @@ exports.getFilteredCourse = (req,res) => {
   let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}
 
   // send to model
+  ////if the return is greater than 0 it shows on the screen
+  // if it does not show an error message
   courseModel.getFiltered(query, projection)
   .then(course => {
     if(course.length == 0){
@@ -76,6 +80,11 @@ exports.getFilteredCourse = (req,res) => {
 
 //------------------------------------------POST-----------------------------------------------------------------------
 exports.postCourse = (req, res) => {
+
+  // check required attributes by joi schema
+  //receives the data by the body and validates them,
+  // abortEarly false avoids sending messages
+  // if passed, the validations continue if you do not send an error message
 
   joiSchemaCourse.validate(req.body,{abortEarly:false}).then(result=>{
     (async () => {

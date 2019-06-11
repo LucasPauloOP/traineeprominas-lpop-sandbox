@@ -39,6 +39,8 @@ exports.getAllTeachers = (req, res) => {
     let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, phd:1}};
 
     // send to model
+    //if the return is greater than 0 it shows on the screen
+    // if it does not show an error message
     teacherModel.getAll(query, projection)
     .then(teachers => {
         if(teachers.length > 0){
@@ -60,6 +62,8 @@ exports.getFilteredTeacher = (req,res) => {
     let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, phd:1}};
 
     // send to model
+    ////if the return is greater than 0 it shows on the screen
+    // if it does not show an error message
     teacherModel.getFiltered(query, projection)
     .then(teacher => {
         if(teacher.length > 0){
@@ -77,10 +81,16 @@ exports.getFilteredTeacher = (req,res) => {
 
 //-----------------------------POST-----------------------------------------------------------------
 exports.postTeacher = (req, res) => {
-    // check required attributes
+
+    // check required attributes by joi schema
+    //receives the data by the body and validates them,
+    // abortEarly false avoids sending messages
+    // if passed, the validations continue if you do not send an error message
+
     joiSchemaTeacher.validate(req.body,{abortEarly:false})
         .then(result=>{
 
+            //variable that validates by mongoose the data of the body
             let teacher = new Teacher({
                 id:parseInt(++id),
                 name:req.body.name,
@@ -89,12 +99,12 @@ exports.postTeacher = (req, res) => {
                 status:1
             });
 
+            //validation if no error returns and proceeds with data
+            // if error return sends error message
             teacher.validate(error=>{
                 if(!error){
-                    // creates teacher array to be inserted
 
-                    // send to model
-
+                    //send for model
                     teacherModel.post(teacher)
                         .then(result => {
                             res.status(201).send('Professor cadastrado com sucesso!');
@@ -105,15 +115,19 @@ exports.postTeacher = (req, res) => {
                         });
                 }
                 else{
+                    //decrements the id to prevent id
+                    // from leaving the expected count
                     teacher.id=parseInt(--id);
 
+                    //sends a custom error message accordingly if
+                    // you try to register a phd different from true
                     try{
                         if(!teacher.phd ){
                             throw new BussinessError('cadastro não autorizado');
                         }
 
                     }catch (Error) {
-                        res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd deverá ser verdadeiro.');
+                        res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd precisa ser verdadeiro.');
                     }
                 }
             });
@@ -127,11 +141,14 @@ exports.postTeacher = (req, res) => {
 
 //--------------------------------PUT---------------------------------------------------------------
 exports.putTeacher = (req, res) => {
-    // check required attributes
 
     //  define query and set for search and update
     let query = {'id': parseInt(req.params.id), 'status': 1};
 
+    //check required attributes by joi schema
+    // receives the data by the body and validates them,
+    // abortEarly false avoids sending messages
+    //if passed, the validations continue if you do not send an error message
     joiSchemaTeacher.validate(req.body,{abortEarly:false})
         .then(result=>{
             // console.log(result);
@@ -143,8 +160,11 @@ exports.putTeacher = (req, res) => {
                 status: 1
             };
 
+            //variable that validates by mongoose the data of the body
             let validate = new Teacher(teacher);
 
+            //validation if no error returns and proceeds with data
+            // if error return sends error message
             validate.validate(error => {
                 if (!error) {
                     // send to model
@@ -176,7 +196,8 @@ exports.putTeacher = (req, res) => {
 
                 else {
 
-
+                    //sends a custom error message accordingly if
+                    // client try to register a phd different from true
                     try{
                         if(!teacher.phd ){
                             throw new BussinessError('cadastro não autorizado');
