@@ -39,6 +39,8 @@ exports.getAllUsers = (req, res) => {
     let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, profile:1}};
 
     // send to model
+    //if the return is greater than 0 it shows on the screen
+    // if it does not show an error message
     userModel.getAll(query, projection)
     .then(users => {
         if(users.length > 0){ 
@@ -61,6 +63,8 @@ exports.getFilteredUser = (req,res) => {
     let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, profile:1}};
 
     // send to model
+    ////if the return is greater than 0 it shows on the screen
+    // if it does not show an error message
     userModel.getFiltered(query, projection)
     .then(user => {
         if(user.length > 0){
@@ -78,9 +82,16 @@ exports.getFilteredUser = (req,res) => {
 
 //------------------------------POST-------------------------------
 exports.postUser = (req, res) => {
-    // check required attributes
+
+    // check required attributes by joi schema
+    //receives the data by the body and validates them,
+    // abortEarly false avoids sending messages
+    // if passed, the validations continue if you do not send an error message
+
     joiSchemaUser.validate(req.body,{abortEarly:false})
         .then(result=>{
+
+            //variable that validates by mongoose the data of the body
             let users= new User({
                 id:parseInt(++id),
                 name:req.body.name,
@@ -88,8 +99,12 @@ exports.postUser = (req, res) => {
                 profile:req.body.profile,
                 status:1
             });
+
+            //validation if no error returns and proceeds with data
+            // if error return sends error message
             users.validate(error => {
                 if(!error){
+                    //send for model
                     userModel.post(users).then(result => {
                         res.status(201).send('Usuário cadastrado com sucesso!');
                     }).catch(err => {
@@ -97,7 +112,12 @@ exports.postUser = (req, res) => {
                         res.status(500);
                     });
                 }else{
+                    //decrements the id to prevent id
+                    // from leaving the expected count
                     users.id=parseInt(--id);
+
+                    //sends a custom error message accordingly if
+                    // you try to register a profile other than admin or guess
                     try{
                         if(user.profile != 'admin'||user.profile != "guess"){
                             throw new BussinessError('cadastro não autorizado');
@@ -122,9 +142,13 @@ exports.postUser = (req, res) => {
 
 //--------------------PUT--------------------------------------------
 exports.putUser = (req, res) => {
-    // check required attributes
+    // variable for find
     let query = {'id': parseInt(req.params.id), 'status': 1};
 
+    //check required attributes by joi schema
+    // receives the data by the body and validates them,
+    // abortEarly false avoids sending messages
+    //if passed, the validations continue if you do not send an error message
     joiSchemaUser.validate(req.body,{abortEarly:false})
         .then(validatedjoiUser=>{
             let user=({
@@ -136,8 +160,11 @@ exports.putUser = (req, res) => {
 
             });
 
+            // //variable that validates by mongoose the data of the body
             let validate = new User(user);
 
+            //validation if no error returns and proceeds with data
+            // if error return sends error message
             validate.validate(err=>{
                 if(!err){
                     userModel.put(query,user).then(result=>{
@@ -154,7 +181,17 @@ exports.putUser = (req, res) => {
                     })
                 }
                 else{
-                    res.status(401).send('Não é possível editar usuário');
+
+                    //sends a custom error message accordingly if
+                    // you try to register a profile other than admin or guess
+                    try{
+                        if(user.profile != 'admin'||user.profile != "guess"){
+                            throw new BussinessError('cadastro não autorizado');
+                        }
+
+                    }catch (Error) {
+                        res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
+                    }
                 }
             });
 

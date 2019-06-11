@@ -175,7 +175,17 @@ exports.putTeacher = (req, res) => {
                 }
 
                 else {
-                    res.status(401).send('Não foi possível editar o professor');
+
+
+                    try{
+                        if(!teacher.phd ){
+                            throw new BussinessError('cadastro não autorizado');
+                        }
+
+                    }catch (Error) {
+                        res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd deverá ser verdadeiro.');
+                    }
+
                 }
 
 

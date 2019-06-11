@@ -1,14 +1,22 @@
+//constant to use express
 const express = require('express');
+
+//constant to use bodyParser
 const bodyParser = require('body-parser');
+
+//constant app for export
 const app = express();
+
+//url base of API
 const baseAPI = "/api/v1";
 
-
-
+//allows app use body parser
 app.use(bodyParser.json());
 
+//connect to bd
 const database = require('./database');
 
+//post hello world on the home screen
 database
   .connect()
   .then(() => {
@@ -16,7 +24,8 @@ database
     app.get(baseAPI, function (req, res) {
       res.status(200).send('Hello World!');
     });
-  
+
+    //API routes
 app.use(baseAPI, require('./routes/student'));
 app.use(baseAPI,require('./routes/user'));
 app.use(baseAPI, require('./routes/course'));

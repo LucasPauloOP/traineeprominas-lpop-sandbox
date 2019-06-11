@@ -191,7 +191,14 @@ exports.putCourse = (req, res) => {
 
             }
             else{
-              res.status(401).send('Não é possível editar curso inexistente');
+              try{
+                if(course.teacher < 2 ){
+                  throw new BussinessError('cadastro não autorizado.');
+                }
+
+              }catch (Error) {
+                res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
+              }
             }
           });
 

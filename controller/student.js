@@ -197,7 +197,26 @@ exports.putStudent = (req, res) => {
                                 });
                         }
                         else{
-                            res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
+
+                            try {
+                                if (student.age < 17) {
+                                    throw new BussinessError('Cadastro não autorizado.');
+                                }
+
+                            }
+                            catch (age) {
+                                res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
+                            }
+
+                            try{
+                                if(student.course!=1){
+                                    throw new BussinessError('Cadastro não autorizado.');
+                                }
+                            }
+                            catch(course){
+                                res.status(401).send('Cadastro de estudantes só é possível com estudantes que possuem curso válido.');
+                            }
+
                         }
                     });
 
