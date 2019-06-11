@@ -145,6 +145,7 @@ schemaStudent =new Schema({
     }
 });
 
-//module that exports the schemas
+
+//---------------------module that exports the schemas---------------------------------------------------
 module.exports={schemaUser,schemaTeacher,schemaCourse,schemaStudent};
 

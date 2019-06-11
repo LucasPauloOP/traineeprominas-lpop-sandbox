@@ -144,6 +144,15 @@ describe('register course as undefined teacher',function () {
     })
 });
 
+describe('register course as 2 teacher',function () {
+    it('register course as 2 teacher that do not exist',()=>{
+        return request(app).post('/api/v1/course').send({name:'teste4',city:'teste4',period:'5',teacher:[100,99]})
+            .then(function (res) {
+                assert.equal(res.status, 401);
+            });
+    });
+});
+
 
 //-----------------------------STUDENT-----------------------------------
 describe('register student as 18 years or more',function () {
