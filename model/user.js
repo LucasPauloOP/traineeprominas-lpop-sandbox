@@ -1,41 +1,37 @@
+// constants to use the database and its respective collection
 const database = require('../database');
 const collection = database.getCollection('user');
 
-var id;
-
-(async () => {
-     id = await collection.countDocuments({});
-})();
-
+//--------------GET ALL------------------------------------
 exports.getAll = (query, projection) => {
+    //search in the bd according to the parameters received in the variable query
+    // and projects according to the variable projection
+
     return collection.find(query, projection).toArray();
 };
 
+//---------------GET FOR ID-------------------------------
 exports.getFiltered = (query, projection) => {
+    //search in the bd according to the parameters received in the variable query
+    // and projects according to the variable projection
     return collection.find(query, projection).toArray();
 };
 
+//-----------------POST---------------------------------
 exports.post = (user) => {
-    // if(user.profile == 'guess' || user.profile == 'admin'){
-    //     user.id = ++id;
+    //insert in the bd
         return collection.insertOne(user);
-    // }else{
-    //     return new Promise((resolve, reject) => {
-            // resolve(false);
-        // });
-//    }
 };
 
+//-----------------PUT------------------------------------
 exports.put = (query, set) => {
-    if(set.profile == 'guess' || set.profile == 'admin'){
+    // edits according to the parameters in the query variable
         return collection.findOneAndUpdate(query, {$set: set});
-    }else{
-        return new Promise((resolve, reject) => {
-            resolve(false);
-        });
-    }
 };
 
+//------------------DELETE-------------------------------------
 exports.delete = (query) => {
+
+    //change the status according to what was passed in the query variable
     return collection.findOneAndUpdate(query, {$set: {status:0}});
 };

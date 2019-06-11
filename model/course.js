@@ -1,11 +1,8 @@
+// constants to use the database and its respective collection
 const database = require('../database');
 const collection = database.getCollection('course');
 
-var id;
 
-(async () => {
-  id = await collection.countDocuments({});
-})();
 
 exports.getAll = (query, projection) => {
   return collection.find(query, projection).toArray();
@@ -17,7 +14,6 @@ exports.getFiltered = (query, projection) => {
 
 exports.post = (course) => {
   if(course.teacher.length >= 2){
-    course.id = ++id;
     return collection.insertOne(course);  
   }else{
     return new Promise((resolve, reject) => {

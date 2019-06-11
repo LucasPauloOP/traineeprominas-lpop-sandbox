@@ -3,11 +3,11 @@ const router = express.Router();
 
 const teacherController = require('../controller/teacher');
 
-router.get('/', teacherController.getAllTeachers);
-router.post('/', teacherController.postTeacher);
+router.get('/JSON/teacher', teacherController.getAllTeachers);
+router.post('/teacher', teacherController.postTeacher);
 
-router.get('/:id', teacherController.getFilteredTeacher);
-router.put('/:id', teacherController.putTeacher);
-router.delete('/:id', teacherController.deleteTeacher);
+router.get('/JSON/teacher/:id', teacherController.getFilteredTeacher);
+router.put('/teacher/:id', teacherController.putTeacher);
+router.delete('/teacher/:id', teacherController.deleteTeacher);
 
 module.exports = router;

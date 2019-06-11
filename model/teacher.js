@@ -1,12 +1,8 @@
+// constants to use the database and its respective collection
 const database = require('../database');
 const collection = database.getCollection('teacher');
 
-// var id;
-//
-// (async () => {
-//      id = await collection.countDocuments({});
-// })();
-
+//--------------------GET ALL---------------------------------
 exports.getAll = (query, projection) => {
   return collection.find(query, projection).toArray();
 };

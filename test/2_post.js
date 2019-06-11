@@ -7,7 +7,7 @@ const app = require('../app');
 //-------------------------USER------------------------------------------
 describe('Get with users register',function () {
    it('Get with registered users and return is empty in user',()=>{
-       return request(app).get('/api/v1/user').then(function (res) {
+       return request(app).get('/api/v1/JSON/user').then(function (res) {
             assert.equal(res.status,204);
        });
    });
@@ -16,7 +16,7 @@ describe('Get with users register',function () {
 //------------------------------TEACHER-----------------------------------
 describe('Get with teachers register',function () {
     it('Get with registered teachers and return is empty',()=>{
-        return request(app).get('/api/v1/teacher').then(function (res) {
+        return request(app).get('/api/v1/JSON/teacher').then(function (res) {
             assert.equal(res.status,204);
         });
     });
@@ -25,7 +25,7 @@ describe('Get with teachers register',function () {
 //------------------------------COURSE------------------------------------
 describe('Get with courses register',function () {
     it('Get with registered users and return is empty',()=>{
-        return request(app).get('/api/v1/course').then(function (res) {
+        return request(app).get('/api/v1/JSON/course').then(function (res) {
             assert.equal(res.status,204);
         });
     });
@@ -34,7 +34,7 @@ describe('Get with courses register',function () {
 //-----------------------------STUDENT------------------------------------
 describe('Get with students register',function () {
     it('Get with registered students and return is empty',()=>{
-        return request(app).get('/api/v1/student').then(function (res) {
+        return request(app).get('/api/v1/JSON/student').then(function (res) {
             assert.equal(res.status,204);
         });
     });

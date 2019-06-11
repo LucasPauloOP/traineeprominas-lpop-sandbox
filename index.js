@@ -10,6 +10,8 @@ const app = express();
 
 const baseApi = "/api/v1";
 
+const baseApiGet="/api/v1/JSON";
+
 app.use(bodyParser.json());
 
 app.get(baseApi, function (req, res) {

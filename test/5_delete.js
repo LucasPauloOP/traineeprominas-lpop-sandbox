@@ -101,7 +101,7 @@ describe('Delete with id valid',function () {
 
 describe('Get with id invalid',function () {
     it('Get on an inactive course (status: 0)',()=>{
-        return request(app).get('/api/v1/course/1').then(function (res) {
+        return request(app).get('/api/v1/JSON/course/1').then(function (res) {
             assert.equal(res.status,204);
         });
     });
