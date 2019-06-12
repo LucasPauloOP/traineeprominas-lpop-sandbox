@@ -24,8 +24,8 @@ const database = require('./database');
     //   res.status(200).send('Hello World!');
     // });
 
-    //API routes
-// app.use(baseAPI, require('./routes/student'));
+//API routes
+app.use(baseAPI, require('./routes/student'));
 app.use(baseAPI,require('./routes/user'));
 app.use(baseAPI, require('./routes/course'));
 app.use(baseAPI, require('./routes/teacher'));

@@ -7,15 +7,14 @@ const mongoose = require('mongoose');
 
 //constants to call the moongose ​​scheme
 const studentSchema = require('../moongose_schema').schemaStudent;
-const Student = mongoose.model('Student', studentSchema);
+const Student = mongoose.model('Student', studentSchema,'student');
+
+
+// const database = require('../database');
+// const collection = database.getCollection('student');
 
 //define id of course
-const database = require('../database');
-const collection = database.getCollection('student');
 
-var id;
-
-//async function to count documents and send their size
 var id;
 Student.countDocuments({}, (err, count) => {
     id = count;

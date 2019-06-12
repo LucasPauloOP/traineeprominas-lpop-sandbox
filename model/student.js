@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 //constants to call the moongose ​​scheme
 const studentSchema = require('../moongose_schema').schemaStudent;
-const Student = mongoose.model('Student', studentSchema);
+const Student = mongoose.model('Student', studentSchema,'student');
 
 //---------------------GET ALL----------------------------------
 exports.getAll = (query, projection) => {
@@ -27,13 +27,13 @@ exports.getFiltered = (query, projection) => {
 //-----------------------POST--------------------------------------
 exports.post = (student) => {
     //insert in the bd the data passed by parameter
-    return collection.create(student);
+    return Student.create(student);
 };
 
 //-----------------------PUT-----------------------------------------
 exports.put = (query, set) => {
     // edits according to the parameters in the query variable
-    return Student.findOneAndUpdate(query, {$set:set},{returnOriginal:false});
+    return Student.findOneAndUpdate(query, {$set:set},{new:true});
 };
 
 //-----------------------DELETE-----------------------------------------
@@ -44,19 +44,21 @@ exports.delete = (query, set) => {
 
 //-----------------------PROPAGATION OF COURSE: UPDATE-------------------
 exports.updateCourse = (id, set) => {
+    // console.log(">>>>>>>>set:",set);
+    // console.log(">>>>>>>>id:",id);
     //updates on the student the course who have been put
-  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"course.$": set}});
+  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"course.$": set}},{new:true});
 };
 
 //-----------------------PROPAGATION OF COURSE: DELETE----------------------
-exports.deleteCourse = (id, set) => {
+exports.deleteCourse = (id) => {
 
     //deletes courses in progress if they are deleted
-  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {status:0}});
+  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"status":0}},{new:true});
 };
 
 //-------------------------PROPAGATION OF COURSE: UPDATE TEACHER------------------------------
 exports.updateTeacher = (course) => {
     //updates teachers within students
-  return Student.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}});
+  return Student.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}},{new:true});
 };

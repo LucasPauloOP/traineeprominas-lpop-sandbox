@@ -9,30 +9,30 @@ const Schema = mongoose.Schema;
 schemaUser = new Schema ({
 
     id:{
-        type:Number,
-        required:true
+        type:Number
+        // required:true
     },
 
     name: {
-        type: String,
-        required: true
+        type: String
+        /*required: true*/
     },
 
     lastName:{
-        type: String,
-        required:true
+        type: String
+        // required:true
     },
 
     profile:{
         type:String,
-        enum:['admin','guess'],
-        required:true
+        enum:['admin','guess']
+        // required:true
     },
 
     status:{
-        type:Number,
-        required:true,
-        enum:[0,1]
+        // required:true,
+        // enum:[0,1],
+        type:Number
     }
 },{versionKey:false});
 
@@ -42,29 +42,29 @@ schemaTeacher = new Schema({
 
     id:{
         type:Number,
-        required:true
+        // required:true
     },
 
     name:{
         type: String,
-        required:true
+        // required:true
     },
 
     lastName:{
         type:String,
-        required:true
+        // required:true
     },
 
     phd:{
         type:Boolean,
-        required:true,
+        // required:true,
         validate:[val =>{return val == true},
             'PHD de professor deve ser verdadeiro para ser cadastrado'
         ]},
 
     status:{
         type:Number,
-        required:true
+        // required:true
     }
 
 },{versionKey:false});
@@ -75,12 +75,12 @@ schemaCourse  =  new Schema({
 
     id:{
         type:Number,
-        required:true
+        // required:true
     },
 
     name:{
         type: String,
-        required:true
+        // required:true
     },
 
     period:{
@@ -89,18 +89,18 @@ schemaCourse  =  new Schema({
 
     city:{
         type:String,
-        required:true
+        // required:true
     },
 
     teacher: {
-        required: true,
+        // required: true,
         type:[schemaTeacher],validate:[schemaTeacher =>{return schemaTeacher.length>=2}
             ,'Para cadastrar um curso é necessário no mínimo 2 professores.']
     },
 
     status:{
         type:Number,
-        required:true
+        // required:true
     }
 
 },{versionKey:false});
@@ -110,34 +110,34 @@ schemaCourse  =  new Schema({
 schemaStudent =new Schema({
     id:{
         type:Number,
-        required:true
+        // required:true
     },
     name:{
         type:String,
-        required:true
+        // required:true
     },
 
     lastName:{
         type:String,
-        required:true
+        // required:true
     },
 
     age:{
         type:Number,
-        min:17,
-        required:true,
+        min:17
+        // required:true,
     },
 
     course:{
         type:[schemaCourse],
         validate:[val=>{return val.length == 1},
             'Para cadastrar um estudante é necessário que ele tenha 1 curso'],
-        required:true,
+        // required:true,
     },
 
     status:{
         type:Number,
-        required:true
+        // required:true
     }
 
 },{versionKey:false});

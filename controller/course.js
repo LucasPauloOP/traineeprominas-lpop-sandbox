@@ -179,16 +179,18 @@ exports.putCourse = (req, res) => {
         };
 
         (async () => {
-          // receive the teacher related to the inserted id
-          for(let i = req.body.teacher.length-1; i > -1 ; i--){
-            teacher = await teacherModel.getTeacher(req.body.teacher[i]);
-            if(teacher == null){
-              req.body.teacher.splice(i, 1);
-            }else{ // if teacher exists
-              req.body.teacher[i] = teacher[0];
+          if(req.body.teacher){//if course is inserted
+            // receive the teacher related to the inserted id
+            for(let i = req.body.teacher.length-1; i > -1 ; i--){
+              teacher = await teacherModel.getTeacher(req.body.teacher[i]);
+              if(teacher.length > 0){
+                req.body.teacher[i]=teacher[0];
+              }else{ // if teacher exists
+                req.body.teacher.splice(i, 1);
+              }
             }
-          }
 
+          }
           //variable that validates by mongoose the data of the body
           let validate  = new Course(course);
 
@@ -201,9 +203,10 @@ exports.putCourse = (req, res) => {
                   .then(result => {
                     if(result)
                     {
+                      console.log(">>>>>>>>>",result);
                       // update course in student
                       res.status(200).send('Curso editado com sucesso!');
-                      studentModel.updateCourse(parseInt(req.params.id), result.value);
+                      studentModel.updateCourse(parseInt(req.params.id), result);
                     }
                     else{
                       res.status(401).send('Não é possível editar curso inexistente');

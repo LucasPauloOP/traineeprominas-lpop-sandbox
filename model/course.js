@@ -33,9 +33,8 @@ exports.post = (course) => {
 
 //---------------------------PUT------------------------------------------------------
 exports.put = (query, set) => {
-
   // edits according to the parameters in the query variable
-    return Course.findOneAndUpdate(query, {$set: set}, {returnOriginal:false} );
+    return Course.findOneAndUpdate(query, {$set: set}, {new:true});
 };
 
 //------------------------------DELETE------------------------------------------------
@@ -49,26 +48,28 @@ exports.delete = (query, set) => {
 exports.getCourse = (id) => {
 
   // find the courses according to the ids passed by parameters
-  return Course.find({'id':id, 'status':1}).toArray();
+  return Course.find({'id':id, 'status':1})
 };
 
 //------------------------------PROPAGATION OF TEACHERS: UPDATE---------------------------------
 exports.updateTeacher = (id, set) => {
 
+    // console.log(">>>>>>>>>>>>>>>2",set);
+
   //updates on the courses the teachers who have been put
-  return Course.updateMany({'teacher.id':id, 'status':1}, {$set: {'teacher.$':set}});
+  return Course.updateMany({'teacher.id':id, 'status':1}, {$set: {'teacher.$':set}},{new:true});
 };
 
 //-----------------------------PROPAGATION OF TEACHERS: DELETE-------------------------------------
 exports.deleteTeacher = (id) => {
 
   //deletes teachers in progress if they are deleted
-  return Course.findOneAndUpdate({'status':1, 'teacher.id':id}, {$pull: {"teacher": {'id': id}}});
+  return Course.findOneAndUpdate({'status':1, 'teacher.id':id}, {$pull: {"teacher": {'id': id}}},{new:true});
 };
 
 //-----------------------------PROPAGATION FOR COURSE: FIND--------------------------------------------
 exports.getCoursebyTeacher = () => {
 
   //// find the courses according to the ids passed by parameters
-  return Course.find({"status":1}).toArray();
+  return Course.find({"status":1});
 };

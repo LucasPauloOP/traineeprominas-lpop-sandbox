@@ -35,14 +35,14 @@ exports.post = (teacher) => {
 exports.put = (query, set) => {
 
     // edits according to the parameters in the query variable
-    return Teacher.findOneAndUpdate(query, {$set: set}, {returnOriginal:false});
+    return Teacher.findOneAndUpdate(query, {$set: set}, {new:true});
 };
 
 //-------------------DELETE--------------------------------------
 exports.delete = (query, set) => {
 
     //change the status according to what was passed in the query variable
-  return Teacher.findOneAndUpdate(query, {$set: set});
+  return Teacher.findOneAndUpdate(query, {$set: set},{new:true});
 };
 
 //--------------------COUNT TEACHER-------------------------------
