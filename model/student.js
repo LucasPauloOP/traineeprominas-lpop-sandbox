@@ -1,6 +1,6 @@
 // constants to use the database and its respective collection
-const database = require('../database');
-const collection = database.getCollection('student');
+// const database = require('../database');
+// const collection = database.getCollection('student');
 
 //---------------------GET ALL----------------------------------
 exports.getAll = (query, projection) => {

@@ -6,17 +6,17 @@ const mongoose = require('mongoose');
 
 //constant to call the moongose ​​scheme
 const userSchema = require('../moongose_schema').schemaUser;
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema,'user');
 
 //define id of user
-const database = require('../database');
-const collection = database.getCollection('user');
+// const database = require('../database');
+// const collection = database.getCollection('user');
 
 var id;
 
 //async function to count documents and send their size
 (async () => {
-    id = await collection.countDocuments({});
+    id = await User.countDocuments({});
 })();
 
 
@@ -36,7 +36,7 @@ const joiSchemaUser = Joi.object().keys({
 exports.getAllUsers = (req, res) => {
     //  define query and projection for search
     let query = {status:1};
-    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, profile:1}};
+    let projection = {_id:0, id: 1, name: 1, lastName: 1, profile:1};
 
     // send to model
     //if the return is greater than 0 it shows on the screen
@@ -60,7 +60,7 @@ exports.getAllUsers = (req, res) => {
 exports.getFilteredUser = (req,res) => {
     //  define query and projection for search
     let query = {'id':parseInt(req.params.id), 'status':1};
-    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, profile:1}};
+    let projection = {_id:0, id: 1, name: 1, lastName: 1, profile:1};
 
     // send to model
     ////if the return is greater than 0 it shows on the screen
@@ -170,7 +170,7 @@ exports.putUser = (req, res) => {
                     // send to model
                     userModel.put(query,user).then(result=>{
                         //console.log('>>>>>>',user);
-                        if(result.value){
+                        if(result){
                             res.status(200).send('Usuário editado com sucesso!');
                         }
                         else{
@@ -211,7 +211,7 @@ exports.deleteUser = (req, res) => {
     // send to model
     userModel.delete(query)
     .then(result => {
-        if(result.value){ // if user exists
+        if(result){ // if user exists
             console.log('O usuário foi removido');
             res.status(200).send('O usuário foi removido com sucesso');
           }else{

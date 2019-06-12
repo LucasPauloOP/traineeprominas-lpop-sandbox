@@ -8,17 +8,17 @@ const mongoose = require('mongoose');
 
 //constants to call the moongose ​​scheme
 const teacherSchema = require('../moongose_schema').schemaTeacher;
-const Teacher = mongoose.model('Teacher', teacherSchema);
+const Teacher = mongoose.model('Teacher', teacherSchema,'teacher');
 
 //define id of teacher
-const database = require('../database');
-const collection = database.getCollection('teacher');
+// const database = require('../database');
+// const collection = database.getCollection('teacher');
 
 var id;
 
 //async function to count documents and send their size
 (async () => {
-    id = await collection.countDocuments({});
+    id = await Teacher.countDocuments({});
 })();
 
 //joi schema of validation
@@ -36,7 +36,7 @@ const joiSchemaTeacher = Joi.object().keys({
 exports.getAllTeachers = (req, res) => {
     //  define query and projection for search
     let query = {'status':1};
-    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, phd:1}};
+    let projection = {_id:0, id: 1, name: 1, lastName: 1, phd:1};
 
     // send to model
     //if the return is greater than 0 it shows on the screen
@@ -59,7 +59,7 @@ exports.getAllTeachers = (req, res) => {
 exports.getFilteredTeacher = (req,res) => {
     //  define query and projection for search    
     let query = {'id':parseInt(req.params.id), 'status':1};
-    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, phd:1}};
+    let projection = {_id:0, id: 1, name: 1, lastName: 1, phd:1};
 
     // send to model
     ////if the return is greater than 0 it shows on the screen
@@ -171,7 +171,7 @@ exports.putTeacher = (req, res) => {
                     // send to model
                     teacherModel.put(query, teacher)
                         .then(async (result) => {
-                            if (result.value) { // if professor exists
+                            if (result) { // if professor exists
                                 res.status(200).send('Professor editado com sucesso!');
 
                                 //updates the course that contains this teacher
@@ -239,7 +239,7 @@ exports.deleteTeacher = (req, res) => {
             }
         });
         
-        if(result.value){ // if professor exists
+        if(result){ // if professor exists
             console.log('O professor foi removido');
             res.status(200).send('O professor foi removido com sucesso');
           }else{

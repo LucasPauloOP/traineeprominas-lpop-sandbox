@@ -34,9 +34,8 @@ schemaUser = new Schema ({
         type:Number,
         required:true,
         enum:[0,1],
-        unique:1
     }
-});
+},{versionKey:false});
 
 
 //---------------------------------schema teacher----------------------------
@@ -69,10 +68,9 @@ schemaTeacher = new Schema({
         type:Number,
         required:true,
         enum:[0,1],
-        unique:true
     }
 
-});
+},{versionKey:false});
 
 
 //-----------------------------------schema course----------------------------------------------
@@ -106,7 +104,7 @@ schemaCourse  =  new Schema({
         required:true
     }
 
-});
+},{versionKey:false});
 
 
 //------------------------------------schema student-----------------------------------------
@@ -143,7 +141,7 @@ schemaStudent =new Schema({
         required:true,
         enum:[0,1]
     }
-});
+},{versionKey:false});
 
 
 //---------------------module that exports the schemas---------------------------------------------------

@@ -16,20 +16,19 @@ app.use(bodyParser.json());
 //connect to bd
 const database = require('./database');
 
-//post hello world on the home screen
-database
-  .connect()
-  .then(() => {
+// //post hello world on the home screen
+// database.connect()
+//   .then(() => {
 
-    app.get(baseAPI, function (req, res) {
-      res.status(200).send('Hello World!');
-    });
+    // app.get(baseAPI, function (req, res) {
+    //   res.status(200).send('Hello World!');
+    // });
 
     //API routes
-app.use(baseAPI, require('./routes/student'));
+// app.use(baseAPI, require('./routes/student'));
 app.use(baseAPI,require('./routes/user'));
-app.use(baseAPI, require('./routes/course'));
-app.use(baseAPI, require('./routes/teacher'));
+// app.use(baseAPI, require('./routes/course'));
+ app.use(baseAPI, require('./routes/teacher'));
 
 app.get(baseAPI+'/', function (req, res){
   res.send('Endpoints: \n '+baseAPI+'/user \n '+baseAPI+'/student \n '+baseAPI+'/course \n '+baseAPI+'/teacher');
@@ -41,6 +40,6 @@ app.get('/'+baseAPI, function (req, res){
 
 app.listen(process.env.PORT || 3000);
 //app.listen(process.env.PORT);
-});
+// });
 
 module.exports = app;
