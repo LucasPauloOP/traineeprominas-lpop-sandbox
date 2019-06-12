@@ -33,7 +33,7 @@ schemaUser = new Schema ({
     status:{
         type:Number,
         required:true,
-        enum:[0,1],
+        enum:[0,1]
     }
 },{versionKey:false});
 
@@ -67,7 +67,7 @@ schemaTeacher = new Schema({
     status:{
         type:Number,
         required:true,
-        enum:[0,1],
+        enum:[0,1]
     }
 
 },{versionKey:false});

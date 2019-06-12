@@ -15,9 +15,10 @@ const User = mongoose.model('User', userSchema,'user');
 var id;
 
 //async function to count documents and send their size
-(async () => {
-    id = await User.countDocuments({});
-})();
+var id;
+User.countDocuments({}, (err, count) => {
+    id = count;
+});
 
 
 //joi schema of validation
