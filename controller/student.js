@@ -144,6 +144,7 @@ exports.postStudent = (req, res) => {
                                 res.status(401).send('Cadastro de estudantes só é possível com estudantes que possuem curso válido.');
                             }
 
+
                         }
 
                     });
