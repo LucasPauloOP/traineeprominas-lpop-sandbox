@@ -8,18 +8,18 @@ const mongoose = require('mongoose');
 
 //constants to call the moongose ​​scheme
 const courseSchema = require('../moongose_schema').schemaCourse;
-const Course = mongoose.model('Course', courseSchema);
+const Course = mongoose.model('Course', courseSchema,'course');
 
 //define id of course
-const database = require('../database');
-const collection = database.getCollection('course');
 
 var id;
 
 //async function to count documents and send their size
-(async () => {
-  id = await collection.countDocuments({});
-})();
+var id;
+Course.countDocuments({}, (err, count) => {
+  id = count;
+});
+
 
 //joi schema of validation
 const Joi = require('joi');
@@ -36,7 +36,7 @@ const joiSchemaCourse = Joi.object().keys({
 exports.getAllCourses = (req, res) => {
   //  define query and projection for search
   let query = {status:1};
-  let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}
+  let projection = {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1};
 
   // send to model
   //if the return is greater than 0 it shows on the screen
@@ -59,7 +59,7 @@ exports.getAllCourses = (req, res) => {
 exports.getFilteredCourse = (req,res) => {
   //  define query and projection for search
   let query = {'id':parseInt(req.params.id), 'status':1};
-  let projection = {projection: {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1}}
+  let projection = {_id:0, id:1, name:1, period:1, city:1, 'teacher.id':1, 'teacher.name':1, 'teacher.lastName':1, 'teacher.phd':1};
 
   // send to model
   ////if the return is greater than 0 it shows on the screen
@@ -199,7 +199,7 @@ exports.putCourse = (req, res) => {
               // send to model
               courseModel.put(query, course)
                   .then(result => {
-                    if(result.value)
+                    if(result)
                     {
                       // update course in student
                       res.status(200).send('Curso editado com sucesso!');
@@ -232,6 +232,7 @@ exports.putCourse = (req, res) => {
         })();
 
       }).catch(err=>{
+
         res.status(401).send('Campos obrigatórios não preenchidos.');
   });
 
@@ -249,7 +250,7 @@ exports.deleteCourse = (req, res) => {
 
     // delete course in student
     studentModel.deleteCourse(parseInt(req.params.id));
-    if(result.value){
+    if(result){
       console.log('O curso foi removido');
       res.status(200).send('O curso foi removido com sucesso');
     }else{

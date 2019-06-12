@@ -16,9 +16,10 @@ const collection = database.getCollection('student');
 var id;
 
 //async function to count documents and send their size
-(async () => {
-    id = await collection.countDocuments({});
-})();
+var id;
+Student.countDocuments({}, (err, count) => {
+    id = count;
+});
 
 //joi schema of validation
 const Joi = require('joi');
@@ -35,7 +36,7 @@ const joiSchemaStudent = Joi.object().keys({
 exports.getAllStudents = (req, res) => {
     //  define query and projection for search
     let query = {status:1};
-    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, age:1, "course.id":1, "course.name":1, "course.period":1, "course.city":1, "course.teacher.id":1, "course.teacher.name":1, "course.teacher.lastName":1, "course.teacher.phd":1}};
+    let projection = {_id:0, id: 1, name: 1, lastName: 1, age:1, "course.id":1, "course.name":1, "course.period":1, "course.city":1, "course.teacher.id":1, "course.teacher.name":1, "course.teacher.lastName":1, "course.teacher.phd":1};
 
     // send to model
     studentModel.getAll(query, projection)
@@ -56,7 +57,7 @@ exports.getAllStudents = (req, res) => {
 exports.getFilteredStudent = (req,res) => {
     //  define query and projection for search
     let query = {'id':parseInt(req.params.id), 'status':1};
-    let projection = {projection: {_id:0, id: 1, name: 1, lastName: 1, age:1, "course.id":1, "course.name":1, "course.period":1, "course.city":1, "course.teacher.id":1, "course.teacher.name":1, "course.teacher.lastName":1, "course.teacher.phd":1}};
+    let projection = {_id:0, id: 1, name: 1, lastName: 1, age:1, "course.id":1, "course.name":1, "course.period":1, "course.city":1, "course.teacher.id":1, "course.teacher.name":1, "course.teacher.lastName":1, "course.teacher.phd":1};
 
     // send to model
     studentModel.getFiltered(query, projection)
@@ -202,7 +203,7 @@ exports.putStudent = (req, res) => {
                             // send to model
                             studentModel.put(query,student)
                                 .then(result => {
-                                    if(result.value)
+                                    if(result)
                                     {
                                         res.status(200).send('Estudante editado com sucesso!');
                                     }
@@ -259,7 +260,7 @@ exports.deleteStudent = (req, res) => {
     // send to model
     studentModel.delete(query, set)
     .then(result => {
-        if(result.value){ // if student exists
+        if(result){ // if student exists
             console.log('O estudante foi removido');
             res.status(200).send('O estudante foi removido com sucesso');
           }else{

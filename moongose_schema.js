@@ -10,8 +10,7 @@ schemaUser = new Schema ({
 
     id:{
         type:Number,
-        required:true,
-        unique:true
+        required:true
     },
 
     name: {
@@ -43,8 +42,7 @@ schemaTeacher = new Schema({
 
     id:{
         type:Number,
-        required:true,
-        unique:true
+        required:true
     },
 
     name:{
@@ -66,8 +64,7 @@ schemaTeacher = new Schema({
 
     status:{
         type:Number,
-        required:true,
-        enum:[0,1]
+        required:true
     }
 
 },{versionKey:false});
@@ -75,18 +72,19 @@ schemaTeacher = new Schema({
 
 //-----------------------------------schema course----------------------------------------------
 schemaCourse  =  new Schema({
+
     id:{
         type:Number,
-        required:true,
-        unique:true
+        required:true
     },
+
     name:{
         type: String,
         required:true
     },
 
     period:{
-        type:Number,
+        type:Number
     },
 
     city:{
@@ -99,6 +97,7 @@ schemaCourse  =  new Schema({
         type:[schemaTeacher],validate:[schemaTeacher =>{return schemaTeacher.length>=2}
             ,'Para cadastrar um curso é necessário no mínimo 2 professores.']
     },
+
     status:{
         type:Number,
         required:true
@@ -111,8 +110,7 @@ schemaCourse  =  new Schema({
 schemaStudent =new Schema({
     id:{
         type:Number,
-        required:true,
-        unique:true
+        required:true
     },
     name:{
         type:String,
@@ -136,11 +134,12 @@ schemaStudent =new Schema({
             'Para cadastrar um estudante é necessário que ele tenha 1 curso'],
         required:true,
     },
+
     status:{
         type:Number,
-        required:true,
-        enum:[0,1]
+        required:true
     }
+
 },{versionKey:false});
 
 

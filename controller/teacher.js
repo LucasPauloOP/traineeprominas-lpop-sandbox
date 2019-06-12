@@ -17,9 +17,11 @@ const Teacher = mongoose.model('Teacher', teacherSchema,'teacher');
 var id;
 
 //async function to count documents and send their size
-(async () => {
-    id = await Teacher.countDocuments({});
-})();
+var id;
+Teacher.countDocuments({}, (err, count) => {
+    id = count;
+});
+
 
 //joi schema of validation
 const Joi = require('joi');

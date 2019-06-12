@@ -13,7 +13,7 @@ exports.getAll = (query, projection) => {
 
     //search in the bd according to the parameters received in the variable query
     // and projects according to the variable projection
-  return Teacher.find(query, projection).toArray();
+  return Teacher.find(query, projection);
 };
 
 //-------------------GET ID-----------------------------------
@@ -21,7 +21,7 @@ exports.getFiltered = (query, projection) => {
 
     //search in the bd according to the parameters received in the variable query
     // and projects according to the variable projection
-  return Teacher.find(query, projection).toArray();
+  return Teacher.find(query, projection);
 };
 
 //--------------------POST---------------------------------------
@@ -49,5 +49,5 @@ exports.delete = (query, set) => {
 exports.getTeacher = (id) => {
 
     /*find the teachers according to the ids passed by parameters*/
-  return Teacher.find({'id':id, 'status':1}).toArray();
+  return Teacher.find({'id':id, 'status':1});
 };

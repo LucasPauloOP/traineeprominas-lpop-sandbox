@@ -27,8 +27,8 @@ const database = require('./database');
     //API routes
 // app.use(baseAPI, require('./routes/student'));
 app.use(baseAPI,require('./routes/user'));
-// app.use(baseAPI, require('./routes/course'));
- app.use(baseAPI, require('./routes/teacher'));
+app.use(baseAPI, require('./routes/course'));
+app.use(baseAPI, require('./routes/teacher'));
 
 app.get(baseAPI+'/', function (req, res){
   res.send('Endpoints: \n '+baseAPI+'/user \n '+baseAPI+'/student \n '+baseAPI+'/course \n '+baseAPI+'/teacher');
