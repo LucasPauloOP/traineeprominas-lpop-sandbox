@@ -6,41 +6,6 @@ const app = require('../app');
 
 
 
-
-
-//---------------------------------TEACHER------------------------------------------
-
-describe('Put with id valid',function () {
-    it('put with existing ID and correct data in teacher',()=>{
-        return request(app).put('/api/v1/teacher/1').send({name:'testeput1',lastName:'testeput1',phd:true})
-            .then(function (res) {
-                assert.equal(res.status,200);
-            })
-    })
-
-});
-
-describe('Put with id invalid',function () {
-    it('put with non existent id and correct data in teacher',()=>{
-        return request(app).put('/api/v1/teacher/30').send({name:'testeput1',lastName:'testeput1',phd:true})
-            .then(function (res) {
-                assert.equal(res.status,401);
-            })
-    })
-
-});
-
-describe('Put with id valid',function () {
-    it('put with existing ID and incorrect data in teacher',()=>{
-        return request(app).put('/api/v1/teacher/1').send({name:'testeput1',lastName:'testeput1'})
-            .then(function (res) {
-                assert.equal(res.status,401);
-            })
-    })
-
-});
-
-
 //---------------------------------COURSE---------------------------------------
 
 describe('Put with id valid',function () {

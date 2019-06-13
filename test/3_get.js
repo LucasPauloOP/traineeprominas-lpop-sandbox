@@ -4,33 +4,6 @@ const app = require('../app');
 
 
 
-//--------------------------TEACHER-------------------------
-
-describe('Get with teachers register',function () {
-    it('Register teachers with users register in mongodb',()=>{
-        return request(app).get('/api/v1/JSON/teacher').then(function(res){
-            assert.equal(res.status,200);
-        });
-    })
-
-});
-
-
-describe('Get id of teacher register',function () {
-    it('Active teacher with active id in teacher',()=>{
-        return request(app).get('/api/v1/JSON/teacher/1').then(function (res) {
-            assert.equal(res.status, 200);
-        });
-    })
-});
-
-describe('Get invalid id of teachers register',function () {
-    it('teacher with invalid id in teacher',()=>{
-        return request(app).get('/api/v1/JSON/teacher/30').then(function (res) {
-            assert.equal(res.status, 204);
-        });
-    })
-});
 
 
 
