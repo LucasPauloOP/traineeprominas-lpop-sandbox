@@ -1,5 +1,5 @@
 //constant to use mongoclient
-const mongoClient = require('mongodb').MongoClient;
+// const mongoClient = require('mongodb').MongoClient;
 
 //constant to connect to bd through url
 const mdbURL = 'mongodb+srv://lucaspauloop:Lucio3237*@cluster0-5y6gh.mongodb.net/trainee-prominas?retryWrites=true&w=majority';

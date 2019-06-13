@@ -47,8 +47,8 @@ describe('register student as 18 years and course wrong', function () {
 //-------------------------GET-----------------------------------
 
 describe('Get with students register',function () {
-    it('Register students with users register in mongodb',()=>{
-        return request(app).get('/api/v1/JSON/user').then(function(res){
+    it('Get students with in mongodb',()=>{
+        return request(app).get('/api/v1/JSON/student').then(function(res){
             assert.equal(res.status,200);
         });
     })

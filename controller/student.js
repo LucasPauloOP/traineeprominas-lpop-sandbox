@@ -223,8 +223,7 @@ exports.putStudent = (req, res) => {
                             {
                                 res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
                             }
-
-                            if(student.course.length!=1)
+                            else if(student.course.length!=1)
                             {
 
                                 res.status(401).send('Cadastro de estudantes só é possível com mais de 1 professor.');

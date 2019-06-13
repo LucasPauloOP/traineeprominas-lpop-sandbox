@@ -93,7 +93,7 @@ describe('Get invalid id of course register',function () {
 
 describe('Put with id valid',function () {
     it('put with existing ID and correct data in course',()=>{
-        return request(app).put('/api/v1/course/1').send({name:'testeput1',city:'testeput1',period:'5',teacher:[1,2]})
+        return request(app).put('/api/v1/course/1').send({name:'testeput1',city:'testeput1',period:'5',teacher:[2,3]})
             .then(function (res) {
                 assert.equal(res.status,200);
             })
