@@ -203,7 +203,7 @@ exports.putCourse = (req, res) => {
                   .then(result => {
                     if(result)
                     {
-                      console.log(">>>>>>>>>",result);
+                     // console.log(">>>>>>>>>",result);
                       // update course in student
                       res.status(200).send('Curso editado com sucesso!');
                       studentModel.updateCourse(parseInt(req.params.id), result);
@@ -222,13 +222,14 @@ exports.putCourse = (req, res) => {
               try{
                 //sends a custom error message accordingly if
                 // client try to register a course with 2 invalid teachers
-                if(course.teacher < 2 ){
+                if(course.teacher.length < 2 ){
                   throw new BussinessError('cadastro não autorizado.');
                 }
 
               }catch (Error) {
                 res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
               }
+
             }
           });
 
@@ -246,11 +247,11 @@ exports.deleteCourse = (req, res) => {
   // define query and set to search and delete
   let query = {'id': parseInt(req.params.id),'status':1};
   let set = {status:0};
-
+  console.log("entrou");
   // send to model
   courseModel.delete(query, set)
   .then(result => {
-
+    console.log('>>>>>>>>>>',result);
     // delete course in student
     studentModel.deleteCourse(parseInt(req.params.id));
     if(result){

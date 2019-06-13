@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ee7ad3b-455a-454f-b5df-ce7a32bf23f5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/course.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/course.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/student.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/student.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/teacher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/course.js" beforeDir="false" afterPath="$PROJECT_DIR$/model/course.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/student.js" beforeDir="false" afterPath="$PROJECT_DIR$/model/student.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/model/teacher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/moongose_schema.js" beforeDir="false" afterPath="$PROJECT_DIR$/moongose_schema.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -25,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
+            <state relative-caret-position="375">
+              <caret line="25" selection-start-line="25" selection-end-line="25" />
             </state>
           </provider>
         </entry>
@@ -34,8 +30,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/teacher.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="179">
-              <caret line="177" column="87" selection-start-line="177" selection-start-column="87" selection-end-line="177" selection-end-column="87" />
+            <state relative-caret-position="99">
+              <caret line="185" column="53" selection-start-line="185" selection-start-column="53" selection-end-line="185" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -43,17 +39,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/teacher.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
+            <state relative-caret-position="209">
               <caret line="38" column="2" lean-forward="true" selection-start-line="38" selection-start-column="2" selection-end-line="38" selection-end-column="2" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/course.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="74">
-              <caret line="208" column="77" selection-start-line="208" selection-start-column="77" selection-end-line="208" selection-end-column="77" />
+            <state relative-caret-position="119">
+              <caret line="253" column="35" selection-start-line="253" selection-start-column="35" selection-end-line="253" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -61,17 +57,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/controller/student.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="203" column="44" selection-start-line="203" selection-start-column="38" selection-end-line="203" selection-end-column="44" />
+            <state relative-caret-position="60">
+              <caret line="259" column="21" selection-start-line="259" selection-start-column="21" selection-end-line="259" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/student.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="134">
-              <caret line="56" column="46" lean-forward="true" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
+            <state relative-caret-position="154">
+              <caret line="56" column="84" lean-forward="true" selection-start-line="56" selection-start-column="84" selection-end-line="56" selection-end-column="84" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -82,8 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/course.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="284">
-              <caret line="74" column="2" lean-forward="true" selection-start-line="74" selection-start-column="2" selection-end-line="74" selection-end-column="2" />
+            <state relative-caret-position="74">
+              <caret line="59" column="83" lean-forward="true" selection-start-line="59" selection-start-column="83" selection-end-line="59" selection-end-column="83" />
             </state>
           </provider>
         </entry>
@@ -141,11 +137,11 @@
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/controller/student.js" />
         <option value="$PROJECT_DIR$/moongose_schema.js" />
-        <option value="$PROJECT_DIR$/controller/teacher.js" />
         <option value="$PROJECT_DIR$/model/teacher.js" />
         <option value="$PROJECT_DIR$/model/course.js" />
-        <option value="$PROJECT_DIR$/controller/course.js" />
+        <option value="$PROJECT_DIR$/controller/teacher.js" />
         <option value="$PROJECT_DIR$/model/student.js" />
+        <option value="$PROJECT_DIR$/controller/course.js" />
       </list>
     </option>
   </component>
@@ -161,7 +157,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -174,15 +169,11 @@
               <item name="Trainee27-05-2019" type="462c0819:PsiDirectoryNode" />
               <item name="controller" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Trainee27-05-2019" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Trainee27-05-2019" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -233,12 +224,13 @@
       <workItem from="1559045471118" duration="5433000" />
       <workItem from="1560164579808" duration="33210000" />
       <workItem from="1560251153472" duration="24809000" />
-      <workItem from="1560350664537" duration="18375000" />
+      <workItem from="1560350664537" duration="18411000" />
+      <workItem from="1560424161741" duration="2068000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="107480000" />
+    <option name="totallyTimeSpent" value="109584000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="25" width="1317" height="743" extended-state="6" />
@@ -259,7 +251,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="GraphQL" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.43333334" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.43189368" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -294,20 +286,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="780">
           <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/router/student.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="855">
-          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/router/course.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="46" column="10" selection-start-line="46" selection-start-column="10" selection-end-line="46" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -367,13 +345,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/course.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="13" lean-forward="true" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/routes/user.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -423,13 +394,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="25" lean-forward="true" selection-start-line="25" selection-end-line="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="149">
@@ -444,48 +408,76 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/teacher.js">
+    <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="177" column="87" selection-start-line="177" selection-start-column="87" selection-end-line="177" selection-end-column="87" />
+        <state relative-caret-position="375">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/teacher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
+        <state relative-caret-position="209">
           <caret line="38" column="2" lean-forward="true" selection-start-line="38" selection-start-column="2" selection-end-line="38" selection-end-column="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/course.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="284">
-          <caret line="74" column="2" lean-forward="true" selection-start-line="74" selection-start-column="2" selection-end-line="74" selection-end-column="2" />
+        <state relative-caret-position="74">
+          <caret line="59" column="83" lean-forward="true" selection-start-line="59" selection-start-column="83" selection-end-line="59" selection-end-column="83" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/course.js">
+    <entry file="file://$PROJECT_DIR$/controller/teacher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="208" column="77" selection-start-line="208" selection-start-column="77" selection-end-line="208" selection-end-column="77" />
+        <state relative-caret-position="99">
+          <caret line="185" column="53" selection-start-line="185" selection-start-column="53" selection-end-line="185" selection-end-column="53" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/student.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="203" column="44" selection-start-line="203" selection-start-column="38" selection-end-line="203" selection-end-column="44" />
+        <state relative-caret-position="60">
+          <caret line="259" column="21" selection-start-line="259" selection-start-column="21" selection-end-line="259" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/router/student.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="855">
+          <caret line="57" column="13" selection-start-line="57" selection-start-column="13" selection-end-line="57" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/router/course.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-525">
+          <caret line="46" column="5" lean-forward="true" selection-start-line="46" selection-start-column="5" selection-end-line="46" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/routes/course.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/student.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="56" column="46" lean-forward="true" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
+        <state relative-caret-position="154">
+          <caret line="56" column="84" lean-forward="true" selection-start-line="56" selection-start-column="84" selection-end-line="56" selection-end-column="84" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/controller/course.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="253" column="35" selection-start-line="253" selection-start-column="35" selection-end-line="253" selection-end-column="35" />
         </state>
       </provider>
     </entry>

@@ -173,7 +173,7 @@ exports.putTeacher = (req, res) => {
                     // send to model
                     teacherModel.put(query, teacher)
                         .then(async (result) => {
-                            console.log(">>>>>>>>>>>>",result);
+                            // console.log(">>>>>>>>>>>>",result);
                             if (result) { // if professor exists
                                 res.status(200).send('Professor editado com sucesso!');
 

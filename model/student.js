@@ -44,21 +44,23 @@ exports.delete = (query, set) => {
 
 //-----------------------PROPAGATION OF COURSE: UPDATE-------------------
 exports.updateCourse = (id, set) => {
-    // console.log(">>>>>>>>set:",set);
-    // console.log(">>>>>>>>id:",id);
+     // console.log(">>>>>>>>set:",set);
+     // console.log(">>>>>>>>id:",id);
     //updates on the student the course who have been put
-  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"course.$": set}},{new:true});
+  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"course.$": set}}).then(result=>{})
 };
 
 //-----------------------PROPAGATION OF COURSE: DELETE----------------------
 exports.deleteCourse = (id) => {
 
     //deletes courses in progress if they are deleted
-  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"status":0}},{new:true});
+  return Student.findOneAndUpdate({'course.id':id, 'status':1}, {$set: {"status":0}}).then(result=>{});
 };
 
 //-------------------------PROPAGATION OF COURSE: UPDATE TEACHER------------------------------
 exports.updateTeacher = (course) => {
     //updates teachers within students
-  return Student.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}},{new:true});
+    // console.log(">>>>>>>>>>>>> course:",course);
+
+  return Student.findOneAndUpdate({'status':1, 'course.id':course.id}, {$set: {'course.$':course}}).then(result=>{})
 };
