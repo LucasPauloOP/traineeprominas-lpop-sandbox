@@ -136,7 +136,7 @@ exports.postCourse = (req, res) => {
               //sends a custom error message accordingly if
               // client try to register a course with 2 invalid teachers
             try{
-              if(course.teacher < 2 ){
+              if(course.teacher.length < 2 ){
                 throw new BussinessError('cadastro não autorizado.');
               }
 

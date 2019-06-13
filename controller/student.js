@@ -199,6 +199,7 @@ exports.putStudent = (req, res) => {
                     validate.validate(error=>{
                         if(!error)
                         {
+                            console.log('>>>>>>>>>>',error);
                             // send to model
                             studentModel.put(query,student)
                                 .then(result => {
@@ -217,6 +218,7 @@ exports.putStudent = (req, res) => {
                                 });
                         }
                         else{
+                            console.log(">>>>>>>>>>>else",error);
 
                             //sends a custom error message accordingly if
                             // client try to register a student with age < 17 or course that does not exist.
@@ -226,7 +228,7 @@ exports.putStudent = (req, res) => {
                                 }
 
                             }
-                            catch (age) {
+                            catch (BussinessError) {
                                 res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
                             }
 
@@ -235,7 +237,7 @@ exports.putStudent = (req, res) => {
                                     throw new BussinessError('Cadastro não autorizado.');
                                 }
                             }
-                            catch(course){
+                            catch(BussinessError){
                                 res.status(401).send('Cadastro de estudantes só é possível com estudantes que possuem curso válido.');
                             }
 
