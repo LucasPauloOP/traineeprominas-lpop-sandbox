@@ -125,25 +125,22 @@ exports.postStudent = (req, res) => {
 
                             //sends a custom error message accordingly if
                             // client try to register a student with age < 17 or course that does not exist.
-                            try {
-                                if (student.age < 17) {
-                                    throw new BussinessError('Cadastro não autorizado.');
-                                }
-
-                            }
-                            catch (age) {
+                                if (student.age < 17)
+                                {
+                                    console.log('>>>>>>>>>>>>>age:',student.age);
                                     res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
-                            }
-
-                            try{
-                                if(student.course!=1){
-                                    throw new BussinessError('Cadastro não autorizado.');
                                 }
-                            }
-                            catch(course){
-                                res.status(401).send('Cadastro de estudantes só é possível com estudantes que possuem curso válido.');
-                            }
 
+                                if(student.course.length!=1)
+                                {
+
+                                    res.status(401).send('Cadastro de estudantes só é possível com cursos existentes.');
+                                }
+
+                                // if(student.age<17 && student.course.length!=1)
+                                // {
+                                //     res.status(401).send('Cadastro de estudantes só é possível cadastrar  estudantes maiores de 17 anos e matriculados em um curso existente.');
+                                // }
 
                         }
 
@@ -218,28 +215,21 @@ exports.putStudent = (req, res) => {
                                 });
                         }
                         else{
-                            console.log(">>>>>>>>>>>else",error);
+                            // console.log(">>>>>>>>>>>else",error);
 
                             //sends a custom error message accordingly if
                             // client try to register a student with age < 17 or course that does not exist.
-                            try {
-                                if (student.age < 17) {
-                                    throw new BussinessError('Cadastro não autorizado.');
-                                }
-
-                            }
-                            catch (BussinessError) {
+                            if (student.age < 17)
+                            {
                                 res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
                             }
 
-                            try{
-                                if(student.course!=1){
-                                    throw new BussinessError('Cadastro não autorizado.');
-                                }
+                            if(student.course.length!=1)
+                            {
+
+                                res.status(401).send('Cadastro de estudantes só é possível com mais de 1 professor.');
                             }
-                            catch(BussinessError){
-                                res.status(401).send('Cadastro de estudantes só é possível com estudantes que possuem curso válido.');
-                            }
+
 
                         }
                     });

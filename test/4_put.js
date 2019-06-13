@@ -128,7 +128,7 @@ describe('Put with id invalid',function () {
 
 describe('Put with id valid',function () {
     it('Put with id valid and incorrect data in student',()=>{
-        return request(app).put('/api/v1/student/1').send({name:'puttest2',lastName:'puttest2',age:'15',course:[2]})
+        return request(app).put('/api/v1/student/1').send({name:'puttest2',lastName:'puttest2',age:'15',course:[1]})
     })
 });
 
