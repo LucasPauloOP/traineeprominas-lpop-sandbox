@@ -118,15 +118,9 @@ exports.postUser = (req, res) => {
 
                     //sends a custom error message accordingly if
                     // client try to register a profile other than admin or guess
-                    try{
-                        if(user.profile != 'admin'||user.profile != "guess"){
-                            throw new BussinessError('cadastro não autorizado');
+                        if(user.profile != 'admin'||user.profile != "guess") {
+                            res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
                         }
-
-                    }catch (Error) {
-                        res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
-                    }
-
                 }
 
             })
@@ -186,14 +180,10 @@ exports.putUser = (req, res) => {
 
                     //sends a custom error message accordingly if
                     // client try to register a profile other than admin or guess
-                    try{
                         if(user.profile != 'admin'||user.profile != "guess"){
-                            throw new BussinessError('cadastro não autorizado');
+                            res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
                         }
 
-                    }catch (Error) {
-                        res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
-                    }
                 }
             });
 

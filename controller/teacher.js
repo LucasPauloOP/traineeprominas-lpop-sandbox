@@ -116,19 +116,15 @@ exports.postTeacher = (req, res) => {
                             res.status(500);
                         });
                 }
-                else{
+                else {
                     //decrements the id to prevent id
                     // from leaving the expected count
-                    teacher.id=parseInt(--id);
+                    teacher.id = parseInt(--id);
 
                     //sends a custom error message accordingly if
                     // client try to register a phd different from true
-                    try{
-                        if(!teacher.phd ){
-                            throw new BussinessError('cadastro não autorizado');
-                        }
+                    if (!teacher.phd) {
 
-                    }catch (Error) {
                         res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd precisa ser verdadeiro.');
                     }
                 }
@@ -198,21 +194,13 @@ exports.putTeacher = (req, res) => {
                 }
 
                 else {
-
                     //sends a custom error message accordingly if
                     // client try to register a phd different from true
-                    try{
                         if(!teacher.phd ){
-                            throw new BussinessError('cadastro não autorizado');
+                            res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd deverá ser verdadeiro.');
                         }
 
-                    }catch (Error) {
-                        res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd deverá ser verdadeiro.');
-                    }
-
                 }
-
-
             });
 
         }).catch(err=>{

@@ -135,16 +135,9 @@ exports.postCourse = (req, res) => {
 
               //sends a custom error message accordingly if
               // client try to register a course with 2 invalid teachers
-            try{
               if(course.teacher.length < 2 ){
-                throw new BussinessError('cadastro não autorizado.');
+                res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
               }
-
-            }catch (Error) {
-              res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
-            }
-
-
           }
         })
       }
@@ -219,17 +212,11 @@ exports.putCourse = (req, res) => {
 
             }
             else{
-              try{
                 //sends a custom error message accordingly if
                 // client try to register a course with 2 invalid teachers
                 if(course.teacher.length < 2 ){
-                  throw new BussinessError('cadastro não autorizado.');
+                  res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
                 }
-
-              }catch (Error) {
-                res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
-              }
-
             }
           });
 
