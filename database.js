@@ -18,6 +18,7 @@ module.exports =function(){
     mongoose.connect(mdbURL, { useNewUrlParser: true });
 
     mongoose.connection.on('connected', function(){
+        mongoose.set('useFindAndModify', false);
         console.log("Mongoose default connection is open to ", mdbURL);
     });
 

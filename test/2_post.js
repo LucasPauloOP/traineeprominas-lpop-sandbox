@@ -4,14 +4,6 @@ const request = require('supertest');
 const app = require('../app');
 
 //route only works if the database is empty
-//-------------------------USER------------------------------------------
-describe('Get with users register',function () {
-   it('Get with registered users and return is empty in user',()=>{
-       return request(app).get('/api/v1/JSON/user').then(function (res) {
-            assert.equal(res.status,204);
-       });
-   });
-});
 
 //------------------------------TEACHER-----------------------------------
 describe('Get with teachers register',function () {
@@ -42,38 +34,6 @@ describe('Get with students register',function () {
 
 //----------------------------------------------------------------------------
 
-//------------------------------------USER-------------------------------------
-
-describe('Post(admin)', function() {
-    it('register user as admin in user', () => {
-        return request(app)
-            .post('/api/v1/user')
-            .send({name: "Teste1", lastName: "Teste1", profile: "admin"})
-            .then(function (res) {
-                assert.equal(res.status, 201);
-            });
-    });
-});
-
-describe('Post(guess)',function () {
-    it('register user as guess in user', () => {
-        return request(app).post('/api/v1/user').send({name:'Teste2',lastName:'Teste2',profile:'guess'})
-            .then(function (res) {
-                assert.equal(res.status,201);
-            });
-    });
-
-});
-
-describe('Post without gues or admin',function () {
-    it('register user without guess or admin in user',()=>{
-        return request(app).post('/api/v1/user').send({name:'Teste4',lastname:'Teste4',profile:'profile'})
-            .then(function (res) {
-                assert.equal(res.status,401);
-            });
-    });
-
-});
 
 //--------------------------------TEACHER------------------------------------------
 

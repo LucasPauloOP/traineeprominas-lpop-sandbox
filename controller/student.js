@@ -127,7 +127,7 @@ exports.postStudent = (req, res) => {
                             // client try to register a student with age < 17 or course that does not exist.
                                 if (student.age < 17)
                                 {
-                                    console.log('>>>>>>>>>>>>>age:',student.age);
+
                                     res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
                                 }
 
@@ -196,7 +196,7 @@ exports.putStudent = (req, res) => {
                     validate.validate(error=>{
                         if(!error)
                         {
-                            console.log('>>>>>>>>>>',error);
+                            // console.log('>>>>>>>>>>',error);
                             // send to model
                             studentModel.put(query,student)
                                 .then(result => {
@@ -252,11 +252,11 @@ exports.deleteStudent = (req, res) => {
     studentModel.delete(query, set)
     .then(result => {
         if(result){ // if student exists
-            console.log('O estudante foi removido');
+            // console.log('O estudante foi removido');
             res.status(200).send('O estudante foi removido com sucesso');
           }else{
-            console.log('Nenhum estudante foi removido');
-            res.status(204).send();
+            // console.log();
+            res.status(204).send('Nenhum estudante foi removido');
           }
     })
     .catch(err => {

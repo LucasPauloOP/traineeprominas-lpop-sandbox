@@ -5,39 +5,6 @@ const app = require('../app');
 //route only works if the database is empty
 
 
-//----------------------------------------USER------------------------------------------------------------------------
-
-describe('Delete with id valid',function () {
-    it('Delete with existing ID in user',()=>{
-        return request(app).delete('/api/v1/user/1')
-            .then(function (res) {
-                assert.equal(res.status,200);
-            })
-    })
-
-});
-
-describe('Delete with id invalid',function () {
-    it('Delete with non existing ID in user',()=>{
-        return request(app).delete('/api/v1/user/50')
-            .then(function (res) {
-                assert.equal(res.status,204);
-            })
-    })
-
-});
-
-describe('Delete with id deleted',function () {
-
-
-    it('Delete with id deleted in user',()=>{
-        return request(app).delete('/api/v1/user/2')
-            .then(function (res) {
-                assert.equal(res.status,200);
-            })
-    })
-
-});
 
 //----------------------------------------TEACHER------------------------------------------------------------------------
 

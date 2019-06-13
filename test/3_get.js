@@ -4,35 +4,6 @@ const app = require('../app');
 
 
 
-
-
-//---------------------USER------------------------------------
-
-describe('Get with users register',function () {
-    it('Register user with users register in mongodb in user',()=>{
-        return request(app).get('/api/v1/JSON/user').then(function(res){
-            assert.equal(res.status,200);
-        });
-    })
-
-});
-
-describe('Get id of users register',function () {
-    it('active user with active id in user',()=>{
-        return request(app).get('/api/v1/JSON/user/1').then(function (res) {
-            assert.equal(res.status, 200);
-        });
-    })
-});
-
-describe('Get id of users register',function () {
-    it('active user with active id in user',()=>{
-        return request(app).get('/api/v1/JSON/user/1').then(function (res) {
-            assert.equal(res.status, 200);
-        });
-    })
-});
-
 //--------------------------TEACHER-------------------------
 
 describe('Get with teachers register',function () {
