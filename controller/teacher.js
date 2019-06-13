@@ -173,7 +173,6 @@ exports.putTeacher = (req, res) => {
                     // send to model
                     teacherModel.put(query, teacher)
                         .then(async (result) => {
-                            // console.log(">>>>>>>>>>>>",result);
                             if (result) { // if professor exists
                                 res.status(200).send('Professor editado com sucesso!');
 
@@ -243,11 +242,11 @@ exports.deleteTeacher = (req, res) => {
         });
         
         if(result){ // if professor exists
-            console.log('O professor foi removido');
+            // console.log('O professor foi removido');
             res.status(200).send('O professor foi removido com sucesso');
           }else{
-            console.log('Nenhum professor foi removido');
-            res.status(204).send();
+            // console.log('Nenhum professor foi removido');
+            res.status(204).send('Nenhum professor foi removido');
           }
     })
     .catch(err => {

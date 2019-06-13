@@ -247,7 +247,7 @@ exports.deleteCourse = (req, res) => {
   // define query and set to search and delete
   let query = {'id': parseInt(req.params.id),'status':1};
   let set = {status:0};
-  console.log("entrou");
+  // console.log("entrou");
   // send to model
   courseModel.delete(query, set)
   .then(result => {

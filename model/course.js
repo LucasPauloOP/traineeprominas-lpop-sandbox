@@ -54,7 +54,7 @@ exports.getCourse = (id) => {
 //------------------------------PROPAGATION OF TEACHERS: UPDATE---------------------------------
 exports.updateTeacher = (id, set) => {
 
-    // console.log(">>>>>>>>>>>>>>>2",set);
+
 
   //updates on the courses the teachers who have been put
   return Course.updateMany({'teacher.id':id, 'status':1}, {$set: {'teacher.$':set}},{new:true});
