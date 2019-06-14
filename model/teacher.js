@@ -41,7 +41,6 @@ exports.put = (query, set) => {
 
 //-------------------DELETE--------------------------------------
 exports.delete = (query, set) => {
-
     //change the status according to what was passed in the query variable
   return Teacher.findOneAndUpdate(query, {$set: set},{new:true});
 };
@@ -51,12 +50,5 @@ exports.getTeacher = (id,req) => {
 
     // console.log(">>>>>>>>>>>req:",req);
     /*find the teachers according to the ids passed by parameters*/
-  return Course.aggregate([
-      {$lookup:
-          {
-              from:'teacher',
-              localField:"req.teacher[1]",
-              foreignField:'id',
-              as:'teacher'
-      }}]);
+  return Teacher.find({'id':id, 'status':1});
 };

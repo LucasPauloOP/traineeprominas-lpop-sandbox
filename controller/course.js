@@ -113,7 +113,6 @@ exports.postCourse = (req, res) => {
           status:1,
         });
 
-        console.log(">>>>>>>>",course);
         //validation if no error returns and proceeds with data
         // if error return sends error message.
         course.validate(error=>{
