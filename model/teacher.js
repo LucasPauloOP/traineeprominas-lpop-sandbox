@@ -8,6 +8,9 @@ const Teacher = mongoose.model('Teacher', teacherSchema,'teacher');
 const courseSchema = require('../moongose_schema').schemaCourse;
 const Course = mongoose.model('Course', courseSchema,'course');
 
+const Transaction = require('mongoose-transactions');
+const transaction = new Transaction();
+
 
 //--------------------GET ALL---------------------------------
 exports.getAll = (query, projection) => {

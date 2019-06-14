@@ -3,6 +3,8 @@ const teacherModel = require('../model/teacher');
 const courseModel = require('../model/course');
 const studentModel = require('../model/student');
 
+const Transaction = require('mongoose-transactions');
+const transaction = new Transaction();
 //constant to use moongose
 const mongoose = require('mongoose');
 
@@ -213,27 +215,22 @@ exports.putTeacher = (req, res) => {
 //--------------------------------DELETE FOR ID----------------------------------------------------
 exports.deleteTeacher = (req, res) => {
     //  define query and set for search and delete
-
     (async ()=>{
-            const session = await mongoose.startSession();
-            session.startTransaction();
             try{
 
                 let query = {'id': parseInt(req.params.id), 'status':1};
                 let set = {status:0};
-
-                const A = await Teacher;
                 // send to model
-                teacherModel.delete(query, set)
+                transaction.teacherModel.delete(query, set)
                     .then(async (result) => {
 
                         //  updates the course that contains that teacher
-                        await courseModel.deleteTeacher(parseInt(req.params.id));
+                        await transaction.courseModel.deleteTeacher(parseInt(req.params.id));
 
                         // receives the updated teacher and updates the student that contains this teacher
-                        courseModel.getCoursebyTeacher().then(courses => {
+                        transaction.courseModel.getCoursebyTeacher().then(courses => {
                             for(var i = 0; i<courses.length; i++){
-                                studentModel.updateTeacher(courses[i]);
+                                transaction.studentModel.updateTeacher(courses[i]);
                             }
                         });
 
@@ -245,22 +242,17 @@ exports.deleteTeacher = (req, res) => {
                             // console.log('Nenhum professor foi removido');
                             res.status(204).send('Nenhum professor foi removido');
                         }
+                    })
+                    .catch(err => {
+                        console.error("Erro ao conectar a collection teacher: ");
+                        res.status(500).send("Erro ao conectar ao banco de dados.");
                     });
-                    // .catch(err => {
-                    //     console.error("Erro ao conectar a collection teacher: ");
-                    //     res.status(500);
-                    // });
-                const b = await Teacher;
-                await session.commitTransaction();
-                session.endSession();
-
-                return {from:A,to:b};
+                    const final = await transaction.run();
 
             }catch (error) {
-                console.log(error);
-                await session.abortTransaction();
-                session.endSession();
-                throw error;
+                console.error(error);
+                const rollback = await transaction.rollback().catch(console.error);
+                transaction.clean();
             }
 
         })();
