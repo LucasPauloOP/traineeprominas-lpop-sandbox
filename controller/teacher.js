@@ -213,42 +213,58 @@ exports.putTeacher = (req, res) => {
 //--------------------------------DELETE FOR ID----------------------------------------------------
 exports.deleteTeacher = (req, res) => {
     //  define query and set for search and delete
-    let session=null;
-    return Teacher.createCollection().
-    then(()=>Teacher.startSession()).then(_sessions=>{
-        sessions = _sessions;
 
-        session.startTransaction();
+    (async ()=>{
+            const session = await mongoose.startSession();
+            session.startTransaction();
+            try{
 
-        let query = {'id': parseInt(req.params.id), 'status':1};
-        let set = {status:0};
+                let query = {'id': parseInt(req.params.id), 'status':1};
+                let set = {status:0};
 
-        // send to model
-        teacherModel.delete(query, set)
-            .then(async (result) => {
-                //  updates the course that contains that teacher
-                await courseModel.deleteTeacher(parseInt(req.params.id));
+                const A = await Teacher;
+                // send to model
+                teacherModel.delete(query, set)
+                    .then(async (result) => {
 
-                // receives the updated teacher and updates the student that contains this teacher
-                courseModel.getCoursebyTeacher().then(courses => {
-                    for(var i = 0; i<courses.length; i++){
-                        studentModel.updateTeacher(courses[i]);
-                    }
-                });
+                        //  updates the course that contains that teacher
+                        await courseModel.deleteTeacher(parseInt(req.params.id));
 
-                if(result){ // if professor exists
-                    // console.log('O professor foi removido');
-                    res.status(200).send('O professor foi removido com sucesso');
-                }else{
-                    // console.log('Nenhum professor foi removido');
-                    res.status(204).send('Nenhum professor foi removido');
-                }
-            })
-            .catch(err => {
-                console.error("Erro ao conectar a collection teacher: ", err);
-                res.status(500);
-            });
+                        // receives the updated teacher and updates the student that contains this teacher
+                        courseModel.getCoursebyTeacher().then(courses => {
+                            for(var i = 0; i<courses.length; i++){
+                                studentModel.updateTeacher(courses[i]);
+                            }
+                        });
 
-    });
+                        if(result){ // if professor exists
+                            // console.log('O professor foi removido');
+                            res.status(200).send('O professor foi removido com sucesso');
+                            throw new err();
+                        }else{
+                            // console.log('Nenhum professor foi removido');
+                            res.status(204).send('Nenhum professor foi removido');
+                        }
+                    });
+                    // .catch(err => {
+                    //     console.error("Erro ao conectar a collection teacher: ");
+                    //     res.status(500);
+                    // });
+                const b = await Teacher;
+                await session.commitTransaction();
+                session.endSession();
+
+                return {from:A,to:b};
+
+            }catch (error) {
+                console.log(error);
+                await session.abortTransaction();
+                session.endSession();
+                throw error;
+            }
+
+        })();
+
+
 
 };
