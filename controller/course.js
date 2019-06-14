@@ -94,7 +94,7 @@ exports.postCourse = (req, res) => {
         // check if any teacher id has been entered
         if(req.body.teacher){
           for(let i = req.body.teacher.length-1; i > -1 ; i--){
-            teacher = await teacherModel.getTeacher(req.body.teacher[i]);
+            teacher = await teacherModel.getTeacher(req.body.teacher[i],i);
             if(teacher.length > 0){
               req.body.teacher[i] = teacher[0];
             }else{ // if teacher exists
@@ -113,6 +113,7 @@ exports.postCourse = (req, res) => {
           status:1,
         });
 
+        console.log(">>>>>>>>",course);
         //validation if no error returns and proceeds with data
         // if error return sends error message.
         course.validate(error=>{

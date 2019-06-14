@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const teacherSchema = require('../moongose_schema').schemaTeacher;
 const Teacher = mongoose.model('Teacher', teacherSchema,'teacher');
 
-// const collection = database.getCollection('teacher');
+const courseSchema = require('../moongose_schema').schemaCourse;
+const Course = mongoose.model('Course', courseSchema,'course');
 
 
 //--------------------GET ALL---------------------------------
@@ -46,8 +47,16 @@ exports.delete = (query, set) => {
 };
 
 //--------------------COUNT TEACHER-------------------------------
-exports.getTeacher = (id) => {
+exports.getTeacher = (id,req) => {
 
+    // console.log(">>>>>>>>>>>req:",req);
     /*find the teachers according to the ids passed by parameters*/
-  return Teacher.find({'id':id, 'status':1});
+  return Course.aggregate([
+      {$lookup:
+          {
+              from:'teacher',
+              localField:"req.teacher[1]",
+              foreignField:'id',
+              as:'teacher'
+      }}]);
 };
