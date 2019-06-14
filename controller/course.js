@@ -116,22 +116,13 @@ exports.postCourse = (req, res) => {
         //validation if no error returns and proceeds with data
         // if error return sends error message.
         course.validate(error=>{
+          console.log(course);
             if(!error){
 
               // send to model
               courseModel.post(course)
                   .then(result => {
                     res.status(201).send('Curso cadastrado com sucesso!');
-
-                      Course.aggregate({
-                      $match:{'id':req.body.teacher},
-                      $lookup:{
-                                from:'teacher',
-                                localField: 'req.body.teacher',
-                                foreignField:'id',
-                                as:'teacher'
-                          }
-                      });
 
                   })
                   .catch(err => {

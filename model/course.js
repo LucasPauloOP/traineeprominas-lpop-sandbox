@@ -73,3 +73,12 @@ exports.getCoursebyTeacher = () => {
   //// find the courses according to the ids passed by parameters
   return Course.find({"status":1});
 };
+
+exports.get_loopUp = (where, collun) =>  {
+    return Course.aggregate([{$match: where}, {
+        $lookup: {
+            from: 'teacher',
+            localField: 'teacher.id',
+            foreignField: "id",
+            as: "Professores"}}]);
+}
