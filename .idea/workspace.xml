@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9ee7ad3b-455a-454f-b5df-ce7a32bf23f5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/course.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/course.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/controller/teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/teacher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/model/teacher.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -18,47 +16,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/course.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="164">
-              <caret line="96" column="46" lean-forward="true" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
+            <state relative-caret-position="112">
+              <caret line="131" column="44" lean-forward="true" selection-start-line="131" selection-start-column="44" selection-end-line="131" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/teacher.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="224">
-              <caret line="52" column="45" lean-forward="true" selection-start-line="52" selection-start-column="45" selection-end-line="52" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/teacher.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="109">
-              <caret line="231" column="48" lean-forward="true" selection-start-line="231" selection-start-column="48" selection-end-line="231" selection-end-column="48" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/course.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="74">
-              <caret line="63" column="24" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/controller/student.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-636">
-              <caret line="176" column="18" selection-start-line="176" selection-start-column="18" selection-end-line="176" selection-end-column="18" />
+            <state relative-caret-position="239">
+              <caret line="235" lean-forward="true" selection-start-line="235" selection-end-line="235" />
             </state>
           </provider>
         </entry>
@@ -122,15 +93,15 @@
         <option value="$PROJECT_DIR$/test/5_Student.js" />
         <option value="$PROJECT_DIR$/database.js" />
         <option value="$PROJECT_DIR$/model/course.js" />
-        <option value="$PROJECT_DIR$/controller/course.js" />
         <option value="$PROJECT_DIR$/model/teacher.js" />
         <option value="$PROJECT_DIR$/controller/teacher.js" />
+        <option value="$PROJECT_DIR$/controller/course.js" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="334" />
-    <option name="y" value="332" />
+    <option name="x" value="344" />
+    <option name="y" value="282" />
     <option name="width" value="659" />
     <option name="height" value="555" />
   </component>
@@ -214,24 +185,23 @@
       <workItem from="1560251153472" duration="24809000" />
       <workItem from="1560350664537" duration="18411000" />
       <workItem from="1560424161741" duration="16043000" />
-      <workItem from="1560510391528" duration="15423000" />
+      <workItem from="1560510391528" duration="19318000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138982000" />
+    <option name="totallyTimeSpent" value="142877000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="25" width="1317" height="743" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49746192" visible="true" weight="0.18160743" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49746192" weight="0.36949685" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" sideWeight="0.5025381" side_tool="true" weight="0.1584235" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34333333" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.28333333" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -471,8 +441,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model/course.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="63" column="24" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
+        <state relative-caret-position="209">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
         </state>
       </provider>
     </entry>
@@ -483,17 +453,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/course.js">
+    <entry file="file://$PROJECT_DIR$/controller/teacher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="96" column="46" lean-forward="true" selection-start-line="96" selection-start-column="46" selection-end-line="96" selection-end-column="46" />
+        <state relative-caret-position="239">
+          <caret line="235" lean-forward="true" selection-start-line="235" selection-end-line="235" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/controller/teacher.js">
+    <entry file="file://$PROJECT_DIR$/controller/course.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="109">
-          <caret line="231" column="48" lean-forward="true" selection-start-line="231" selection-start-column="48" selection-end-line="231" selection-end-column="48" />
+        <state relative-caret-position="112">
+          <caret line="131" column="44" lean-forward="true" selection-start-line="131" selection-start-column="44" selection-end-line="131" selection-end-column="44" />
         </state>
       </provider>
     </entry>

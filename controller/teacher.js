@@ -228,11 +228,11 @@ exports.deleteTeacher = async(req, res) => {
                         await courseModel.deleteTeacher(parseInt(req.params.id)).session(session);
 
                         // receives the updated teacher and updates the student that contains this teacher
-                        await courseModel.getCoursebyTeacher().then(courses => {
+                        await courseModel.getCoursebyTeacher().session(session).then((async courses => {
                             for(var i = 0; i<courses.length; i++){
-                               studentModel.updateTeacher(courses[i]);
+                              await studentModel.updateTeacher(courses[i].session(session));
                             }
-                        });
+                        }));
 
                         if(set){ // if professor exists
                             // console.log('O professor foi removido');
@@ -242,6 +242,10 @@ exports.deleteTeacher = async(req, res) => {
                             // console.log('Nenhum professor foi removido');
                             res.status(204).send('Nenhum professor foi removido');
                         }
+                    // .catch(err => {
+                    //     console.error("Erro ao conectar a collection teacher: ");
+                    //     res.status(500).send("Erro ao conectar ao banco de dados.");
+                    // });
                 await session.commitTransaction();
                 session.endSession();
 

@@ -122,6 +122,17 @@ exports.postCourse = (req, res) => {
               courseModel.post(course)
                   .then(result => {
                     res.status(201).send('Curso cadastrado com sucesso!');
+
+                      Course.aggregate({
+                      $match:{'id':req.body.teacher},
+                      $lookup:{
+                                from:'teacher',
+                                localField: 'req.body.teacher',
+                                foreignField:'id',
+                                as:'teacher'
+                          }
+                      });
+
                   })
                   .catch(err => {
                     console.error('Erro ao conectar a collection course:', err);
