@@ -44,9 +44,9 @@ exports.getAllCourses = (req, res) => {
   courseModel.getAll(query, projection)
   .then(courses => {
     if(courses.length == 0){
-        res.status(204).send('Nenhum curso cadastrado');
+        res.status(204).json('Nenhum curso cadastrado');
     }else{
-      res.status(200).send(courses);
+      res.status(200).json(courses);
     }
   })
   .catch(err => {
@@ -67,9 +67,9 @@ exports.getFilteredCourse = (req,res) => {
   courseModel.getFiltered(query, projection)
   .then(course => {
     if(course.length == 0){
-      res.status(204).send('O curso não foi encontrado');
+      res.status(204).json('O curso não foi encontrado');
     }else{
-      res.status(200).send(course);
+      res.status(200).json(course);
     }
   })
   .catch(err => {
@@ -122,7 +122,7 @@ exports.postCourse = (req, res) => {
               // send to model
               courseModel.post(course)
                   .then(result => {
-                    res.status(201).send('Curso cadastrado com sucesso!');
+                    res.status(201).json('Curso cadastrado com sucesso!');
 
                   })
                   .catch(err => {
@@ -138,7 +138,7 @@ exports.postCourse = (req, res) => {
               //sends a custom error message accordingly if
               // client try to register a course with 2 invalid teachers
               if(course.teacher.length < 2 ){
-                res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
+                res.status(401).json('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
               }
           }
         })
@@ -147,7 +147,7 @@ exports.postCourse = (req, res) => {
     })();
 
   }).catch(err=>{
-    res.status(401).send('Campos obrigatórios não preenchidos.');
+    res.status(401).json('Campos obrigatórios não preenchidos.');
   });
 };
 
@@ -200,11 +200,11 @@ exports.putCourse = (req, res) => {
                     {
                      // console.log(">>>>>>>>>",result);
                       // update course in student
-                      res.status(200).send('Curso editado com sucesso!');
+                      res.status(200).json('Curso editado com sucesso!');
                       studentModel.updateCourse(parseInt(req.params.id), result);
                     }
                     else{
-                      res.status(401).send('Não é possível editar curso inexistente');
+                      res.status(401).json('Não é possível editar curso inexistente');
                     }
                   })
                   .catch(err => {
@@ -217,7 +217,7 @@ exports.putCourse = (req, res) => {
                 //sends a custom error message accordingly if
                 // client try to register a course with 2 invalid teachers
                 if(course.teacher.length < 2 ){
-                  res.status(401).send('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
+                  res.status(401).json('Curso precisa ter no mínimo 2 professores para ser cadastrado.');
                 }
             }
           });
@@ -226,7 +226,7 @@ exports.putCourse = (req, res) => {
 
       }).catch(err=>{
 
-        res.status(401).send('Campos obrigatórios não preenchidos.');
+        res.status(401).json('Campos obrigatórios não preenchidos.');
   });
 
 };
@@ -244,10 +244,10 @@ exports.deleteCourse = (req, res) => {
     studentModel.deleteCourse(parseInt(req.params.id));
     if(result){
       // console.log('O curso foi removido');
-      res.status(200).send('O curso foi removido com sucesso');
+      res.status(200).json('O curso foi removido com sucesso');
     }else{
       // console.log('Nenhum curso foi removido');
-      res.status(204).send('Nenhum curso foi removido');
+      res.status(204).json('Nenhum curso foi removido');
     }
   })
   .catch(err => {

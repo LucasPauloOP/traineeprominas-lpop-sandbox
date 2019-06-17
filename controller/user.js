@@ -45,9 +45,9 @@ exports.getAllUsers = (req, res) => {
     userModel.getAll(query, projection)
     .then(users => {
         if(users.length > 0){ 
-            res.send(users);
+            res.json(users);
         }else{
-            res.status(204).send('Nenhum usuário cadastrado');
+            res.status(204).json('Nenhum usuário cadastrado');
         }
     })
     .catch(err => {
@@ -69,9 +69,9 @@ exports.getFilteredUser = (req,res) => {
     userModel.getFiltered(query, projection)
     .then(user => {
         if(user.length > 0){
-            res.status(200).send(user);
+            res.status(200).json(user);
         }else{
-            res.status(204).send('O usuário não foi encontrado');
+            res.status(204).json('O usuário não foi encontrado');
         }
     })
     .catch(err => {
@@ -106,7 +106,7 @@ exports.postUser = (req, res) => {
                 if(!error){
                     //send for model
                     userModel.post(users).then(result => {
-                        res.status(201).send('Usuário cadastrado com sucesso!');
+                        res.status(201).json('Usuário cadastrado com sucesso!');
                     }).catch(err => {
                         console.error("Erro ao conectar a collection user ->>>>>>>>>> ", err);
                         res.status(500);
@@ -119,7 +119,7 @@ exports.postUser = (req, res) => {
                     //sends a custom error message accordingly if
                     // client try to register a profile other than admin or guess
                         if(user.profile != 'admin'||user.profile != "guess") {
-                            res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
+                            res.status(401).json('Profile deve ser guess ou admin para cadastrar usuário.');
                         }
                 }
 
@@ -127,7 +127,7 @@ exports.postUser = (req, res) => {
 
         }).catch(err=>{
             // console.log(err);
-            res.status(401).send('Campos obrigatórios não preenchidos.');
+            res.status(401).json('Campos obrigatórios não preenchidos.');
     });
 
 
@@ -166,14 +166,14 @@ exports.putUser = (req, res) => {
                     userModel.put(query,user).then(result=>{
                         //console.log('>>>>>>',user);
                         if(result){
-                            res.status(200).send('Usuário editado com sucesso!');
+                            res.status(200).json('Usuário editado com sucesso!');
                         }
                         else{
-                            res.status(401).send('Não é possível editar usuário');
+                            res.status(401).json('Não é possível editar usuário');
                         }
                     }).catch(err=>{
                         console.error('Erro ao conectar a collection user',err);
-                        res.status(500).send('Erro ao conectar a collection user');
+                        res.status(500).json('Erro ao conectar a collection user');
                     })
                 }
                 else{
@@ -181,7 +181,7 @@ exports.putUser = (req, res) => {
                     //sends a custom error message accordingly if
                     // client try to register a profile other than admin or guess
                         if(user.profile != 'admin'||user.profile != "guess"){
-                            res.status(401).send('Profile deve ser guess ou admin para cadastrar usuário.');
+                            res.status(401).json('Profile deve ser guess ou admin para cadastrar usuário.');
                         }
 
                 }
@@ -189,7 +189,7 @@ exports.putUser = (req, res) => {
 
     }).catch(err=>{
        // console.log(err);
-        res.status(401).send('Campos obrigatórios não preenchidos.');
+        res.status(401).json('Campos obrigatórios não preenchidos.');
     });
 
 };
@@ -204,10 +204,10 @@ exports.deleteUser = (req, res) => {
     .then(result => {
         if(result){ // if user exists
             console.log('O usuário foi removido');
-            res.status(200).send('O usuário foi removido com sucesso');
+            res.status(200).json('O usuário foi removido com sucesso');
           }else{
             console.log('Nenhum usuário foi removido');
-            res.status(204).send();
+            res.status(204).json();
           }
     })
     .catch(err => {

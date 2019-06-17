@@ -46,9 +46,9 @@ exports.getAllTeachers = (req, res) => {
     teacherModel.getAll(query, projection)
     .then(teachers => {
         if(teachers.length > 0){
-            res.status(200).send(teachers);
+            res.status(200).json(teachers);
         }else{
-            res.status(204).send('Nenhum professor cadastrado');
+            res.status(204).json('Nenhum professor cadastrado');
         }
     })
     .catch(err => {
@@ -69,9 +69,9 @@ exports.getFilteredTeacher = (req,res) => {
     teacherModel.getFiltered(query, projection)
     .then(teacher => {
         if(teacher.length > 0){
-            res.status(200).send(teacher);
+            res.status(200).json(teacher);
         }else{
-            res.status(204).send('O professor não foi encontrado');
+            res.status(204).json('O professor não foi encontrado');
         }
     })
     .catch(err => {
@@ -109,7 +109,7 @@ exports.postTeacher = (req, res) => {
                     //send for model
                     teacherModel.post(teacher)
                         .then(result => {
-                            res.status(201).send('Professor cadastrado com sucesso!');
+                            res.status(201).json('Professor cadastrado com sucesso!');
                         })
                         .catch(err => {
                             console.error("Erro ao conectar a collection teacher: ", err);
@@ -125,14 +125,14 @@ exports.postTeacher = (req, res) => {
                     // client try to register a phd different from true
                     if (!teacher.phd) {
 
-                        res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd precisa ser verdadeiro.');
+                        res.status(401).json('Não foi possível cadastrar o professor (phd inválido) phd precisa ser verdadeiro.');
                     }
                 }
             });
 
         }).catch(err=>{
             // console.log(err);
-            res.status(401).send('Campos obrigatorios não preenchidos.');
+            res.status(401).json('Campos obrigatorios não preenchidos.');
     });
 };
 
@@ -170,7 +170,7 @@ exports.putTeacher = (req, res) => {
                     teacherModel.put(query, teacher)
                         .then(async (result) => {
                             if (result) { // if professor exists
-                                res.status(200).send('Professor editado com sucesso!');
+                                res.status(200).json('Professor editado com sucesso!');
 
                                 //updates the course that contains this teacher
                                 await courseModel.updateTeacher(parseInt(req.params.id), result);
@@ -184,7 +184,7 @@ exports.putTeacher = (req, res) => {
                                 });
 
                             } else {
-                                res.status(401).send('Não é possível editar professor inexistente');
+                                res.status(401).json('Não é possível editar professor inexistente');
                             }
 
                         }).catch(err => {
@@ -197,7 +197,7 @@ exports.putTeacher = (req, res) => {
                     //sends a custom error message accordingly if
                     // client try to register a phd different from true
                         if(!teacher.phd ){
-                            res.status(401).send('Não foi possível cadastrar o professor (phd inválido) phd deverá ser verdadeiro.');
+                            res.status(401).json('Não foi possível cadastrar o professor (phd inválido) phd deverá ser verdadeiro.');
                         }
 
                 }
@@ -205,7 +205,7 @@ exports.putTeacher = (req, res) => {
 
         }).catch(err=>{
             // console.log(err);
-        res.status(401).send('Campos obrigatórios não preenchidos.');
+        res.status(401).json('Campos obrigatórios não preenchidos.');
     });
 };
 
@@ -213,11 +213,12 @@ exports.putTeacher = (req, res) => {
 //--------------------------------DELETE FOR ID----------------------------------------------------
 exports.deleteTeacher = async(req, res) => {
     //  define query and set for search and delete
-
+    //security transaction so that if an error occurs in the teacher deletion does not affect course or student
         let session = await mongoose.startSession();
         session.startTransaction();
             try{
 
+                //each session (session) is a save point to be able to rollback if necessary
                 const opts={session,new: true};
 
                 let query = {'id': parseInt(req.params.id), 'status':1};
@@ -236,22 +237,22 @@ exports.deleteTeacher = async(req, res) => {
 
                         if(set){ // if professor exists
                             // console.log('O professor foi removido');
-                            res.status(200).send('O professor foi removido com sucesso');
+                            res.status(200).json('O professor foi removido com sucesso');
 
                         }else{
                             // console.log('Nenhum professor foi removido');
-                            res.status(204).send('Nenhum professor foi removido');
+                            res.status(204).json('Nenhum professor foi removido');
                         }
-                    // .catch(err => {
-                    //     console.error("Erro ao conectar a collection teacher: ");
-                    //     res.status(500).send("Erro ao conectar ao banco de dados.");
-                    // });
+
+                        //if the whole process is well closed the transaction
                 await session.commitTransaction();
                 session.endSession();
 
             }catch (error) {
+                // Case of error goes to the catch that releases a standard
+                // message and performs the rollback avoiding the teacher deletion
                 console.error("Erro ao conectar a collection teacher: ");
-                res.status(500).send("Erro ao conectar ao banco de dados.");
+                res.status(500).json("Erro ao conectar ao banco de dados.");
                 await session.abortTransaction();
                 session.endSession();
                 console.error(error);

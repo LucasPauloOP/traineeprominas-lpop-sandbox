@@ -41,9 +41,9 @@ exports.getAllStudents = (req, res) => {
     studentModel.getAll(query, projection)
     .then(students => {
         if(students.length > 0){
-            res.status(200).send(students);
+            res.status(200).json(students);
         }else{
-            res.status(204).send('Nenhum estudante cadastrado');
+            res.status(204).json('Nenhum estudante cadastrado');
         }
     })
     .catch(err => {
@@ -62,9 +62,9 @@ exports.getFilteredStudent = (req,res) => {
     studentModel.getFiltered(query, projection)
     .then(student => {
         if(student.length > 0){
-            res.status(200).send(student);
+            res.status(200).json(student);
         }else{
-            res.status(204).send('O estudante não foi encontrado');
+            res.status(204).json('O estudante não foi encontrado');
         }
     })
     .catch(err => {
@@ -111,7 +111,7 @@ exports.postStudent = (req, res) => {
                             studentModel.post(student)
                                 .then(result => {
 
-                                    res.status(201).send('Estudante cadastrado com sucesso!');
+                                    res.status(201).json('Estudante cadastrado com sucesso!');
                                 })
                                 .catch(err => {
                                     console.error("Erro ao conectar a collection student: ", err);
@@ -128,13 +128,13 @@ exports.postStudent = (req, res) => {
                                 if (student.age < 17)
                                 {
 
-                                    res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
+                                    res.status(401).json('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
                                 }
 
                                 if(student.course.length!=1)
                                 {
 
-                                    res.status(401).send('Cadastro de estudantes só é possível com cursos existentes.');
+                                    res.status(401).json('Cadastro de estudantes só é possível com cursos existentes.');
                                 }
 
                                 // if(student.age<17 && student.course.length!=1)
@@ -149,7 +149,7 @@ exports.postStudent = (req, res) => {
                 })();
 
             }).catch(err=>{
-                res.status(401).send('Campo obrigatório não cadastrado');
+                res.status(401).json('Campo obrigatório não cadastrado');
         });
 
 };
@@ -202,10 +202,10 @@ exports.putStudent = (req, res) => {
                                 .then(result => {
                                     if(result)
                                     {
-                                        res.status(200).send('Estudante editado com sucesso!');
+                                        res.status(200).json('Estudante editado com sucesso!');
                                     }
                                     else{
-                                        res.status(401).send('Não foi possível editar o estudante (idade ou curso inválido)');
+                                        res.status(401).json('Não foi possível editar o estudante (idade ou curso inválido)');
                                     }
 
                                 })
@@ -221,12 +221,12 @@ exports.putStudent = (req, res) => {
                             // client try to register a student with age < 17 or course that does not exist.
                             if (student.age < 17)
                             {
-                                res.status(401).send('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
+                                res.status(401).json('Cadastro de estudantes só é possível com estudantes maiores de 17 anos.');
                             }
                             else if(student.course.length!=1)
                             {
 
-                                res.status(401).send('Cadastro de estudantes só é possível com mais de 1 professor.');
+                                res.status(401).json('Cadastro de estudantes só é possível com mais de 1 professor.');
                             }
 
 
@@ -236,7 +236,7 @@ exports.putStudent = (req, res) => {
                 })();
 
             }).catch(err=>{
-              res.status(401).send('Campos obrigatórios não preenchidos.');
+              res.status(401).json('Campos obrigatórios não preenchidos.');
         });
 };
 
@@ -252,10 +252,10 @@ exports.deleteStudent = (req, res) => {
     .then(result => {
         if(result){ // if student exists
             // console.log('O estudante foi removido');
-            res.status(200).send('O estudante foi removido com sucesso');
+            res.status(200).json('O estudante foi removido com sucesso');
           }else{
             // console.log();
-            res.status(204).send('Nenhum estudante foi removido');
+            res.status(204).json('Nenhum estudante foi removido');
           }
     })
     .catch(err => {
