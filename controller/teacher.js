@@ -231,7 +231,7 @@ exports.deleteTeacher = async(req, res) => {
                         // receives the updated teacher and updates the student that contains this teacher
                         await courseModel.getCoursebyTeacher().session(session).then((async courses => {
                             for(var i = 0; i<courses.length; i++){
-                              await studentModel.updateTeacher(courses[i].session(session));
+                              await studentModel.updateTeacher(courses[i]);
                             }
                         }));
 
@@ -243,7 +243,6 @@ exports.deleteTeacher = async(req, res) => {
                             // console.log('Nenhum professor foi removido');
                             res.status(204).json('Nenhum professor foi removido');
                         }
-
                         //if the whole process is well closed the transaction
                 await session.commitTransaction();
                 session.endSession();
@@ -251,7 +250,7 @@ exports.deleteTeacher = async(req, res) => {
             }catch (error) {
                 // Case of error goes to the catch that releases a standard
                 // message and performs the rollback avoiding the teacher deletion
-                console.error("Erro ao conectar a collection teacher: ");
+                console.log("Erro ao conectar a collection teacher: ",err);
                 res.status(500).json("Erro ao conectar ao banco de dados.");
                 await session.abortTransaction();
                 session.endSession();
