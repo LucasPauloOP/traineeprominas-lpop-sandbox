@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9ee7ad3b-455a-454f-b5df-ce7a32bf23f5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/teacher.js" beforeDir="false" afterPath="$PROJECT_DIR$/controller/teacher.js" afterDir="false" />
-    </list>
+    <list default="true" id="9ee7ad3b-455a-454f-b5df-ce7a32bf23f5" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -40,8 +37,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/controller/teacher.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="385">
-              <caret line="252" column="19" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
+            <state relative-caret-position="370">
+              <caret line="251" column="19" selection-start-line="251" selection-start-column="19" selection-end-line="251" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -194,11 +191,12 @@
       <workItem from="1560779015739" duration="2000" />
       <workItem from="1560779785398" duration="4000" />
       <workItem from="1560785126108" duration="13000" />
+      <workItem from="1560879475780" duration="597000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="148656000" />
+    <option name="totallyTimeSpent" value="149253000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="49" y="25" width="1317" height="743" extended-state="6" />
@@ -470,8 +468,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/controller/teacher.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="385">
-          <caret line="252" column="19" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
+        <state relative-caret-position="370">
+          <caret line="251" column="19" selection-start-line="251" selection-start-column="19" selection-end-line="251" selection-end-column="19" />
         </state>
       </provider>
     </entry>

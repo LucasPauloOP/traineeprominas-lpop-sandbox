@@ -28,7 +28,7 @@ const Joi = require('joi');
 const joiSchemaCourse = Joi.object().keys({
   name: Joi.string().required(),
   city: Joi.string().required(),
-  period:Joi.number().default(8),
+  period:Joi.number().default(8).required(),
   teacher:Joi.array().required()
 });
 
