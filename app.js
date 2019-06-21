@@ -16,11 +16,9 @@ app.use(bodyParser.json());
 //connect to bd
 const database = require('./database');
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-  });
+const cors = require('cors');
+app.use(cors());
+app.options('*', cors());
 
 // //post hello world on the home screen
 // database.connect()
