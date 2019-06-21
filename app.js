@@ -10,15 +10,17 @@ const app = express();
 //url base of API
 const baseAPI = "/api/v1";
 
+const cors = require('cors');
+app.use(cors());
+app.options('*', cors());
+
 //allows app use body parser
 app.use(bodyParser.json());
 
 //connect to bd
 const database = require('./database');
 
-const cors = require('cors');
-app.use(cors());
-app.options('*', cors());
+
 
 // //post hello world on the home screen
 // database.connect()
