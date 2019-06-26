@@ -1,4 +1,4 @@
-
+var jwt = require('express-jwt');
 //constant to use express
 const express = require('express');
 
@@ -10,6 +10,7 @@ const app = express();
 
 //url base of API
 const baseAPI = "/api/v1";
+const API_BASE= "/api/v1.1/"; 
 
 const cors = require('cors');
 app.use(cors());
@@ -21,6 +22,7 @@ app.use(bodyParser.json());
 //connect to bd
 const database = require('./database');
 
+app.use(jwt({ secret: 'admin'}).unless({path: ['/api/v1']}));
 
 
 // //post hello world on the home screen
@@ -36,6 +38,13 @@ app.use(baseAPI, require('./routes/student'));
 app.use(baseAPI,require('./routes/user'));
 app.use(baseAPI, require('./routes/course'));
 app.use(baseAPI, require('./routes/teacher'));
+// app.use(baseAPI, require('./routes/login'));
+
+app.use(API_BASE, auth ,require('./routes/student'));
+app.use(API_BASE, auth ,require('./routes/user'));
+app.use(API_BASE, auth ,require('./routes/course'));
+app.use(API_BASE, auth ,require('./routes/teacher'));
+// app.use(API_BASE, auth ,require('./routes/login'));
 
 app.get(baseAPI+'/', function (req, res){
   res.send('Endpoints: \n '+baseAPI+'/user \n '+baseAPI+'/student \n '+baseAPI+'/course \n '+baseAPI+'/teacher');

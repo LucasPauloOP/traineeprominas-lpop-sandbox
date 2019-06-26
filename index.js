@@ -6,7 +6,6 @@ const userRouter = require('./routes/users');
 const teacherRouter = require('./routes/teachers');
 const courseRouter = require('./routes/courses');
 const studentRouter = require('./routes/students');
-const loginRouter = require('./routes/login');
 
 const app = express();
 
@@ -15,8 +14,6 @@ const baseApi = "/api/v1";
 const baseApiGet="/api/v1/JSON";
 
 app.use(bodyParser.json());
-
-
 
 app.get(baseApi, function (req, res) {
   res.send('Hello World!');
@@ -27,7 +24,6 @@ app.use(`${baseApi}/user`, userRouter);
 app.use(`${baseApi}/teacher`, teacherRouter);
 app.use(`${baseApi}/course`, courseRouter);
 app.use(`${baseApi}/student`, studentRouter);
-app.use(`${baseApi}/login`,loginRouter);
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log(`Server running on PORT ${listener.address().port}`);

@@ -3,11 +3,11 @@ const express = require('express');
 const router = express.Router();
 
 const userController = require('../controller/user');
-require("dotenv-safe").load();
-var jwt = require('jsonwebtoken');
+var jwt = require('express-jwt');
 
 function verifyJWT(req, res, next){
     var token = req.headers['x-access-token'];
+    console.log(">>>>>>>>",req.headers)
     if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
     
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
