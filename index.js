@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const userRouter = require('./routes/users');
+// const userRouter = require('./routes/users');
 const teacherRouter = require('./routes/teachers');
 const courseRouter = require('./routes/courses');
 const studentRouter = require('./routes/students');

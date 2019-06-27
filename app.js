@@ -1,4 +1,4 @@
-var jwt = require('express-jwt');
+
 //constant to use express
 const express = require('express');
 
@@ -7,6 +7,26 @@ const bodyParser = require('body-parser');
 
 //constant app for export
 const app = express();
+
+var jwt = require('express-jwt');
+var jwt = require('express-jwt');
+var jwks = require('jwks-rsa');
+
+
+var jwtCheck = jwt({
+      secret: jwks.expressJwtSecret({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: 5,
+          jwksUri: 'https://lucas-paulo.auth0.com/.well-known/jwks.json'
+    }),
+    audience: 'http://localhost:3000/api/v1.1',
+    issuer: 'https://lucas-paulo.auth0.com/',
+    algorithms: ['RS256']
+});
+
+
+
 
 //url base of API
 const baseAPI = "/api/v1";
@@ -21,9 +41,6 @@ app.use(bodyParser.json());
 
 //connect to bd
 const database = require('./database');
-
-app.use(jwt({ secret: 'admin'}).unless({path: ['/api/v1']}));
-
 
 // //post hello world on the home screen
 // database.connect()
@@ -40,10 +57,11 @@ app.use(baseAPI, require('./routes/course'));
 app.use(baseAPI, require('./routes/teacher'));
 // app.use(baseAPI, require('./routes/login'));
 
-app.use(API_BASE, auth ,require('./routes/student'));
-app.use(API_BASE, auth ,require('./routes/user'));
-app.use(API_BASE, auth ,require('./routes/course'));
-app.use(API_BASE, auth ,require('./routes/teacher'));
+app.use(API_BASE,jwtCheck ,require('./routes/student'));
+app.use(API_BASE,jwtCheck ,require('./routes/user'));
+app.use(API_BASE,jwtCheck ,require('./routes/course'));
+app.use(API_BASE,jwtCheck ,require('./routes/teacher'));
+
 // app.use(API_BASE, auth ,require('./routes/login'));
 
 app.get(baseAPI+'/', function (req, res){
@@ -52,6 +70,12 @@ app.get(baseAPI+'/', function (req, res){
 
 app.get('/'+baseAPI, function (req, res){
   res.send('Endpoints: \n /user \n /student \n /course \n /teacher');
+});
+
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('Faça seu cadastro ou login para ter permissão para acessar esse conteúdo.');
+  }
 });
 
 app.listen(process.env.PORT || 3000);
