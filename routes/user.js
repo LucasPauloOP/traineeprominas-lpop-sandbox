@@ -16,7 +16,7 @@ const userController = require('../controller/user');
 //       next();
 //     });
 //   }
-console.log("conectou");
+// console.log("conectou");
 router.get('/JSON/user',userController.getAllUsers);
 router.post('/user', userController.postUser);
 

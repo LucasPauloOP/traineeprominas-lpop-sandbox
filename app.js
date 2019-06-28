@@ -12,22 +12,6 @@ var jwt = require('express-jwt');
 var jwt = require('express-jwt');
 var jwks = require('jwks-rsa');
 
-//function to accept RS256 signed tokens
-var jwtCheck = jwt({
-  secret: jwks.expressJwtSecret({
-      cache: true,
-      rateLimit: true,
-      jwksRequestsPerMinute: 5,
-      jwksUri: 'https://jknvlvxs.auth0.com/.well-known/jwks.json'
-}),
-  audience: 'https://traineeprominas-lpop-sandbox.herokuapp.com/api/v1.1/',
-  issuer: 'https://jknvlvxs.auth0.com/',
-  algorithms: ['RS256']
-});
-
-
-
-
 //url base of API
 const baseAPI = "/api/v1";
 const API_BASE= "/api/v1.1/"; 
@@ -49,6 +33,23 @@ const database = require('./database');
     // app.get(baseAPI, function (req, res) {
     //   res.status(200).send('Hello World!');
     // });
+
+//function to accept RS256 signed tokens
+var jwtCheck = jwt({
+  secret: jwks.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: 'https://jknvlvxs.auth0.com/.well-known/jwks.json'
+}),
+  audience: 'https://traineeprominas-lpop-sandbox.herokuapp.com/api/v1.1/',
+  issuer: 'https://jknvlvxs.auth0.com/',
+  algorithms: ['RS256']
+});
+
+app.get('/authorized', function (req, res) {
+   res.send('Secured Resource');
+});
 
 //API routes
 app.use(baseAPI, require('./routes/student'));
