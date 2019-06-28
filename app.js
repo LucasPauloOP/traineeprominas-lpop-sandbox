@@ -1,4 +1,3 @@
-
 //constant to use express
 const express = require('express');
 
@@ -8,21 +7,22 @@ const bodyParser = require('body-parser');
 //constant app for export
 const app = express();
 
+//import for security jwt
 var jwt = require('express-jwt');
 var jwt = require('express-jwt');
 var jwks = require('jwks-rsa');
 
-
+//function to accept RS256 signed tokens
 var jwtCheck = jwt({
-      secret: jwks.expressJwtSecret({
-          cache: true,
-          rateLimit: true,
-          jwksRequestsPerMinute: 5,
-          jwksUri: 'https://lucas-paulo.auth0.com/.well-known/jwks.json'
-    }),
-    audience: 'http://localhost:3000/api/v1.1',
-    issuer: 'https://lucas-paulo.auth0.com/',
-    algorithms: ['RS256']
+  secret: jwks.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: 'https://jknvlvxs.auth0.com/.well-known/jwks.json'
+}),
+  audience: 'https://traineeprominas-lpop-sandbox.herokuapp.com/api/v1.1/',
+  issuer: 'https://jknvlvxs.auth0.com/',
+  algorithms: ['RS256']
 });
 
 
@@ -72,6 +72,8 @@ app.get('/'+baseAPI, function (req, res){
   res.send('Endpoints: \n /user \n /student \n /course \n /teacher');
 });
 
+
+//handles the error sent by jwt
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
     res.status(401).send('Faça seu cadastro ou login para ter permissão para acessar esse conteúdo.');
